@@ -1,0 +1,19 @@
+Сформируй JSON p4_doc_list_v1 по контракту:
+{
+  "razdel_code":"...",
+  "selected_doc_type_ids":["..."],
+  "docs_to_generate":[],
+  "agent_comments":[
+    {
+      "comment":"string",
+      "source":{"file":"string","page":"string","snippet":"string"}
+    }
+  ]
+}
+
+Контекст:
+selected_doc_type_ids={{selected_doc_type_ids}}
+dictionary={{dictionary_json}}
+quality_registry={{quality_registry_json}}
+
+Требование: добавь agent_comments с пояснениями, которые извлечены из входных файлов (с source).

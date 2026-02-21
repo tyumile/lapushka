@@ -1,0 +1,102 @@
+{% extends "base_v02.html" %}
+{% block title %}План документов и содержимое{% endblock %}
+{% block content %}
+<h2>План документов и содержимое</h2>
+
+<div class="btn-row">
+  <form method="post" action="{% url 'v02_run_p4b' project_id=project_id %}" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p4b" data-running-text="Статус Process P4B: выполняется...">
+    {% csrf_token %}
+    <button type="submit">Run P4B (Build Plan)</button>
+  </form>
+  <form method="post" action="{% url 'v02_doc_plan_save' project_id=project_id %}" id="docPlanSaveForm" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_save_doc_plan" data-running-text="Статус Save corrections: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="rows_order" id="rows_order" />
+    <button type="submit">Save corrections</button>
+  </form>
+  <a href="{% url 'v02_formation' project_id=project_id %}"><button type="button">Next: Generate documents</button></a>
+</div>
+<p id="status_run_p4b" class="muted">Статус Process P4B: {{ ui_status.run_p4b.message|default:"еще не запускался" }}</p>
+<p id="status_save_doc_plan" class="muted">Статус Save corrections: {{ ui_status.save_doc_plan.message|default:"еще не запускалось" }}</p>
+
+{% if instances %}
+<table id="docPlanTable">
+  <thead>
+    <tr>
+      <th></th>
+      <th>DocType</th>
+      <th>Название</th>
+      <th>Номер</th>
+      <th>Multiplier</th>
+      <th>Status</th>
+      <th>Детали</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for inst in instances %}
+    <tr draggable="true" data-idx="{{ forloop.counter0 }}">
+      <td>::</td>
+      <td>{{ inst.doc_type_id }}</td>
+      <td><input form="docPlanSaveForm" type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ inst.doc_name }}" style="width:280px;" /></td>
+      <td><input form="docPlanSaveForm" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ inst.doc_number }}" /></td>
+      <td>
+        <input form="docPlanSaveForm" type="text" name="mult_axis_{{ forloop.counter0 }}" value="{{ inst.multiplier.axis }}" placeholder="axis" style="width:80px;" />
+        <input form="docPlanSaveForm" type="text" name="mult_label_{{ forloop.counter0 }}" value="{{ inst.multiplier.label }}" placeholder="label" style="width:180px;" />
+      </td>
+      <td>{{ inst.overall_status }}</td>
+      <td>
+        <details>
+          <summary>Edit</summary>
+          <p><strong>Work scope (JSON)</strong></p>
+          <textarea form="docPlanSaveForm" name="work_scope_{{ forloop.counter0 }}" rows="8" cols="90">{{ inst.work_scope_text }}</textarea>
+          <p><strong>Fields (JSON)</strong></p>
+          <textarea form="docPlanSaveForm" name="fields_{{ forloop.counter0 }}" rows="12" cols="90">{{ inst.fields_text }}</textarea>
+          <p><strong>User note</strong></p>
+          <textarea form="docPlanSaveForm" name="user_note_{{ forloop.counter0 }}" rows="3" cols="90">{{ inst.user_note }}</textarea>
+        </details>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>План пока не построен. Нажмите <strong>Run P4B (Build Plan)</strong>.</p>
+{% endif %}
+
+{% if open_questions %}
+<h3>Open Questions</h3>
+<ul>{% for q in open_questions %}<li>{{ q }}</li>{% endfor %}</ul>
+{% endif %}
+{% if issues %}
+<h3>Issues</h3>
+<ul>{% for i in issues %}<li>{{ i }}</li>{% endfor %}</ul>
+{% endif %}
+{% if excluded_files %}
+<h3>Исключённые файлы (перемещены в 01_input/99_excluded)</h3>
+<ul>{% for x in excluded_files %}<li><strong>{{ x.path }}</strong>: {{ x.reason|truncatechars:120 }}</li>{% endfor %}</ul>
+{% endif %}
+
+<script>
+(() => {
+  const table = document.getElementById("docPlanTable");
+  const saveForm = document.getElementById("docPlanSaveForm");
+  if (!table || !saveForm) return;
+  let dragEl = null;
+  table.querySelectorAll("tbody tr").forEach((row) => {
+    row.addEventListener("dragstart", () => { dragEl = row; });
+    row.addEventListener("dragover", (e) => e.preventDefault());
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (!dragEl || dragEl === row) return;
+      const tbody = table.querySelector("tbody");
+      const rows = Array.from(tbody.children);
+      if (rows.indexOf(dragEl) < rows.indexOf(row)) tbody.insertBefore(dragEl, row.nextSibling);
+      else tbody.insertBefore(dragEl, row);
+    });
+  });
+  saveForm.addEventListener("submit", () => {
+    const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
+    document.getElementById("rows_order").value = order;
+  });
+})();
+</script>
+{% endblock %}

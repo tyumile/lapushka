@@ -1,0 +1,69 @@
+Контекст проекта:
+project_id={{project_id}}
+comment={{comment}}
+dictionary={{dictionary_json}}
+rules_from_user_edits={{feedback_rules}}
+
+Верни ТОЛЬКО валидный JSON без markdown, строго по схеме:
+{
+  "project_cipher": {
+    "value": "string",
+    "status": "ok|needs_extraction|blocked_missing_source",
+    "confidence": 0.0,
+    "source": {"file":"string","page":"string","snippet":"string"}
+  },
+  "razdel": {
+    "razdel_code": "string",
+    "razdel_name": "string",
+    "status": "ok|needs_extraction|blocked_missing_source",
+    "confidence": 0.0,
+    "source": {"file":"string","page":"string","snippet":"string"}
+  },
+  "materials": [
+    {
+      "material_id": "stable_string_id",
+      "material_name": "string",
+      "material_norm_name": "string",
+      "status": "ok|needs_extraction|needs_disambiguation|blocked_missing_source",
+      "confidence": 0.0,
+      "source": {"file":"string","page":"string","snippet":"string"},
+      "docs": [
+        {
+          "doc_kind": "string",
+          "doc_number": "string or б/н",
+          "doc_date": "DD.MM.YYYY or б/д",
+          "volume": "string with value+unit (e.g. 12.5 м3 / 350 м / 1250 кг) or needs_extraction",
+          "manufacturer": "string",
+          "issuer": "string",
+          "file_ref": "path in 01_input/02_quality_docs",
+          "status": "ok|needs_extraction|needs_disambiguation|blocked_missing_source",
+          "confidence": 0.0,
+          "source": {"file":"string","page":"string","snippet":"string"}
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "string",
+      "source": {"file":"string","page":"string","snippet":"string"}
+    }
+  ]
+}
+
+Критично:
+1) Для КАЖДОГО материала обязателен непустой массив docs.
+2) Если поле не найдено, ставь status=needs_extraction, но все равно добавляй запись docs с file_ref и source.
+3) file_ref должен ссылаться на конкретный файл качества.
+4) Нельзя возвращать только список материалов без docs.
+5) Для КАЖДОЙ записи docs обязательно попытайся извлечь volume:
+   - объем в м3, или
+   - длину в м, или
+   - вес в кг.
+   Если не найдено, ставь volume="needs_extraction".
+6) project_cipher.value должен быть именно шифром проекта, извлеченным из загруженного проекта/документов (например "..." из титула проекта).
+   НЕЛЬЗЯ подставлять project_id, название папки или имя проекта пользователя.
+   Если шифр не найден, верни:
+   - project_cipher.value = ""
+   - project_cipher.status = "needs_extraction"
+7) Добавь agent_comments: краткие комментарии/наблюдения, извлеченные из файлов, с обязательным source.

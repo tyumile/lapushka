@@ -1,0 +1,228 @@
+{
+  "version": "0.2.0",
+  "default_razdel_code": "KJ",
+  "razdels": [
+    {
+      "razdel_code": "KJ",
+      "razdel_name": "КЖ",
+      "doc_types": [
+        {
+          "doc_type_id": "acts_hidden",
+          "doc_type_name": "Акты скрытых работ",
+          "docs": [
+            {
+              "doc_id": "AOSR",
+              "name": "Акт освидетельствования скрытых работ",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "section",
+                "floor",
+                "axis",
+                "line",
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "table"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "acts_responsible_structures",
+          "doc_type_name": "Акты ответственных конструкций",
+          "docs": [
+            {
+              "doc_id": "AOOK",
+              "name": "Акт освидетельствования ответственных конструкций",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "table"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_REGISTERS",
+          "doc_type_name": "Реестры",
+          "docs": [
+            {
+              "doc_id": "KJ_REESTR_ID",
+              "name": "Реестр исполнительной документации",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_reestr_id"
+            },
+            {
+              "doc_id": "KJ_REESTR_AOSR",
+              "name": "Реестр актов освидетельствования скрытых работ (АОСР)",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_reestr_aosr"
+            },
+            {
+              "doc_id": "KJ_REESTR_CERTS",
+              "name": "Реестр сертификатов и паспортов качества",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_reestr_certs"
+            },
+            {
+              "doc_id": "KJ_REESTR_SCHEMES_TESTS",
+              "name": "Реестр исполнительных схем и протоколов испытаний",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_reestr_schemes_tests"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_TITLE_SHEETS",
+          "doc_type_name": "Титульные листы",
+          "docs": [
+            {
+              "doc_id": "KJ_TITLE_SHEET",
+              "name": "Титульный лист тома исполнительной документации",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_title_sheet"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_EXEC_SCHEMES",
+          "doc_type_name": "Исполнительные схемы",
+          "docs": [
+            {
+              "doc_id": "KJ_EXEC_SCHEME_GEODETIC",
+              "name": "Исполнительные геодезические схемы",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "section",
+                "floor",
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_exec_scheme_geodetic"
+            },
+            {
+              "doc_id": "KJ_EXEC_SCHEME_REBAR",
+              "name": "Исполнительные схемы армирования",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "layer",
+                "section",
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_exec_scheme_rebar"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_PROTOCOLS_TESTS",
+          "doc_type_name": "Протоколы и испытания",
+          "docs": [
+            {
+              "doc_id": "KJ_PROTOCOL_BETON",
+              "name": "Протоколы лабораторных испытаний бетона",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_protocol_beton"
+            },
+            {
+              "doc_id": "KJ_TEMP_SHEETS",
+              "name": "Температурные листы бетонных работ",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_temp_sheets"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_INPUT_CONTROL",
+          "doc_type_name": "Входной контроль (ВИК)",
+          "docs": [
+            {
+              "doc_id": "KJ_VIK_ACT",
+              "name": "Акт входного контроля материалов и конструкций",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_vik_act"
+            },
+            {
+              "doc_id": "KJ_VIK_JOURNAL",
+              "name": "Журнал входного контроля материалов и конструкций",
+              "multi_rule": "single",
+              "multi_axis_allowed": [],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_vik_journal"
+            }
+          ]
+        },
+        {
+          "doc_type_id": "KJ_APPENDICES",
+          "doc_type_name": "Приложения к актам",
+          "docs": [
+            {
+              "doc_id": "KJ_REESTR_DOCS_QUALITY",
+              "name": "Реестр документов качества (приложение к АОСР)",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "layer",
+                "section",
+                "stage",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "xlsx_reestr_docs_quality"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "razdel_code": "GP",
+      "razdel_name": "ГП",
+      "doc_types": [
+        {
+          "doc_type_id": "geodesy",
+          "doc_type_name": "Геодезия",
+          "docs": [
+            {
+              "doc_id": "GP_AXIS_LAYOUT_ACT",
+              "name": "Акт разбивки осей объекта капитального строительства на местности",
+              "multi_rule": "multi",
+              "multi_axis_allowed": [
+                "section",
+                "axis",
+                "line",
+                "lot"
+              ],
+              "default_output_format": "xlsx",
+              "template_kind": "table"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

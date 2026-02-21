@@ -1,0 +1,24 @@
+Сформируй JSON p5_fill_plan:
+{
+  "outputs":[
+    {
+      "output_path":"<relative path inside 03_output/>",
+      "template_ref":"...",
+      "format":"xlsx|docx",
+      "fills":[]
+    }
+  ],
+  "missing_inputs":[],
+  "agent_comments":[
+    {
+      "comment":"string",
+      "source":{"file":"string","page":"string","snippet":"string"}
+    }
+  ]
+}
+
+Контекст:
+doc_list={{doc_list_json}}
+quality_registry={{quality_registry_json}}
+
+Требование: добавь agent_comments с замечаниями/обоснованиями, найденными в файлах (с source).

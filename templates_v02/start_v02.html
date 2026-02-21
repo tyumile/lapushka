@@ -1,0 +1,59 @@
+{% extends "base_v02.html" %}
+{% block title %}Начало{% endblock %}
+{% block content %}
+<h2>1. Начало</h2>
+<form method="post" data-disable-on-submit="true" data-busy-text="Создается..." data-status-target="status_create_project" data-running-text="Статус \"Создать проект\": выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="create_project" />
+  <p>Название проекта: <input type="text" name="project_name" style="width:320px;" /></p>
+  <p>Комментарий: <br/><textarea name="comment" rows="4" cols="90"></textarea></p>
+  <button type="submit">Создать проект</button>
+</form>
+{% if selected_project_id %}
+<p id="status_create_project" class="muted">Статус "Создать проект": {{ ui_status.create_project.message|default:"ожидание" }}</p>
+{% endif %}
+
+{% if selected_project_id %}
+<hr/>
+<p><strong>Текущий проект:</strong> {{ selected_project_id }}</p>
+<p><a href="{% url 'v02_quality' project_id=selected_project_id %}">Перейти к шагу 2</a></p>
+
+<h3>Загрузить проект</h3>
+<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project" data-running-text="Статус загрузки проекта: выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="upload_project" />
+  <input type="hidden" name="project_id" value="{{ selected_project_id }}" />
+  <input type="file" name="files" multiple />
+  <button type="submit">Загрузить</button>
+</form>
+<p id="status_upload_project" class="muted">Статус загрузки проекта: {{ ui_status.upload_project.message|default:"еще не загружалось" }}</p>
+
+<h3>Загрузить документы качества</h3>
+<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_quality" data-running-text="Статус загрузки документов качества: выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="upload_quality" />
+  <input type="hidden" name="project_id" value="{{ selected_project_id }}" />
+  <input type="file" name="files" multiple />
+  <button type="submit">Загрузить</button>
+</form>
+<p id="status_upload_quality" class="muted">Статус загрузки документов качества: {{ ui_status.upload_quality.message|default:"еще не загружалось" }}</p>
+
+<h3>Загрузить ОЖР</h3>
+<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_ojr" data-running-text="Статус загрузки ОЖР: выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="upload_ojr" />
+  <input type="hidden" name="project_id" value="{{ selected_project_id }}" />
+  <input type="file" name="files" multiple />
+  <button type="submit">Загрузить</button>
+</form>
+<p id="status_upload_ojr" class="muted">Статус загрузки ОЖР: {{ ui_status.upload_ojr.message|default:"еще не загружалось" }}</p>
+
+{% if files_map %}
+<h3>Файлы по блокам</h3>
+<p><strong>Проект:</strong> {{ files_map.project|join:", " }}</p>
+<p><strong>Качество:</strong> {{ files_map.quality|join:", " }}</p>
+<p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
+<p><strong>Образцы:</strong> {{ files_map.samples|join:", " }}</p>
+{% endif %}
+{% endif %}
+{% endblock %}

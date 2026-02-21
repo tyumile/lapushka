@@ -1,0 +1,166 @@
+{% extends "base_v02.html" %}
+{% block title %}Документы качества{% endblock %}
+{% block content %}
+<h2>2. Документы качества</h2>
+<p><a href="/start/?project_id={{ project_id }}">Вернуться к шагу 1</a></p>
+
+<h3>Загруженные файлы</h3>
+<p><strong>Проект:</strong> {{ files_map.project|join:", " }}</p>
+<p><strong>Документы качества:</strong> {{ files_map.quality|join:", " }}</p>
+<p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
+
+<h3>Загрузка файлов на шаге 2</h3>
+<div class="stack">
+  <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project" data-running-text="Статус загрузки проекта: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="upload_project" />
+    <div class="upload-row">
+      <label for="upload_project_files">Проект</label>
+      <input id="upload_project_files" type="file" name="files" multiple />
+      <button type="submit">Загрузить</button>
+    </div>
+  </form>
+  <p id="status_upload_project" class="muted">Статус загрузки проекта: {{ ui_status.upload_project.message|default:"еще не загружалось" }}</p>
+
+  <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_quality" data-running-text="Статус загрузки документов качества: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="upload_quality" />
+    <div class="upload-row">
+      <label for="upload_quality_files">Документы качества</label>
+      <input id="upload_quality_files" type="file" name="files" multiple />
+      <button type="submit">Загрузить</button>
+    </div>
+  </form>
+  <p id="status_upload_quality" class="muted">Статус загрузки документов качества: {{ ui_status.upload_quality.message|default:"еще не загружалось" }}</p>
+
+  <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_ojr" data-running-text="Статус загрузки ОЖР: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="upload_ojr" />
+    <div class="upload-row">
+      <label for="upload_ojr_files">ОЖР</label>
+      <input id="upload_ojr_files" type="file" name="files" multiple />
+      <button type="submit">Загрузить</button>
+    </div>
+  </form>
+  <p id="status_upload_ojr" class="muted">Статус загрузки ОЖР: {{ ui_status.upload_ojr.message|default:"еще не загружалось" }}</p>
+</div>
+
+<div class="btn-row">
+  <form method="post" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p2" data-running-text="Статус Process 2: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="run_p2" />
+    <button type="submit">Запустить Process 2</button>
+  </form>
+</div>
+<p id="status_run_p2" class="muted">Статус Process 2: {{ ui_status.run_p2.message|default:"еще не запускался" }}</p>
+{% if p2.agent_comments %}
+<h3>Комментарии агента (из файлов)</h3>
+<ul>
+  {% for c in p2.agent_comments %}
+  <li>
+    {{ c.comment }}
+    {% if c.source.file %}<span class="muted">[{{ c.source.file }}{% if c.source.page %}, стр. {{ c.source.page }}{% endif %}]</span>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if p2.project_cipher %}
+<p><strong>Шифр проекта:</strong> {{ p2.project_cipher.value }} ({{ p2.project_cipher.status }})</p>
+<p><strong>Раздел:</strong> {{ p2.razdel.razdel_code }} — {{ p2.razdel.razdel_name }}</p>
+
+<form method="post" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_quality_fix" data-running-text="Статус кнопки \"Исправить\": выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="save_quality_edits" />
+  <table>
+    <thead>
+      <tr>
+        <th>Материал</th><th>Вид документа</th><th>Номер</th><th>Дата</th>
+        <th>Изготовитель</th><th>Кто выдал</th><th>Объем</th><th>Файл</th><th>Статус</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr class="{% if row.status == 'blocked_missing_source' or row.status == 'needs_extraction' %}warn{% endif %}">
+        <td>{{ row.material_name }}</td>
+        <td><input type="text" name="doc_kind_{{ forloop.counter0 }}" value="{{ row.doc_kind }}" /></td>
+        <td><input type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ row.doc_number }}" /></td>
+        <td><input type="text" name="doc_date_{{ forloop.counter0 }}" value="{{ row.doc_date }}" /></td>
+        <td><input type="text" name="manufacturer_{{ forloop.counter0 }}" value="{{ row.manufacturer }}" /></td>
+        <td><input type="text" name="issuer_{{ forloop.counter0 }}" value="{{ row.issuer }}" /></td>
+        <td><input type="text" name="volume_{{ forloop.counter0 }}" value="{{ row.volume }}" /></td>
+        <td>
+          {% if row.file_ref %}
+            <a href="{% url 'v02_input_file' project_id=project_id relative_path=row.file_ref %}" target="_blank" rel="noopener noreferrer">Документ</a>
+          {% else %}
+            —
+          {% endif %}
+        </td>
+        <td>{{ row.status_display }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted">Если есть строки со status=needs_extraction/blocked_missing_source, продолжение разрешено, но часть полей в output может остаться пустой.</p>
+  <button type="submit">Исправить</button>
+</form>
+<p id="status_quality_fix" class="muted">Статус кнопки "Исправить": {{ ui_status.save_quality_edits.message|default:"еще не использовалась" }}</p>
+
+<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Переход..." data-status-target="status_quality_next" data-running-text="Статус кнопки \"Далее\": выполняется...">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="next_to_doc_types" />
+  <button type="submit">Далее</button>
+</form>
+<p id="status_quality_next" class="muted">Статус кнопки "Далее": {{ ui_status.next_to_doc_types.message|default:"ожидание" }}</p>
+{% endif %}
+
+<script>
+(() => {
+  const statusMap = {
+    upload_project: "status_upload_project",
+    upload_quality: "status_upload_quality",
+    upload_ojr: "status_upload_ojr",
+    run_p2: "status_run_p2",
+    save_quality_edits: "status_quality_fix",
+    next_to_doc_types: "status_quality_next",
+  };
+  let reloadTriggered = false;
+
+  const updateStatusTexts = (uiStatus) => {
+    Object.entries(statusMap).forEach(([key, elementId]) => {
+      const el = document.getElementById(elementId);
+      if (!el || !uiStatus[key] || !uiStatus[key].message) return;
+      const prefix = el.textContent.split(":")[0];
+      el.textContent = prefix + ": " + uiStatus[key].message;
+    });
+  };
+
+  const maybeReloadOnP2Finish = (uiStatus) => {
+    const run = uiStatus.run_p2;
+    if (!run || reloadTriggered) return;
+    if (run.state === "success" || run.state === "error") {
+      const text = (document.getElementById("status_run_p2") || {}).textContent || "";
+      if (text.includes("выполняется") || text.includes("запущен")) {
+        reloadTriggered = true;
+        window.location.reload();
+      }
+    }
+  };
+
+  const poll = async () => {
+    try {
+      const resp = await fetch("{% url 'v02_project_status' project_id=project_id %}", { cache: "no-store" });
+      if (!resp.ok) return;
+      const payload = await resp.json();
+      const uiStatus = payload.ui_status || {};
+      updateStatusTexts(uiStatus);
+      maybeReloadOnP2Finish(uiStatus);
+    } catch (e) {
+      // silent polling error
+    }
+  };
+
+  setInterval(poll, 3000);
+})();
+</script>
+{% endblock %}
