@@ -1,7 +1,7 @@
 {% extends "base_v02.html" %}
 {% block title %}Начало{% endblock %}
 {% block content %}
-<h2>1. Начало</h2>
+<h2>Лапушка Профи - загрузите свой проект</h2>
 <form method="post" data-disable-on-submit="true" data-busy-text="Создается..." data-status-target="status_create_project" data-running-text="Статус \"Создать проект\": выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="create_project" />
