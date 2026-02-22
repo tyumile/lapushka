@@ -1,124 +1,13 @@
 <!doctype html>
 <html lang="ru">
+{% load static %}
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}Virtual Engineer v0.2{% endblock %}</title>
-  <style>
-    :root {
-      --bg: #f3f5f8;
-      --surface: #ffffff;
-      --surface-2: #f8fafc;
-      --text: #111827;
-      --text-muted: #5b6472;
-      --border: #dbe2ea;
-      --accent: #234a75;
-      --accent-soft: #e9f1fb;
-      --success: #0f7a3d;
-      --warn: #a15c00;
-      --danger: #b3261e;
-      --shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
-      --radius: 10px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      line-height: 1.45;
-    }
-    .layout { max-width: 1240px; margin: 0 auto; padding: 18px; }
-    .shell {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      padding: 18px 20px 22px;
-    }
-    h1 { margin: 0 0 12px; font-size: 26px; letter-spacing: .2px; }
-    h2 { margin: 0 0 14px; font-size: 22px; }
-    h3 { margin: 18px 0 10px; font-size: 16px; }
-    p { margin: 8px 0; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .topbar { display: flex; gap: 8px; margin: 10px 0 16px; flex-wrap: wrap; }
-    .step {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .step.active { background: var(--accent-soft); color: var(--accent); border-color: #bfd4ec; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
-      margin: 12px 0;
-    }
-    .muted { color: var(--text-muted); }
-    .warn { background: #fff6ea; }
-    .msgs { margin: 12px 0; padding-left: 20px; }
-    .msgs li { margin-bottom: 6px; }
-
-    table { border-collapse: separate; border-spacing: 0; width: 100%; margin: 10px 0; font-size: 14px; }
-    thead th {
-      text-align: left;
-      background: var(--surface-2);
-      color: #2a3443;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    th, td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; }
-    th:first-child, td:first-child { border-left-width: 1px; }
-
-    input[type="text"], input[type="file"], textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #c9d5e1;
-      border-radius: 8px;
-      background: #fff;
-      color: var(--text);
-    }
-    textarea { resize: vertical; }
-
-    button {
-      border: 1px solid var(--accent);
-      background: var(--accent);
-      color: #fff;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { filter: brightness(0.97); }
-    button:disabled { opacity: .65; cursor: not-allowed; }
-
-    .stack { display: flex; flex-direction: column; gap: 10px; }
-    .upload-row { display: grid; grid-template-columns: 180px 1fr 160px; gap: 10px; align-items: center; }
-    .upload-row label { font-weight: 700; }
-    .btn-row { margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .inline { display: inline-block; margin-right: 8px; }
-
-    .file-list { display: grid; gap: 6px; }
-    .status-ok { color: var(--success); font-weight: 600; }
-    .status-warn { color: var(--warn); font-weight: 600; }
-    .status-bad { color: var(--danger); font-weight: 600; }
-
-    @media (max-width: 900px) {
-      .upload-row { grid-template-columns: 1fr; }
-      .shell { padding: 14px; }
-      h1 { font-size: 22px; }
-      h2 { font-size: 20px; }
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'v02/css/tokens.css' %}" />
+  <link rel="stylesheet" href="{% static 'v02/css/components.css' %}" />
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
   <div class="layout">
@@ -146,28 +35,7 @@
       {% block content %}{% endblock %}
     </div>
   </div>
-  <script>
-    (() => {
-      const forms = document.querySelectorAll("form[data-disable-on-submit='true']");
-      forms.forEach((form) => {
-        form.addEventListener("submit", () => {
-          const btn = form.querySelector("button[type='submit'], button:not([type])");
-          if (btn) {
-            btn.disabled = true;
-            const busyText = form.getAttribute("data-busy-text") || "Выполняется...";
-            btn.dataset.originalText = btn.textContent;
-            btn.textContent = busyText;
-          }
-          const targetId = form.getAttribute("data-status-target");
-          if (targetId) {
-            const el = document.getElementById(targetId);
-            if (el) {
-              el.textContent = form.getAttribute("data-running-text") || "Статус: выполняется...";
-            }
-          }
-        });
-      });
-    })();
-  </script>
+  <script defer src="{% static 'v02/js/forms.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

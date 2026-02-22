@@ -1,0 +1,80 @@
+.topbar { display: flex; gap: 8px; margin: 10px 0 16px; flex-wrap: wrap; }
+.step {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.step.active { background: var(--accent-soft); color: var(--accent); border-color: #bfd4ec; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 12px 0;
+}
+
+.muted { color: var(--text-muted); }
+.warn { background: #fff6ea; }
+.msgs { margin: 12px 0; padding-left: 20px; }
+.msgs li { margin-bottom: 6px; }
+
+.table-wrap { overflow-x: auto; }
+table { border-collapse: separate; border-spacing: 0; width: 100%; margin: 10px 0; font-size: 14px; }
+thead th {
+  text-align: left;
+  background: var(--surface-2);
+  color: #2a3443;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+th, td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; }
+
+input[type="text"], input[type="file"], textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #c9d5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+}
+textarea { resize: vertical; }
+
+button {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button:hover { filter: brightness(0.97); }
+button:disabled { opacity: .65; cursor: not-allowed; }
+
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.upload-row { display: grid; grid-template-columns: 180px 1fr 160px; gap: 10px; align-items: center; }
+.upload-row label { font-weight: 700; }
+.btn-row { margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.inline { display: inline-block; margin-right: 8px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.status-ok { color: var(--success); font-weight: 600; }
+.status-warn { color: var(--warn); font-weight: 600; }
+.status-bad { color: var(--danger); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .upload-row { grid-template-columns: 1fr; }
+}

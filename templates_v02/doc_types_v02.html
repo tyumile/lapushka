@@ -4,13 +4,15 @@
 <h2>3. Выбрать тип документов</h2>
 
 <h3>Раздел: {{ razdel_code }}</h3>
+<div class="card">
 <p><strong>Файлы проекта:</strong> {{ files_map.project|join:", " }}</p>
 <p><strong>Файлы качества:</strong> {{ files_map.quality|join:", " }}</p>
 <p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
 <p><strong>Образцы:</strong> {{ files_map.samples|join:", " }}</p>
+</div>
 
 <h3>Загрузить образцы проектов</h3>
-<form method="post" enctype="multipart/form-data" class="inline" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_sample_project" data-running-text="Статус: загрузка образцов проектов выполняется...">
+<form method="post" enctype="multipart/form-data" class="card" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_sample_project" data-running-text="Статус: загрузка образцов проектов выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_sample_project" />
   <input type="file" name="files" multiple />
@@ -19,7 +21,7 @@
 <p id="status_upload_sample_project" class="muted">Статус: {{ ui_status.upload_sample_project.message|default:"еще не загружалось" }}</p>
 
 <h3>Загрузить образцы ИД</h3>
-<form method="post" enctype="multipart/form-data" class="inline" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_sample_id" data-running-text="Статус: загрузка образцов ИД выполняется...">
+<form method="post" enctype="multipart/form-data" class="card" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_sample_id" data-running-text="Статус: загрузка образцов ИД выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_sample_id" />
   <input type="file" name="files" multiple />

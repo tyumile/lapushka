@@ -4,13 +4,15 @@
 <h2>2. Документы качества</h2>
 <p><a href="/start/?project_id={{ project_id }}">Вернуться к шагу 1</a></p>
 
-<h3>Загруженные файлы</h3>
-<p><strong>Проект:</strong> {{ files_map.project|join:", " }}</p>
-<p><strong>Документы качества:</strong> {{ files_map.quality|join:", " }}</p>
-<p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
+<div class="card">
+  <h3>Загруженные файлы</h3>
+  <p><strong>Проект:</strong> {{ files_map.project|join:", " }}</p>
+  <p><strong>Документы качества:</strong> {{ files_map.quality|join:", " }}</p>
+  <p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
+</div>
 
 <h3>Загрузка файлов на шаге 2</h3>
-<div class="stack">
+<div class="stack card">
   <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project" data-running-text="Статус загрузки проекта: выполняется...">
     {% csrf_token %}
     <input type="hidden" name="action" value="upload_project" />

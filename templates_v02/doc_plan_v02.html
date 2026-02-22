@@ -1,4 +1,5 @@
 {% extends "base_v02.html" %}
+{% load static %}
 {% block title %}План документов и содержимое{% endblock %}
 {% block content %}
 <h2>План документов и содержимое</h2>
@@ -13,7 +14,7 @@
     <input type="hidden" name="rows_order" id="rows_order" />
     <button type="submit">Save corrections</button>
   </form>
-  <a href="{% url 'v02_formation' project_id=project_id %}"><button type="button">Next: Generate documents</button></a>
+  <a href="{% url 'v02_formation' project_id=project_id %}">Next: Generate documents</a>
 </div>
 <p id="status_run_p4b" class="muted">Статус Process P4B: {{ ui_status.run_p4b.message|default:"еще не запускался" }}</p>
 <p id="status_save_doc_plan" class="muted">Статус Save corrections: {{ ui_status.save_doc_plan.message|default:"еще не запускалось" }}</p>
@@ -24,12 +25,8 @@
 
 {% if work_breakdown %}
 <h3>Work breakdown</h3>
-<table id="workBreakdownTable">
-  <thead>
-    <tr>
-      <th>work_group_id</th><th>work_type_id</th><th>work_name</th><th>status</th><th>evidence</th>
-    </tr>
-  </thead>
+<div class="table-wrap"><table id="workBreakdownTable">
+  <thead><tr><th>work_group_id</th><th>work_type_id</th><th>work_name</th><th>status</th><th>evidence</th></tr></thead>
   <tbody>
     {% for w in work_breakdown %}
     <tr data-status="{{ w.status|default:'' }}">
@@ -41,24 +38,15 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% endif %}
 
 {% if instances %}
 <h3>Doc instances</h3>
-<table id="docPlanTable">
+<div class="table-wrap"><table id="docPlanTable">
   <thead>
     <tr>
-      <th></th>
-      <th>doc_id</th>
-      <th>doc_variant_id</th>
-      <th>instance_key</th>
-      <th>multiplicity</th>
-      <th>status</th>
-      <th>basis</th>
-      <th>scope</th>
-      <th>evidence</th>
-      <th>Детали</th>
+      <th></th><th>doc_id</th><th>doc_variant_id</th><th>instance_key</th><th>multiplicity</th><th>status</th><th>basis</th><th>scope</th><th>evidence</th><th>Детали</th>
     </tr>
   </thead>
   <tbody>
@@ -94,14 +82,14 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% else %}
 <p>План пока не построен. Нажмите <strong>Run P4B (Build Plan)</strong>.</p>
 {% endif %}
 
 {% if registry_links %}
 <h3>Registry links</h3>
-<table id="registryLinksTable">
+<div class="table-wrap"><table id="registryLinksTable">
   <thead><tr><th>material_or_item</th><th>linked_doc_instance_key</th><th>quality_doc_ref</th><th>status</th><th>evidence</th></tr></thead>
   <tbody>
     {% for row in registry_links %}
@@ -114,7 +102,7 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% endif %}
 
 {% if questions %}
@@ -129,40 +117,8 @@
 <h3>Исключённые файлы (перемещены в 01_input/99_excluded)</h3>
 <ul>{% for x in excluded_files %}<li><strong>{{ x.path }}</strong>: {{ x.reason|truncatechars:120 }}</li>{% endfor %}</ul>
 {% endif %}
+{% endblock %}
 
-<script>
-(() => {
-  const table = document.getElementById("docPlanTable");
-  const saveForm = document.getElementById("docPlanSaveForm");
-  if (table && saveForm) {
-    let dragEl = null;
-    table.querySelectorAll("tbody tr").forEach((row) => {
-      row.addEventListener("dragstart", () => { dragEl = row; });
-      row.addEventListener("dragover", (e) => e.preventDefault());
-      row.addEventListener("drop", (e) => {
-        e.preventDefault();
-        if (!dragEl || dragEl === row) return;
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.children);
-        if (rows.indexOf(dragEl) < rows.indexOf(row)) tbody.insertBefore(dragEl, row.nextSibling);
-        else tbody.insertBefore(dragEl, row);
-      });
-    });
-    saveForm.addEventListener("submit", () => {
-      const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
-      document.getElementById("rows_order").value = order;
-    });
-  }
-
-  const toggle = document.getElementById("onlyNeedsToggle");
-  if (!toggle) return;
-  const filterRows = () => {
-    document.querySelectorAll("tr[data-status]").forEach((row) => {
-      const st = (row.getAttribute("data-status") || "").toLowerCase();
-      row.style.display = (toggle.checked && !st.startsWith("needs_")) ? "none" : "";
-    });
-  };
-  toggle.addEventListener("change", filterRows);
-})();
-</script>
+{% block extra_js %}
+<script defer src="{% static 'v02/js/drag_tables.js' %}"></script>
 {% endblock %}

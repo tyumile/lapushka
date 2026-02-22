@@ -2,7 +2,7 @@
 {% block title %}Начало{% endblock %}
 {% block content %}
 <h2>Лапушка Профи - загрузите свой проект</h2>
-<form method="post" data-disable-on-submit="true" data-busy-text="Создается..." data-status-target="status_create_project" data-running-text="Статус \"Создать проект\": выполняется...">
+<form method="post" class="card" data-disable-on-submit="true" data-busy-text="Создается..." data-status-target="status_create_project" data-running-text="Статус \"Создать проект\": выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="create_project" />
   <p>Название проекта: <input type="text" name="project_name"  /></p>
@@ -14,12 +14,13 @@
 {% endif %}
 
 {% if selected_project_id %}
-<hr/>
+<div class="card">
 <p><strong>Текущий проект:</strong> {{ selected_project_id }}</p>
 <p><a href="{% url 'v02_quality' project_id=selected_project_id %}">Перейти к шагу 2</a></p>
+</div>
 
 <h3>Загрузить проект</h3>
-<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project" data-running-text="Статус загрузки проекта: выполняется...">
+<form method="post" enctype="multipart/form-data" class="card" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project" data-running-text="Статус загрузки проекта: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_project" />
   <input type="hidden" name="project_id" value="{{ selected_project_id }}" />
@@ -29,7 +30,7 @@
 <p id="status_upload_project" class="muted">Статус загрузки проекта: {{ ui_status.upload_project.message|default:"еще не загружалось" }}</p>
 
 <h3>Загрузить документы качества</h3>
-<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_quality" data-running-text="Статус загрузки документов качества: выполняется...">
+<form method="post" enctype="multipart/form-data" class="card" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_quality" data-running-text="Статус загрузки документов качества: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_quality" />
   <input type="hidden" name="project_id" value="{{ selected_project_id }}" />
@@ -39,7 +40,7 @@
 <p id="status_upload_quality" class="muted">Статус загрузки документов качества: {{ ui_status.upload_quality.message|default:"еще не загружалось" }}</p>
 
 <h3>Загрузить ОЖР</h3>
-<form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_ojr" data-running-text="Статус загрузки ОЖР: выполняется...">
+<form method="post" enctype="multipart/form-data" class="card" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_ojr" data-running-text="Статус загрузки ОЖР: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_ojr" />
   <input type="hidden" name="project_id" value="{{ selected_project_id }}" />

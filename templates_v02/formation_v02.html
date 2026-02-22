@@ -1,4 +1,5 @@
 {% extends "base_v02.html" %}
+{% load static %}
 {% block title %}Формирование документов{% endblock %}
 {% block content %}
 <h2>4. Формирование документов</h2>
@@ -7,7 +8,7 @@
   {% csrf_token %}
   <input type="hidden" name="action" value="save_doc_list_edits" />
   <input type="hidden" name="rows_order" id="rows_order" />
-  <table id="docsTable">
+  <div class="table-wrap"><table id="docsTable">
     <thead><tr><th></th><th>Doc ID</th><th>Номер</th><th>Название</th><th>Статус</th></tr></thead>
     <tbody>
       {% for row in rows %}
@@ -15,12 +16,12 @@
         <td>::</td>
         <td>{{ row.doc_id }}</td>
         <td><input type="text" name="doc_number_suggestion_{{ forloop.counter0 }}" value="{{ row.doc_number_suggestion }}" /></td>
-        <td><input type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ row.doc_name }}"  /></td>
+        <td><input type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ row.doc_name }}" /></td>
         <td>{{ row.status }}</td>
       </tr>
       {% endfor %}
     </tbody>
-  </table>
+  </table></div>
   <button type="submit">Исправить</button>
 </form>
 <p id="status_save_doc_list_edits" class="muted">Статус кнопки "Исправить": {{ ui_status.save_doc_list_edits.message|default:"еще не использовалась" }}</p>
@@ -31,6 +32,7 @@
   <button type="submit">Сформировать документы</button>
 </form>
 <p id="status_run_p5" class="muted">Статус Process 5: {{ ui_status.run_p5.message|default:"еще не запускался" }}</p>
+
 {% if p4_comments %}
 <h3>Комментарии агента Process 4 (из файлов)</h3>
 <ul>
@@ -42,6 +44,7 @@
   {% endfor %}
 </ul>
 {% endif %}
+
 {% if p5_comments %}
 <h3>Комментарии агента Process 5 (из файлов)</h3>
 <ul>
@@ -56,7 +59,7 @@
 
 {% if outputs %}
 <h3>Сформированные выходы (по p5_fill_plan)</h3>
-<table>
+<div class="table-wrap"><table>
   <thead><tr><th>Путь</th><th>Шаблон</th><th>Формат</th></tr></thead>
   <tbody>
     {% for out in outputs %}
@@ -67,33 +70,10 @@
     </tr>
     {% endfor %}
   </tbody>
-</table>
+</table></div>
 {% endif %}
+{% endblock %}
 
-<script>
-(() => {
-  const table = document.getElementById("docsTable");
-  if (!table) return;
-  let dragEl = null;
-  table.querySelectorAll("tbody tr").forEach((row) => {
-    row.addEventListener("dragstart", () => { dragEl = row; });
-    row.addEventListener("dragover", (e) => e.preventDefault());
-    row.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (!dragEl || dragEl === row) return;
-      const tbody = table.querySelector("tbody");
-      const rows = Array.from(tbody.children);
-      if (rows.indexOf(dragEl) < rows.indexOf(row)) {
-        tbody.insertBefore(dragEl, row.nextSibling);
-      } else {
-        tbody.insertBefore(dragEl, row);
-      }
-    });
-  });
-  document.getElementById("editForm").addEventListener("submit", () => {
-    const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
-    document.getElementById("rows_order").value = order;
-  });
-})();
-</script>
+{% block extra_js %}
+<script defer src="{% static 'v02/js/drag_tables.js' %}"></script>
 {% endblock %}
