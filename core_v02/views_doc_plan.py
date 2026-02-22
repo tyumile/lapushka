@@ -121,7 +121,7 @@ def run_p4b_build_doc_plan_view(request, project_id: str):
 def save_doc_plan_view(request, project_id: str):
     if request.method != "POST":
         return redirect("v02_doc_plan", project_id=project_id)
-    source = read_processing(project_id, "p4b_doc_instances_final.json", read_processing(project_id, "p4b_doc_instances_v1.json", {}))
+    source = read_processing(project_id, "p4_doc_plan.json", read_processing(project_id, "p4b_doc_instances_final.json", read_processing(project_id, "p4b_doc_instances_v1.json", {})))
     if not source:
         messages.error(request, "Нет плана для сохранения. Запустите P4B.")
         return redirect("v02_doc_plan", project_id=project_id)
@@ -138,12 +138,18 @@ def save_doc_plan_view(request, project_id: str):
         mult["axis"] = request.POST.get(f"mult_axis_{i}", mult.get("axis", ""))
         mult["label"] = request.POST.get(f"mult_label_{i}", mult.get("label", ""))
         inst["multiplier"] = mult
-        inst["work_scope"] = _parse_json_or_keep(request.POST.get(f"work_scope_{i}", ""), inst.get("work_scope") or [])
+        parsed_scope = _parse_json_or_keep(request.POST.get(f"work_scope_{i}", ""), inst.get("scope") or inst.get("work_scope") or {})
+        if isinstance(parsed_scope, dict):
+            inst["scope"] = parsed_scope
+            inst["work_scope"] = inst.get("work_scope") or []
+        else:
+            inst["work_scope"] = parsed_scope
         inst["fields"] = _parse_json_or_keep(request.POST.get(f"fields_{i}", ""), inst.get("fields") or {})
         note = request.POST.get(f"user_note_{i}", "").strip()
         if note:
             inst["user_note"] = note
     source["doc_instances"] = instances
+    save_processing_json(project_id, "p4_doc_plan.json", source)
     save_processing_json(project_id, "p4b_doc_instances_final.json", source)
     diff = _diff_entries(project_id, original, source)
     _append_doc_plan_edit_log(project_id, diff)
@@ -153,14 +159,16 @@ def save_doc_plan_view(request, project_id: str):
 
 
 def doc_plan_view(request, project_id: str):
-    v1 = read_processing(project_id, "p4b_doc_instances_v1.json", {})
-    final = read_processing(project_id, "p4b_doc_instances_final.json", v1)
+    v1 = read_processing(project_id, "p4_doc_plan.json", read_processing(project_id, "p4b_doc_instances_v1.json", {}))
+    final = read_processing(project_id, "p4_doc_plan.json", read_processing(project_id, "p4b_doc_instances_final.json", v1))
     excluded_data = read_processing(project_id, "p4b_excluded_files.json", {})
     raw_instances = final.get("doc_instances") or []
     instances = [_normalize_doc_instance(inst, i) for i, inst in enumerate(raw_instances)]
     for inst in instances:
-        inst["work_scope_text"] = json.dumps(inst.get("work_scope") or [], ensure_ascii=False, indent=2)
+        inst["work_scope_text"] = json.dumps(inst.get("scope") or inst.get("work_scope") or [], ensure_ascii=False, indent=2)
         inst["fields_text"] = json.dumps(inst.get("fields") or {}, ensure_ascii=False, indent=2)
+        scope = inst.get("scope") if isinstance(inst.get("scope"), dict) else {}
+        inst["scope_short"] = ", ".join([str(scope.get(k)) for k in ("section", "floor", "axes", "stage") if scope.get(k)]) or "—"
     set_project_step(project_id, 4)
     return render(
         request,
@@ -169,8 +177,11 @@ def doc_plan_view(request, project_id: str):
             **common_context(project_id),
             "plan": final,
             "instances": instances,
+            "work_breakdown": final.get("work_breakdown") or [],
+            "registry_links": final.get("registry_links") or [],
+            "questions": final.get("questions") or [],
             "open_questions": final.get("open_questions") or [],
-            "issues": final.get("issues") or [],
+            "issues": (final.get("warnings") or final.get("issues") or []),
             "excluded_files": excluded_data.get("excluded") or [],
         },
     )

@@ -15,7 +15,7 @@
         <td>::</td>
         <td>{{ row.doc_id }}</td>
         <td><input type="text" name="doc_number_suggestion_{{ forloop.counter0 }}" value="{{ row.doc_number_suggestion }}" /></td>
-        <td><input type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ row.doc_name }}" style="width: 420px;" /></td>
+        <td><input type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ row.doc_name }}"  /></td>
         <td>{{ row.status }}</td>
       </tr>
       {% endfor %}
@@ -25,7 +25,7 @@
 </form>
 <p id="status_save_doc_list_edits" class="muted">Статус кнопки "Исправить": {{ ui_status.save_doc_list_edits.message|default:"еще не использовалась" }}</p>
 
-<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p5" data-running-text="Статус Process 5: выполняется...">
+<form method="post" class="btn-row" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p5" data-running-text="Статус Process 5: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="run_p5" />
   <button type="submit">Сформировать документы</button>

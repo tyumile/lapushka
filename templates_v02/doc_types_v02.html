@@ -27,7 +27,7 @@
 </form>
 <p id="status_upload_sample_id" class="muted">Статус: {{ ui_status.upload_sample_id.message|default:"еще не загружалось" }}</p>
 
-<form method="post" style="margin-top:12px;" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p4b" data-running-text="Статус Process P4B: выполняется...">
+<form method="post" class="card" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p4b" data-running-text="Статус Process P4B: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="run_p4b" />
   <table>
@@ -58,7 +58,7 @@
 
 <h3>Образцы по типам</h3>
 {% for dt in doc_types %}
-<form method="post" enctype="multipart/form-data" style="margin-bottom: 8px;">
+<form method="post" enctype="multipart/form-data" class="card">
   {% csrf_token %}
   <input type="hidden" name="action" value="upload_doc_type_sample" />
   <input type="hidden" name="doc_type_id" value="{{ dt.doc_type_id }}" />

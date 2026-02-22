@@ -18,35 +18,72 @@
 <p id="status_run_p4b" class="muted">Статус Process P4B: {{ ui_status.run_p4b.message|default:"еще не запускался" }}</p>
 <p id="status_save_doc_plan" class="muted">Статус Save corrections: {{ ui_status.save_doc_plan.message|default:"еще не запускалось" }}</p>
 
+<div class="btn-row">
+  <label><input id="onlyNeedsToggle" type="checkbox" /> Показывать только needs_*</label>
+</div>
+
+{% if work_breakdown %}
+<h3>Work breakdown</h3>
+<table id="workBreakdownTable">
+  <thead>
+    <tr>
+      <th>work_group_id</th><th>work_type_id</th><th>work_name</th><th>status</th><th>evidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for w in work_breakdown %}
+    <tr data-status="{{ w.status|default:'' }}">
+      <td>{{ w.work_group_id }}</td>
+      <td>{{ w.work_type_id }}</td>
+      <td>{{ w.work_name }}</td>
+      <td>{{ w.status }}</td>
+      <td>{% if w.evidence.file %}{{ w.evidence.file }}{% if w.evidence.page %} / стр. {{ w.evidence.page }}{% endif %}{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
 {% if instances %}
+<h3>Doc instances</h3>
 <table id="docPlanTable">
   <thead>
     <tr>
       <th></th>
-      <th>DocType</th>
-      <th>Название</th>
-      <th>Номер</th>
-      <th>Multiplier</th>
-      <th>Status</th>
+      <th>doc_id</th>
+      <th>doc_variant_id</th>
+      <th>instance_key</th>
+      <th>multiplicity</th>
+      <th>status</th>
+      <th>basis</th>
+      <th>scope</th>
+      <th>evidence</th>
       <th>Детали</th>
     </tr>
   </thead>
   <tbody>
     {% for inst in instances %}
-    <tr draggable="true" data-idx="{{ forloop.counter0 }}">
+    <tr draggable="true" data-idx="{{ forloop.counter0 }}" data-status="{{ inst.status|default:'' }}">
       <td>::</td>
-      <td>{{ inst.doc_type_id }}</td>
-      <td><input form="docPlanSaveForm" type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ inst.doc_name }}" style="width:280px;" /></td>
-      <td><input form="docPlanSaveForm" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ inst.doc_number }}" /></td>
-      <td>
-        <input form="docPlanSaveForm" type="text" name="mult_axis_{{ forloop.counter0 }}" value="{{ inst.multiplier.axis }}" placeholder="axis" style="width:80px;" />
-        <input form="docPlanSaveForm" type="text" name="mult_label_{{ forloop.counter0 }}" value="{{ inst.multiplier.label }}" placeholder="label" style="width:180px;" />
-      </td>
-      <td>{{ inst.overall_status }}</td>
+      <td>{{ inst.doc_id }}</td>
+      <td>{{ inst.doc_variant_id|default:"" }}</td>
+      <td>{{ inst.instance_key }}</td>
+      <td>{{ inst.multiplicity }}</td>
+      <td>{{ inst.status }}</td>
+      <td>{{ inst.basis }}</td>
+      <td>{{ inst.scope_short }}</td>
+      <td>{% if inst.evidence.file %}{{ inst.evidence.file }}{% if inst.evidence.page %} / стр. {{ inst.evidence.page }}{% endif %}{% else %}—{% endif %}</td>
       <td>
         <details>
           <summary>Edit</summary>
-          <p><strong>Work scope (JSON)</strong></p>
+          <p><strong>doc_name</strong></p>
+          <input form="docPlanSaveForm" type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ inst.doc_name }}" />
+          <p><strong>doc_number</strong></p>
+          <input form="docPlanSaveForm" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ inst.doc_number }}" />
+          <p><strong>multiplier (legacy UI compatibility)</strong></p>
+          <input form="docPlanSaveForm" type="text" name="mult_axis_{{ forloop.counter0 }}" value="{{ inst.multiplier.axis }}" placeholder="axis" />
+          <input form="docPlanSaveForm" type="text" name="mult_label_{{ forloop.counter0 }}" value="{{ inst.multiplier.label }}" placeholder="label" />
+          <p><strong>Scope (JSON)</strong></p>
           <textarea form="docPlanSaveForm" name="work_scope_{{ forloop.counter0 }}" rows="8" cols="90">{{ inst.work_scope_text }}</textarea>
           <p><strong>Fields (JSON)</strong></p>
           <textarea form="docPlanSaveForm" name="fields_{{ forloop.counter0 }}" rows="12" cols="90">{{ inst.fields_text }}</textarea>
@@ -62,12 +99,30 @@
 <p>План пока не построен. Нажмите <strong>Run P4B (Build Plan)</strong>.</p>
 {% endif %}
 
-{% if open_questions %}
-<h3>Open Questions</h3>
-<ul>{% for q in open_questions %}<li>{{ q }}</li>{% endfor %}</ul>
+{% if registry_links %}
+<h3>Registry links</h3>
+<table id="registryLinksTable">
+  <thead><tr><th>material_or_item</th><th>linked_doc_instance_key</th><th>quality_doc_ref</th><th>status</th><th>evidence</th></tr></thead>
+  <tbody>
+    {% for row in registry_links %}
+    <tr data-status="{{ row.status|default:'' }}">
+      <td>{{ row.material_or_item }}</td>
+      <td>{{ row.linked_doc_instance_key|default:"" }}</td>
+      <td>{{ row.quality_doc_ref|default:"" }}</td>
+      <td>{{ row.status }}</td>
+      <td>{% if row.evidence.file %}{{ row.evidence.file }}{% if row.evidence.page %} / стр. {{ row.evidence.page }}{% endif %}{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if questions %}
+<h3>Questions</h3>
+<ul>{% for q in questions %}<li>{{ q.id }} — {{ q.type }}: {{ q.message }}</li>{% endfor %}</ul>
 {% endif %}
 {% if issues %}
-<h3>Issues</h3>
+<h3>Warnings / Issues</h3>
 <ul>{% for i in issues %}<li>{{ i }}</li>{% endfor %}</ul>
 {% endif %}
 {% if excluded_files %}
@@ -79,24 +134,35 @@
 (() => {
   const table = document.getElementById("docPlanTable");
   const saveForm = document.getElementById("docPlanSaveForm");
-  if (!table || !saveForm) return;
-  let dragEl = null;
-  table.querySelectorAll("tbody tr").forEach((row) => {
-    row.addEventListener("dragstart", () => { dragEl = row; });
-    row.addEventListener("dragover", (e) => e.preventDefault());
-    row.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (!dragEl || dragEl === row) return;
-      const tbody = table.querySelector("tbody");
-      const rows = Array.from(tbody.children);
-      if (rows.indexOf(dragEl) < rows.indexOf(row)) tbody.insertBefore(dragEl, row.nextSibling);
-      else tbody.insertBefore(dragEl, row);
+  if (table && saveForm) {
+    let dragEl = null;
+    table.querySelectorAll("tbody tr").forEach((row) => {
+      row.addEventListener("dragstart", () => { dragEl = row; });
+      row.addEventListener("dragover", (e) => e.preventDefault());
+      row.addEventListener("drop", (e) => {
+        e.preventDefault();
+        if (!dragEl || dragEl === row) return;
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.children);
+        if (rows.indexOf(dragEl) < rows.indexOf(row)) tbody.insertBefore(dragEl, row.nextSibling);
+        else tbody.insertBefore(dragEl, row);
+      });
     });
-  });
-  saveForm.addEventListener("submit", () => {
-    const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
-    document.getElementById("rows_order").value = order;
-  });
+    saveForm.addEventListener("submit", () => {
+      const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
+      document.getElementById("rows_order").value = order;
+    });
+  }
+
+  const toggle = document.getElementById("onlyNeedsToggle");
+  if (!toggle) return;
+  const filterRows = () => {
+    document.querySelectorAll("tr[data-status]").forEach((row) => {
+      const st = (row.getAttribute("data-status") || "").toLowerCase();
+      row.style.display = (toggle.checked && !st.startsWith("needs_")) ? "none" : "";
+    });
+  };
+  toggle.addEventListener("change", filterRows);
 })();
 </script>
 {% endblock %}

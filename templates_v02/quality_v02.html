@@ -106,7 +106,7 @@
 </form>
 <p id="status_quality_fix" class="muted">Статус кнопки "Исправить": {{ ui_status.save_quality_edits.message|default:"еще не использовалась" }}</p>
 
-<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Переход..." data-status-target="status_quality_next" data-running-text="Статус кнопки \"Далее\": выполняется...">
+<form method="post" class="btn-row" data-disable-on-submit="true" data-busy-text="Переход..." data-status-target="status_quality_next" data-running-text="Статус кнопки \"Далее\": выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="next_to_doc_types" />
   <button type="submit">Далее</button>
