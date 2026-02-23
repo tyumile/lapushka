@@ -14,7 +14,7 @@
     <input type="hidden" name="rows_order" id="rows_order" />
     <button type="submit">Save corrections</button>
   </form>
-  <a href="{% url 'v02_formation' project_id=project_id %}">Next: Generate documents</a>
+  <a class="btn-link" href="{% url 'v02_formation' project_id=project_id %}">Next: Generate documents</a>
 </div>
 <p id="status_run_p4b" class="muted">Статус Process P4B: {{ ui_status.run_p4b.message|default:"еще не запускался" }}</p>
 <p id="status_save_doc_plan" class="muted">Статус Save corrections: {{ ui_status.save_doc_plan.message|default:"еще не запускалось" }}</p>
