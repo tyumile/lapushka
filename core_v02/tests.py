@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 
 from .services.io_utils import read_processing
@@ -10,7 +11,14 @@ from .services.process_p4b_build_doc_plan import (
     validate_p4_plan_payload,
 )
 from .services.process_p5_fill_plan import run_process_p5
-from .services.project_storage import create_project_structure, load_project_meta, project_root, save_processing_json, save_project_meta
+from .services.project_storage import (
+    create_project_structure,
+    list_uploaded_files,
+    load_project_meta,
+    project_root,
+    save_processing_json,
+    save_project_meta,
+)
 from .views_utils import resolve_files_for_process
 
 
@@ -214,3 +222,26 @@ class V02P4ValidationTests(TestCase):
         self.assertEqual(upload_paths, [])
         self.assertTrue(any("sample_xlsx_json::" in x for x in input_texts))
         self.assertTrue(mock_conv.called)
+
+
+@override_settings(MOCK_MODE=True)
+class V02QualityUploadTests(TestCase):
+    def setUp(self):
+        self.project_id = create_project_structure("Quality upload")
+
+    def test_upload_quality_requires_selected_files(self):
+        c = Client()
+        resp = c.post(f"/project/{self.project_id}/quality/", {"action": "upload_quality"})
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn("/quality/", resp.headers.get("Location", ""))
+
+    def test_upload_quality_with_named_field_saves_file(self):
+        c = Client()
+        uploaded = SimpleUploadedFile("q1.txt", b"quality")
+        resp = c.post(
+            f"/project/{self.project_id}/quality/",
+            {"action": "upload_quality", "quality_files": [uploaded]},
+        )
+        self.assertEqual(resp.status_code, 302)
+        files_map = list_uploaded_files(self.project_id)
+        self.assertIn("01_input/02_quality_docs/q1.txt", files_map.get("quality") or [])

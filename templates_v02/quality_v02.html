@@ -18,7 +18,7 @@
     <input type="hidden" name="action" value="upload_project" />
     <div class="upload-row">
       <label for="upload_project_files">Проект</label>
-      <input id="upload_project_files" type="file" name="files" multiple />
+      <input id="upload_project_files" type="file" name="project_files" multiple required />
       <button type="submit">Загрузить</button>
     </div>
   </form>
@@ -29,7 +29,7 @@
     <input type="hidden" name="action" value="upload_quality" />
     <div class="upload-row">
       <label for="upload_quality_files">Документы качества</label>
-      <input id="upload_quality_files" type="file" name="files" multiple />
+      <input id="upload_quality_files" type="file" name="quality_files" multiple required />
       <button type="submit">Загрузить</button>
     </div>
   </form>
@@ -40,7 +40,7 @@
     <input type="hidden" name="action" value="upload_ojr" />
     <div class="upload-row">
       <label for="upload_ojr_files">ОЖР</label>
-      <input id="upload_ojr_files" type="file" name="files" multiple />
+      <input id="upload_ojr_files" type="file" name="ojr_files" multiple required />
       <button type="submit">Загрузить</button>
     </div>
   </form>
