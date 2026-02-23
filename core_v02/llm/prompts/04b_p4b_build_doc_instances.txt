@@ -149,6 +149,7 @@ razdel_code={{razdel_code}}
 razdel_name={{razdel_name}}
 selected_doc_type_ids={{selected_doc_type_ids_json}}
 user_comment={{user_comment}}
+feedback_rules={{feedback_rules}}
 
 ПОДСКАЗКИ (НЕ источники):
 dictionary_hint={{dictionary_hint}}

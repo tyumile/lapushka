@@ -1,0 +1,29 @@
+{% extends "base_v02.html" %}
+{% block title %}Логи запусков{% endblock %}
+{% block content %}
+<h2>Логи запусков</h2>
+<p class="muted">Последняя папка запуска: {{ latest_folder|default:"нет" }}</p>
+
+{% if runs %}
+  {% for r in runs %}
+  <details style="margin:12px 0; border:1px solid #d7dce2; border-radius:10px; padding:10px;">
+    <summary><strong>{{ r.process }}</strong> | {{ r.run_id }}</summary>
+    <p><strong>Папка:</strong> {{ r.folder }}</p>
+    <h3>Run Meta</h3>
+    <pre style="white-space: pre-wrap; word-break: break-word;">{{ r.run_meta_text }}</pre>
+    <h3>Что отправлялось агенту</h3>
+    <pre style="white-space: pre-wrap; word-break: break-word;">{{ r.uploaded_files_text }}</pre>
+    {% if r.outputs %}
+    <h3>Outputs</h3>
+    <ul>
+      {% for o in r.outputs %}<li>{{ o }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    <h3>Ответ агента (raw_response.txt)</h3>
+    <pre style="white-space: pre-wrap; word-break: break-word;">{{ r.raw_response }}</pre>
+  </details>
+  {% endfor %}
+{% else %}
+<p>Логи пока не найдены.</p>
+{% endif %}
+{% endblock %}

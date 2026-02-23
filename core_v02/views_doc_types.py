@@ -37,10 +37,10 @@ def doc_types_view(request, project_id: str):
 
         if action == "run_p4b":
             set_action_status(project_id, "run_p4b", "running", "Process P4B запущен...")
-            selected_doc_type_ids = request.POST.getlist("doc_type_ids")
+            selected_doc_type_ids = [d.get("doc_type_id") for d in get_doc_types(razdel_code) if d.get("doc_type_id")]
             if not selected_doc_type_ids:
-                set_action_status(project_id, "run_p4b", "error", "Выберите хотя бы один тип документа.")
-                messages.error(request, "Выберите хотя бы один тип документа.")
+                set_action_status(project_id, "run_p4b", "error", "Для раздела не найдено типов документов.")
+                messages.error(request, "Для раздела не найдено типов документов.")
                 return redirect("v02_doc_types", project_id=project_id)
             try:
                 _, payload, excluded = run_process_p4b_build_doc_plan(project_id, razdel_code, selected_doc_type_ids)
@@ -48,7 +48,7 @@ def doc_types_view(request, project_id: str):
                 if excluded:
                     for x in excluded:
                         messages.warning(request, f"Исключён: {x['path']}. Причина: {x['reason'][:150]}...")
-                    status_msg += f" Исключено файлов: {len(excluded)} (см. 01_input/99_excluded)"
+                    status_msg += f" Исключено файлов: {len(excluded)} (см. 01_input/099_excluded)"
                 set_action_status(project_id, "run_p4b", "success", status_msg)
                 messages.success(request, f"Сформирован план документов: {len(payload.get('doc_instances') or [])}")
             except Exception as exc:

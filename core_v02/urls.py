@@ -5,7 +5,7 @@ from .views_doc_plan import doc_plan_view, run_p4b_build_doc_plan_view, save_doc
 from .views_formation import formation_view
 from .views_quality import quality_view
 from .views_start import open_last_logs_view, start_view
-from .views_utils import download_input_file_view, download_output_zip_view, project_status_view
+from .views_utils import download_input_file_view, download_output_zip_view, logs_view, project_status_view
 
 urlpatterns = [
     path("start/", start_view, name="v02_start"),
@@ -19,4 +19,5 @@ urlpatterns = [
     path("project/<str:project_id>/input/<path:relative_path>", download_input_file_view, name="v02_input_file"),
     path("project/<str:project_id>/status/", project_status_view, name="v02_project_status"),
     path("project/<str:project_id>/logs-last/", open_last_logs_view, name="v02_logs_last"),
+    path("project/<str:project_id>/logs/", logs_view, name="v02_logs"),
 ]

@@ -11,7 +11,9 @@
   <form method="post" action="{% url 'v02_doc_plan_save' project_id=project_id %}" id="docPlanSaveForm" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_save_doc_plan" data-running-text="Статус Save corrections: выполняется...">
     {% csrf_token %}
     <input type="hidden" name="rows_order" id="rows_order" />
-    <button type="submit">Save corrections</button>
+    <label for="p4_general_comment"><strong>Общий комментарий для исправления агентом</strong></label>
+    <textarea id="p4_general_comment" name="general_comment" rows="3" style="width:100%;" placeholder="Что нужно учесть при исправлении Process 4">{{ p4_general_comment }}</textarea>
+    <button type="submit">Исправить</button>
   </form>
   <a href="{% url 'v02_formation' project_id=project_id %}"><button type="button">Next: Generate documents</button></a>
 </div>
@@ -19,45 +21,187 @@
 <p id="status_save_doc_plan" class="muted">Статус Save corrections: {{ ui_status.save_doc_plan.message|default:"еще не запускалось" }}</p>
 
 {% if instances %}
-<table id="docPlanTable">
-  <thead>
-    <tr>
-      <th></th>
-      <th>DocType</th>
-      <th>Название</th>
-      <th>Номер</th>
-      <th>Multiplier</th>
-      <th>Status</th>
-      <th>Детали</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for inst in instances %}
-    <tr draggable="true" data-idx="{{ forloop.counter0 }}">
-      <td>::</td>
-      <td>{{ inst.doc_type_id }}</td>
-      <td><input form="docPlanSaveForm" type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ inst.doc_name }}" style="width:280px;" /></td>
-      <td><input form="docPlanSaveForm" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ inst.doc_number }}" /></td>
-      <td>
-        <input form="docPlanSaveForm" type="text" name="mult_axis_{{ forloop.counter0 }}" value="{{ inst.multiplier.axis }}" placeholder="axis" style="width:80px;" />
-        <input form="docPlanSaveForm" type="text" name="mult_label_{{ forloop.counter0 }}" value="{{ inst.multiplier.label }}" placeholder="label" style="width:180px;" />
-      </td>
-      <td>{{ inst.overall_status }}</td>
-      <td>
-        <details>
-          <summary>Edit</summary>
-          <p><strong>Work scope (JSON)</strong></p>
-          <textarea form="docPlanSaveForm" name="work_scope_{{ forloop.counter0 }}" rows="8" cols="90">{{ inst.work_scope_text }}</textarea>
-          <p><strong>Fields (JSON)</strong></p>
-          <textarea form="docPlanSaveForm" name="fields_{{ forloop.counter0 }}" rows="12" cols="90">{{ inst.fields_text }}</textarea>
-          <p><strong>User note</strong></p>
-          <textarea form="docPlanSaveForm" name="user_note_{{ forloop.counter0 }}" rows="3" cols="90">{{ inst.user_note }}</textarea>
-        </details>
-      </td>
-    </tr>
+<style>
+  .doc-type-card {
+    border: 1px solid #cfd8e3;
+    border-radius: 12px;
+    background: #f8fbff;
+    margin: 14px 0;
+    padding: 8px 12px;
+  }
+  .doc-type-card > summary {
+    cursor: pointer;
+    font-weight: 700;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .doc-type-card > summary::-webkit-details-marker {
+    display: none;
+  }
+  .doc-card {
+    border: 1px solid #d7dce2;
+    border-radius: 12px;
+    background: #fff;
+    margin: 10px 0;
+    padding: 8px 12px;
+  }
+  .doc-card > summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .doc-card > summary::-webkit-details-marker {
+    display: none;
+  }
+  .doc-meta {
+    color: #667085;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .doc-fields {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  .doc-fields th, .doc-fields td {
+    border: 1px solid #e4e7ec;
+    padding: 8px;
+    vertical-align: top;
+  }
+  .doc-fields th {
+    width: 260px;
+    background: #f8fafc;
+    text-align: left;
+    font-weight: 600;
+  }
+  .doc-fields input, .doc-fields textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .doc-fields textarea {
+    min-height: 120px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .inner-fields {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .inner-fields th, .inner-fields td {
+    border: 1px solid #e4e7ec;
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+  .inner-fields th {
+    background: #f8fafc;
+    font-weight: 600;
+  }
+</style>
+
+<div id="docPlanBlocks">
+  {% for group in doc_type_groups %}
+  <details class="doc-type-card">
+    <summary>
+      <span>Тип документа: {{ group.doc_type_id }}</span>
+      <span class="doc-meta">Документов: {{ group.instances|length }}</span>
+    </summary>
+    {% for inst in group.instances %}
+    <details class="doc-card" data-idx="{{ inst.row_idx }}">
+      <summary>
+        <span>{{ inst.doc_name|default:"(без названия)" }}</span>
+        <span class="doc-meta">{{ inst.overall_status }}</span>
+      </summary>
+      <table class="doc-fields">
+        <tbody>
+          <tr>
+            <th>Doc type</th>
+            <td>{{ inst.doc_type_id }}</td>
+          </tr>
+          <tr>
+            <th>Название документа</th>
+            <td><input form="docPlanSaveForm" type="text" name="doc_name_{{ inst.row_idx }}" value="{{ inst.doc_name }}" /></td>
+          </tr>
+          <tr>
+            <th>Номер документа</th>
+            <td><input form="docPlanSaveForm" type="text" name="doc_number_{{ inst.row_idx }}" value="{{ inst.doc_number }}" /></td>
+          </tr>
+          <tr>
+            <th>Multiplier axis</th>
+            <td><input form="docPlanSaveForm" type="text" name="mult_axis_{{ inst.row_idx }}" value="{{ inst.multiplier.axis }}" /></td>
+          </tr>
+          <tr>
+            <th>Multiplier label</th>
+            <td><input form="docPlanSaveForm" type="text" name="mult_label_{{ inst.row_idx }}" value="{{ inst.multiplier.label }}" /></td>
+          </tr>
+          <tr>
+            <th>Work scope (JSON)</th>
+            <td><textarea form="docPlanSaveForm" name="work_scope_{{ inst.row_idx }}">{{ inst.work_scope_text }}</textarea></td>
+          </tr>
+          <tr>
+            <th>Fields</th>
+            <td>
+              {% if inst.fields_rows %}
+              <table class="inner-fields">
+                <thead>
+                  <tr>
+                    <th>Поле</th>
+                    <th>Значение</th>
+                    <th>Статус</th>
+                    <th>Confidence</th>
+                    <th>Источники</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for f in inst.fields_rows %}
+                  <tr>
+                    <td>{{ f.name }}</td>
+                    <td>{{ f.value }}</td>
+                    <td>{{ f.status }}</td>
+                    <td>{{ f.confidence }}</td>
+                    <td>{{ f.sources }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% elif inst.fields %}
+              <table class="inner-fields">
+                <thead>
+                  <tr>
+                    <th>Поле</th>
+                    <th>Значение</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for k, v in inst.fields.items %}
+                  <tr>
+                    <td>{{ k }}</td>
+                    <td>{{ v }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <span class="muted">Поля не заполнены.</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>User note</th>
+            <td><textarea form="docPlanSaveForm" name="user_note_{{ inst.row_idx }}" rows="3">{{ inst.user_note }}</textarea></td>
+          </tr>
+        </tbody>
+      </table>
+    </details>
     {% endfor %}
-  </tbody>
-</table>
+  </details>
+  {% endfor %}
+</div>
 {% else %}
 <p>План пока не построен. Нажмите <strong>Run P4B (Build Plan)</strong>.</p>
 {% endif %}
@@ -71,30 +215,17 @@
 <ul>{% for i in issues %}<li>{{ i }}</li>{% endfor %}</ul>
 {% endif %}
 {% if excluded_files %}
-<h3>Исключённые файлы (перемещены в 01_input/99_excluded)</h3>
+<h3>Исключённые файлы (скопированы в 01_input/099_excluded)</h3>
 <ul>{% for x in excluded_files %}<li><strong>{{ x.path }}</strong>: {{ x.reason|truncatechars:120 }}</li>{% endfor %}</ul>
 {% endif %}
 
 <script>
 (() => {
-  const table = document.getElementById("docPlanTable");
+  const blocks = document.getElementById("docPlanBlocks");
   const saveForm = document.getElementById("docPlanSaveForm");
-  if (!table || !saveForm) return;
-  let dragEl = null;
-  table.querySelectorAll("tbody tr").forEach((row) => {
-    row.addEventListener("dragstart", () => { dragEl = row; });
-    row.addEventListener("dragover", (e) => e.preventDefault());
-    row.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (!dragEl || dragEl === row) return;
-      const tbody = table.querySelector("tbody");
-      const rows = Array.from(tbody.children);
-      if (rows.indexOf(dragEl) < rows.indexOf(row)) tbody.insertBefore(dragEl, row.nextSibling);
-      else tbody.insertBefore(dragEl, row);
-    });
-  });
+  if (!blocks || !saveForm) return;
   saveForm.addEventListener("submit", () => {
-    const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
+    const order = Array.from(blocks.querySelectorAll(".doc-card")).map((r) => r.dataset.idx).join(",");
     document.getElementById("rows_order").value = order;
   });
 })();

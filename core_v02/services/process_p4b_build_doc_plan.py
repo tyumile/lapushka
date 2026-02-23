@@ -8,14 +8,19 @@ from pathlib import Path
 from ..llm.prompt_loader_v02 import load_prompt
 from ..llm.responses_client_v02 import ResponsesClientV02
 from .dictionary_service import get_razdel, load_dictionary
-from .llm_runtime import SUPPORTED_CONTEXT_EXTS
+from .llm_runtime import (
+    SUPPORTED_CONTEXT_EXTS,
+    TABLE_CONTEXT_PROMPT_NOTE,
+    prepare_context_file_for_upload,
+    resolve_openai_model,
+)
 from .project_storage import persist_run_artifact, persist_run_json, project_root, save_processing_json
 
-EXCLUDED_REL = "01_input/99_excluded"
+EXCLUDED_REL = "01_input/099_excluded"
 
 
 def _move_to_excluded(root: Path, path: Path, reason: str) -> Path:
-    """Move file to 01_input/99_excluded, preserving name. Returns new path."""
+    """Copy file to 01_input/099_excluded, preserving name. Returns copied path."""
     try:
         rel = path.relative_to(root)
     except ValueError:
@@ -33,7 +38,7 @@ def _move_to_excluded(root: Path, path: Path, reason: str) -> Path:
         dest = excluded_dir / f"{stem}_{idx}{suf}"
         idx += 1
     if path != dest:
-        shutil.move(str(path), str(dest))
+        shutil.copy2(str(path), str(dest))
     meta_path = dest.with_suffix(dest.suffix + ".excluded_reason.txt")
     meta_path.write_text(reason, encoding="utf-8")
     return dest
@@ -77,6 +82,46 @@ def _read_project_comment(project_id: str) -> str:
         return (payload.get("comment") or "").strip()
     except json.JSONDecodeError:
         return ""
+
+
+def _collect_excluded_non_reason_files(root: Path) -> list[Path]:
+    excluded_dir = root / EXCLUDED_REL
+    if not excluded_dir.exists():
+        return []
+    files: list[Path] = []
+    for p in excluded_dir.rglob("*"):
+        if not p.is_file():
+            continue
+        if p.name.endswith(".excluded_reason.txt"):
+            continue
+        files.append(p)
+    return files
+
+
+def _build_supplemental_context(root: Path, files: list[Path], max_chars_per_file: int = 12000) -> str:
+    chunks: list[str] = []
+    for p in files:
+        try:
+            rel = str(p.relative_to(root)).replace("\\", "/")
+        except ValueError:
+            rel = p.name
+        display_name = p.name
+        try:
+            upload_name, upload_bytes, _ = prepare_context_file_for_upload(p)
+            display_name = upload_name
+            text = upload_bytes.decode("utf-8", errors="replace")
+        except Exception:
+            # Best-effort fallback for plain text-like files.
+            try:
+                text = p.read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                continue
+        if len(text) > max_chars_per_file:
+            text = text[:max_chars_per_file] + "\n... [truncated]"
+        chunks.append(f"\n=== FILE: {rel} (as {display_name}) ===\n{text}")
+    if not chunks:
+        return ""
+    return "\n\nSUPPLEMENTAL NON-PDF CONTEXT (treat as source material):\n" + "\n".join(chunks)
 
 
 def _normalize_doc_instance(inst: dict, idx: int) -> dict:
@@ -167,11 +212,20 @@ def _mock_payload(razdel_code: str, selected_doc_type_ids: list[str]) -> dict:
     }
 
 
-def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_doc_type_ids: list[str]) -> tuple[str, dict]:
+def run_process_p4b_build_doc_plan(
+    project_id: str,
+    razdel_code: str,
+    selected_doc_type_ids: list[str],
+    feedback_rules: str = "",
+) -> tuple[str, dict]:
     run_id = datetime.utcnow().strftime("%Y%m%d%H%M%S") + "-" + secrets.token_hex(3)
-    model = "gpt-4.1-mini"
+    model = resolve_openai_model()
     root = project_root(project_id)
     input_files = _collect_input_files(project_id, razdel_code)
+    excluded_files_for_context = _collect_excluded_non_reason_files(root)
+    pdf_input_files = [p for p in input_files if p.suffix.lower() == ".pdf"]
+    non_pdf_context_files = [p for p in input_files if p.suffix.lower() != ".pdf"]
+    supplemental_context = _build_supplemental_context(root, non_pdf_context_files + excluded_files_for_context)
     razdel = get_razdel(razdel_code)
     user_comment = _read_project_comment(project_id)
     dictionary_hint = f"dict_size={len((load_dictionary().get('razdels') or []))}"
@@ -198,8 +252,7 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
             payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
             save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
             save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)
-            if not (root / "02_processing" / "p4b_doc_instances_final.json").exists():
-                save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
+            save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
             persist_run_json(project_id, "process_p4b", run_id, "uploaded_files.json", {"files": []})
             persist_run_artifact(project_id, "process_p4b", run_id, "raw_response.txt", json.dumps(payload, ensure_ascii=False))
             persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
@@ -213,19 +266,20 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
             return run_id, payload, []
 
     client = ResponsesClientV02(api_key=api_key or None)
-    upload_map: dict[str, str] = {}
+    upload_map: dict[str, dict] = {}
     file_ids: list[str] = []
     items: list[tuple[Path, str, str]] = []
     excluded: list[dict] = []
 
-    for p in input_files:
+    for p in pdf_input_files:
         try:
             rel = str(p.relative_to(root)).replace("\\", "/")
         except ValueError:
             rel = p.name
         try:
-            fid = client.upload_file_bytes(p.name, p.read_bytes())
-            upload_map[rel] = fid
+            upload_name, upload_bytes, converted_from = prepare_context_file_for_upload(p)
+            fid = client.upload_file_bytes(upload_name, upload_bytes)
+            upload_map[rel] = {"file_id": fid, "upload_name": upload_name, "converted_from": converted_from}
             file_ids.append(fid)
             items.append((p, rel, fid))
         except Exception as e:
@@ -269,19 +323,27 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
             "quality_registry_hint": quality_registry_hint,
             "regs_hint": regs_hint,
             "samples_hint": samples_hint,
+            "feedback_rules": feedback_rules or "нет дополнительных правил",
         },
-    )
+    ) + TABLE_CONTEXT_PROMPT_NOTE + supplemental_context
+
+    def _is_file_support_error(msg: str) -> bool:
+        m = (msg or "").lower()
+        return (
+            "image_parse_error" in m
+            or "unsupported image" in m
+            or "unsupported_file" in m
+            or ("invalid_request_error" in m and "file type" in m)
+        )
 
     try:
         payload, raw = _call_with_ids(file_ids)
     except Exception as e:
         err_str = str(e).lower()
-        if "image_parse_error" in err_str or "unsupported image" in err_str:
+        if _is_file_support_error(err_str):
             bad_path_rel = None
             for i, (path, rel, fid) in enumerate(items):
                 trial_ids = [x[2] for j, x in enumerate(items) if j != i]
-                if not trial_ids:
-                    break
                 try:
                     payload, raw = _call_with_ids(trial_ids)
                     bad_path_rel = rel
@@ -291,11 +353,24 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
                     except (ValueError, TypeError):
                         pass
                     excluded.append({"path": rel, "reason": str(e)[:300]})
+                    upload_map.pop(rel, None)
+                    items = [x for j, x in enumerate(items) if j != i]
                     break
                 except Exception:
                     continue
             if bad_path_rel is None:
-                raise
+                # Fallback for APIs/models that only accept PDF as input_file.
+                pdf_items = [x for x in items if x[0].suffix.lower() == ".pdf"]
+                non_pdf_items = [x for x in items if x[0].suffix.lower() != ".pdf"]
+                for path, rel, _ in non_pdf_items:
+                    try:
+                        if root in path.parents or path == root or str(path).startswith(str(root)):
+                            _move_to_excluded(root, path, f"File type not accepted by API: {e}")
+                    except (ValueError, TypeError):
+                        pass
+                    excluded.append({"path": rel, "reason": f"unsupported_file: {str(e)[:260]}"})
+                    upload_map.pop(rel, None)
+                payload, raw = _call_with_ids([x[2] for x in pdf_items])
         else:
             raise
     payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
@@ -304,8 +379,7 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
 
     save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
     save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)
-    if not (root / "02_processing" / "p4b_doc_instances_final.json").exists():
-        save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
+    save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
     persist_run_json(project_id, "process_p4b", run_id, "uploaded_files.json", upload_map)
     persist_run_artifact(project_id, "process_p4b", run_id, "raw_response.txt", raw)
     persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
@@ -316,6 +390,5 @@ def run_process_p4b_build_doc_plan(project_id: str, razdel_code: str, selected_d
         "run_meta.json",
         {"process": "process_p4b", "model": model, "success": True, "mock_mode": False, "excluded": excluded},
     )
-    if excluded:
-        save_processing_json(project_id, "p4b_excluded_files.json", {"excluded": excluded, "run_id": run_id})
+    save_processing_json(project_id, "p4b_excluded_files.json", {"excluded": excluded, "run_id": run_id})
     return run_id, payload, excluded

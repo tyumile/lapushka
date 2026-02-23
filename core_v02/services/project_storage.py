@@ -1,5 +1,6 @@
 import json
 import secrets
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -7,7 +8,31 @@ from django.conf import settings
 
 
 def _safe_name(value: str) -> str:
-    cleaned = "".join(c for c in (value or "") if c.isalnum() or c in " _-").strip()
+    translit_map = {
+        "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e", "ж": "zh", "з": "z", "и": "i",
+        "й": "y", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t",
+        "у": "u", "ф": "f", "х": "h", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y", "ь": "",
+        "э": "e", "ю": "yu", "я": "ya",
+    }
+    src = (value or "").strip()
+    out = []
+    for ch in src:
+        low = ch.lower()
+        if low in translit_map:
+            part = translit_map[low]
+            out.append(part.capitalize() if ch.isupper() and part else part)
+            continue
+        if ch.isascii() and (ch.isalnum() or ch in " _-"):
+            out.append(ch)
+            continue
+        if ch.isascii():
+            out.append(" ")
+            continue
+        # Keep latin-like characters from other alphabets out of folder id.
+        out.append(" ")
+    cleaned = "".join(out)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    cleaned = re.sub(r"[^A-Za-z0-9 _-]+", "", cleaned)
     return cleaned or "project"
 
 

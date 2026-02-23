@@ -93,7 +93,7 @@ class ResponsesClientV02:
         instructions: str,
         user_text: str,
         file_ids: list[str],
-        model: str = "gpt-4.1-mini",
+        model: str,
         timeout_s: int = 120,
     ) -> tuple[dict, str]:
         pauses = [1, 2, 4]

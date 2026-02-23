@@ -1,13 +1,9 @@
-{% extends "base_v02.html" %}
+﻿{% extends "base_v02.html" %}
 {% block title %}Выбрать тип документов{% endblock %}
 {% block content %}
 <h2>3. Выбрать тип документов</h2>
 
 <h3>Раздел: {{ razdel_code }}</h3>
-<p><strong>Файлы проекта:</strong> {{ files_map.project|join:", " }}</p>
-<p><strong>Файлы качества:</strong> {{ files_map.quality|join:", " }}</p>
-<p><strong>ОЖР:</strong> {{ files_map.ojr|join:", " }}</p>
-<p><strong>Образцы:</strong> {{ files_map.samples|join:", " }}</p>
 
 <h3>Загрузить образцы проектов</h3>
 <form method="post" enctype="multipart/form-data" class="inline" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_sample_project" data-running-text="Статус: загрузка образцов проектов выполняется...">
@@ -30,18 +26,7 @@
 <form method="post" style="margin-top:12px;" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p4b" data-running-text="Статус Process P4B: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="run_p4b" />
-  <table>
-    <thead><tr><th>Выбрать</th><th>Тип документа</th></tr></thead>
-    <tbody>
-      {% for dt in doc_types %}
-      <tr>
-        <td><input type="checkbox" name="doc_type_ids" value="{{ dt.doc_type_id }}" /></td>
-        <td>{{ dt.doc_type_name }} ({{ dt.doc_type_id }})</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <button type="submit">Сформировать план документов</button>
+  <button type="submit">Сформировать план документов (все типы)</button>
 </form>
 <p id="status_run_p4b" class="muted">Статус Process P4B: {{ ui_status.run_p4b.message|default:"еще не запускался" }}</p>
 {% if p4_comments %}

@@ -72,6 +72,8 @@
 <form method="post" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_quality_fix" data-running-text="Статус кнопки \"Исправить\": выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="save_quality_edits" />
+  <p><strong>Общий комментарий для исправления агентом</strong></p>
+  <textarea name="general_comment" rows="3" style="width:100%;" placeholder="Что нужно учесть при повторном запуске Process 2">{{ quality_general_comment }}</textarea>
   <table>
     <thead>
       <tr>
@@ -82,7 +84,7 @@
     <tbody>
       {% for row in rows %}
       <tr class="{% if row.status == 'blocked_missing_source' or row.status == 'needs_extraction' %}warn{% endif %}">
-        <td>{{ row.material_name }}</td>
+        <td><input type="text" name="material_name_{{ forloop.counter0 }}" value="{{ row.material_name }}" /></td>
         <td><input type="text" name="doc_kind_{{ forloop.counter0 }}" value="{{ row.doc_kind }}" /></td>
         <td><input type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ row.doc_number }}" /></td>
         <td><input type="text" name="doc_date_{{ forloop.counter0 }}" value="{{ row.doc_date }}" /></td>

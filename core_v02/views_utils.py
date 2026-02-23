@@ -1,9 +1,10 @@
 from pathlib import Path
 import re
 import mimetypes
+import json
 
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from .services.log_service import latest_run_folder
 from .services.project_storage import load_project_meta, project_root
@@ -70,12 +71,55 @@ def download_input_file_view(request, project_id: str, relative_path: str):
 
 
 def open_last_logs_view(request, project_id: str):
-    folder = latest_run_folder(project_id)
-    if not folder:
-        return redirect("v02_start")
-    # Browser-safe fallback: redirect to start page with hint.
-    # Keeping this endpoint for UX parity ("open last logs").
-    return redirect(f"/start/?logs={folder.as_posix()}")
+    return redirect("v02_logs", project_id=project_id)
+
+
+def logs_view(request, project_id: str):
+    runs_root = project_root(project_id) / "04_logs" / "runs"
+    runs = []
+    if runs_root.exists():
+        for process_dir in sorted([p for p in runs_root.iterdir() if p.is_dir()], key=lambda p: p.name):
+            for run_dir in sorted([p for p in process_dir.iterdir() if p.is_dir()], key=lambda p: p.name, reverse=True):
+                item = {
+                    "process": process_dir.name,
+                    "run_id": run_dir.name,
+                    "folder": str(run_dir.relative_to(project_root(project_id))).replace("\\", "/"),
+                    "run_meta": {},
+                    "uploaded_files": {},
+                    "raw_response": "",
+                    "outputs": [],
+                }
+                meta_path = run_dir / "run_meta.json"
+                if meta_path.exists():
+                    try:
+                        item["run_meta"] = json.loads(meta_path.read_text(encoding="utf-8"))
+                    except json.JSONDecodeError:
+                        item["run_meta"] = {"_raw": meta_path.read_text(encoding="utf-8", errors="replace")}
+                uploaded_path = run_dir / "uploaded_files.json"
+                if uploaded_path.exists():
+                    try:
+                        item["uploaded_files"] = json.loads(uploaded_path.read_text(encoding="utf-8"))
+                    except json.JSONDecodeError:
+                        item["uploaded_files"] = {"_raw": uploaded_path.read_text(encoding="utf-8", errors="replace")}
+                raw_path = run_dir / "raw_response.txt"
+                if raw_path.exists():
+                    item["raw_response"] = raw_path.read_text(encoding="utf-8", errors="replace")
+                outputs_dir = run_dir / "outputs"
+                if outputs_dir.exists():
+                    item["outputs"] = [str(p.relative_to(project_root(project_id))).replace("\\", "/") for p in outputs_dir.rglob("*") if p.is_file()]
+                item["run_meta_text"] = json.dumps(item["run_meta"], ensure_ascii=False, indent=2) if item["run_meta"] else "{}"
+                item["uploaded_files_text"] = json.dumps(item["uploaded_files"], ensure_ascii=False, indent=2) if item["uploaded_files"] else "{}"
+                runs.append(item)
+    runs.sort(key=lambda x: x["run_id"], reverse=True)
+    return render(
+        request,
+        "logs_v02.html",
+        {
+            **common_context(project_id),
+            "runs": runs,
+            "latest_folder": str(latest_run_folder(project_id) or ""),
+        },
+    )
 
 
 def resolve_files_for_process(project_id: str) -> list[Path]:

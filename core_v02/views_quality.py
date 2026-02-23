@@ -58,6 +58,10 @@ def _feedback_rules_path(project_id: str) -> Path:
     return project_root(project_id) / "02_processing" / "p2_prompt_feedback.txt"
 
 
+def _general_comment_path(project_id: str) -> Path:
+    return project_root(project_id) / "02_processing" / "p2_last_general_comment.txt"
+
+
 def _build_rules_from_edits(edits: list[dict]) -> list[str]:
     rules: list[str] = []
     for e in edits:
@@ -82,6 +86,19 @@ def _append_feedback_rules(project_id: str, rules: list[str]) -> str:
     merged = (existing.rstrip() + "\n" if existing.strip() else "") + "\n".join(rules) + "\n"
     path.write_text(merged, encoding="utf-8")
     return merged
+
+
+def _load_general_comment(project_id: str) -> str:
+    path = _general_comment_path(project_id)
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip()
+
+
+def _save_general_comment(project_id: str, comment: str) -> None:
+    path = _general_comment_path(project_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text((comment or "").strip(), encoding="utf-8")
 
 
 def quality_view(request, project_id: str):
@@ -130,13 +147,14 @@ def quality_view(request, project_id: str):
             edited_rows: list[dict] = []
             for idx, row in enumerate(before_rows):
                 edited = dict(row)
+                edited["material_name"] = _from_ui_value(request.POST.get(f"material_name_{idx}", row.get("material_name", "")))
                 for key in ("doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
                     edited[key] = _from_ui_value(request.POST.get(f"{key}_{idx}", row.get(key, "")))
                 edited_rows.append(edited)
             edits: list[dict] = []
             for old, new in zip(before_rows, edited_rows):
                 row_key = quality_row_key(new)
-                for field in ("doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
+                for field in ("material_name", "doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
                     if (old.get(field) or "") != (new.get(field) or ""):
                         edits.append(
                             {
@@ -149,6 +167,8 @@ def quality_view(request, project_id: str):
                             }
                         )
             append_quality_edit_log(project_id, edits)
+            general_comment = (request.POST.get("general_comment") or "").strip()
+            _save_general_comment(project_id, general_comment)
             # Rebuild payload with edited values.
             final = dict(before)
             pointer = 0
@@ -156,10 +176,13 @@ def quality_view(request, project_id: str):
                 for doc in material.get("docs") or []:
                     row = edited_rows[pointer]
                     pointer += 1
+                    material["material_name"] = row.get("material_name", material.get("material_name"))
                     for key in ("doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
                         doc[key] = row.get(key, doc.get(key))
             save_processing_json(project_id, "p2_quality_registry_final.json", final)
             rules = _build_rules_from_edits(edits)
+            if general_comment:
+                rules.append(f"- Общий комментарий пользователя по исправлению реестра: {general_comment}")
             feedback_rules = _append_feedback_rules(project_id, rules)
             razdel_code = (final.get("razdel") or {}).get("razdel_code", "KJ")
             save_learning_diff(
@@ -207,5 +230,6 @@ def quality_view(request, project_id: str):
             "p2": p2_final,
             "rows": rows,
             "razdel_code": (p2_final.get("razdel") or {}).get("razdel_code", "KJ"),
+            "quality_general_comment": _load_general_comment(project_id),
         },
     )

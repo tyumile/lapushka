@@ -1,10 +1,12 @@
 import json
 from copy import deepcopy
 from datetime import datetime
+from pathlib import Path
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+from .services.dictionary_service import get_doc_types
 from .services.io_utils import read_processing
 from .services.process_p4b_build_doc_plan import _normalize_doc_instance, run_process_p4b_build_doc_plan
 from .services.project_storage import project_root, save_processing_json, set_project_step
@@ -24,6 +26,46 @@ def _append_doc_plan_edit_log(project_id: str, entries: list[dict]) -> None:
             payload = []
     payload.extend(entries)
     log_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _p4_feedback_rules_path(project_id: str) -> Path:
+    return project_root(project_id) / "02_processing" / "p4b_prompt_feedback.txt"
+
+
+def _p4_general_comment_path(project_id: str) -> Path:
+    return project_root(project_id) / "02_processing" / "p4b_last_general_comment.txt"
+
+
+def _load_p4_feedback_rules(project_id: str) -> str:
+    path = _p4_feedback_rules_path(project_id)
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
+def _append_p4_feedback_rules(project_id: str, lines: list[str]) -> str:
+    path = _p4_feedback_rules_path(project_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    block = "\n".join([x for x in lines if (x or "").strip()])
+    merged = existing
+    if block:
+        merged = (existing.rstrip() + "\n" if existing.strip() else "") + block + "\n"
+        path.write_text(merged, encoding="utf-8")
+    return merged
+
+
+def _load_p4_general_comment(project_id: str) -> str:
+    path = _p4_general_comment_path(project_id)
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip()
+
+
+def _save_p4_general_comment(project_id: str, comment: str) -> None:
+    path = _p4_general_comment_path(project_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text((comment or "").strip(), encoding="utf-8")
 
 
 def _diff_entries(project_id: str, before: dict, after: dict) -> list[dict]:
@@ -93,23 +135,45 @@ def _parse_json_or_keep(value: str, fallback):
         return fallback
 
 
+def _value_to_text(value) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    return json.dumps(value, ensure_ascii=False)
+
+
+def _fields_filled_score(payload: dict) -> int:
+    score = 0
+    for inst in (payload or {}).get("doc_instances") or []:
+        fields = inst.get("fields")
+        if isinstance(fields, dict):
+            score += len(fields)
+    return score
+
+
 def run_p4b_build_doc_plan_view(request, project_id: str):
     if request.method != "POST":
         return redirect("v02_doc_plan", project_id=project_id)
     quality_final = read_processing(project_id, "p2_quality_registry_final.json", {})
     razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
-    selected = (read_processing(project_id, "p4_doc_types_selection.json", {}).get("selected_doc_type_ids") or [])
+    selected = [d.get("doc_type_id") for d in get_doc_types(razdel_code) if d.get("doc_type_id")]
     if not selected:
-        messages.error(request, "Сначала выберите типы документов на шаге 3.")
+        messages.error(request, "Для раздела не найдено типов документов.")
         return redirect("v02_doc_types", project_id=project_id)
     set_action_status(project_id, "run_p4b", "running", "Process P4B запущен...")
     try:
-        _, payload, excluded = run_process_p4b_build_doc_plan(project_id, razdel_code, selected)
+        _, payload, excluded = run_process_p4b_build_doc_plan(
+            project_id,
+            razdel_code,
+            selected,
+            feedback_rules=_load_p4_feedback_rules(project_id),
+        )
         status_msg = f"Process P4B завершён. Инстансов: {len(payload.get('doc_instances') or [])}."
         if excluded:
             for x in excluded:
                 messages.warning(request, f"Исключён: {x['path']}. Причина: {x['reason'][:150]}...")
-            status_msg += f" Исключено файлов: {len(excluded)} (см. 01_input/99_excluded)"
+            status_msg += f" Исключено файлов: {len(excluded)} (см. 01_input/099_excluded)"
         set_action_status(project_id, "run_p4b", "success", status_msg)
         messages.success(request, f"P4B завершён. Инстансов: {len(payload.get('doc_instances') or [])}.")
     except Exception as exc:
@@ -147,20 +211,101 @@ def save_doc_plan_view(request, project_id: str):
     save_processing_json(project_id, "p4b_doc_instances_final.json", source)
     diff = _diff_entries(project_id, original, source)
     _append_doc_plan_edit_log(project_id, diff)
+    general_comment = (request.POST.get("general_comment") or "").strip()
+    _save_p4_general_comment(project_id, general_comment)
+    feedback_lines = []
+    if general_comment:
+        feedback_lines.append(f"- Общий комментарий пользователя по исправлению плана документов: {general_comment}")
+    feedback_lines.extend(
+        [
+            f"- Изменение {e['path']}: было '{e.get('before')}', стало '{e.get('after')}'."
+            for e in diff[:30]
+            if e.get("path")
+        ]
+    )
+    feedback_rules = _append_p4_feedback_rules(project_id, feedback_lines)
     set_action_status(project_id, "save_doc_plan", "success", f"План сохранён. Изменений: {len(diff)}.")
     messages.success(request, f"План сохранён. Изменений: {len(diff)}.")
+    if general_comment:
+        quality_final = read_processing(project_id, "p2_quality_registry_final.json", {})
+        razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
+        selected = [d.get("doc_type_id") for d in get_doc_types(razdel_code) if d.get("doc_type_id")]
+        if selected:
+            set_action_status(project_id, "run_p4b", "running", "Process P4B повторно запущен с учетом комментария...")
+            try:
+                _, payload, excluded = run_process_p4b_build_doc_plan(
+                    project_id,
+                    razdel_code,
+                    selected,
+                    feedback_rules=feedback_rules,
+                )
+                rows_count = len(payload.get("doc_instances") or [])
+                status_msg = f"Process P4B (после исправлений) завершён. Инстансов: {rows_count}."
+                if excluded:
+                    status_msg += f" Исключено файлов: {len(excluded)}."
+                set_action_status(project_id, "run_p4b", "success", status_msg)
+                messages.success(request, f"Комментарий учтён. Process P4B перезапущен. Инстансов: {rows_count}.")
+            except Exception as exc:
+                set_action_status(project_id, "run_p4b", "error", f"Повторный Process P4B завершился ошибкой: {exc}")
+                messages.error(request, f"План сохранён, но повторный Process P4B завершился ошибкой: {exc}")
     return redirect("v02_doc_plan", project_id=project_id)
 
 
 def doc_plan_view(request, project_id: str):
     v1 = read_processing(project_id, "p4b_doc_instances_v1.json", {})
     final = read_processing(project_id, "p4b_doc_instances_final.json", v1)
+    if _fields_filled_score(v1) > _fields_filled_score(final):
+        final = v1
+        save_processing_json(project_id, "p4b_doc_instances_final.json", final)
     excluded_data = read_processing(project_id, "p4b_excluded_files.json", {})
     raw_instances = final.get("doc_instances") or []
     instances = [_normalize_doc_instance(inst, i) for i, inst in enumerate(raw_instances)]
-    for inst in instances:
+    for idx, inst in enumerate(instances):
+        inst["row_idx"] = idx
         inst["work_scope_text"] = json.dumps(inst.get("work_scope") or [], ensure_ascii=False, indent=2)
         inst["fields_text"] = json.dumps(inst.get("fields") or {}, ensure_ascii=False, indent=2)
+        fields_rows = []
+        fields_obj = inst.get("fields") if isinstance(inst.get("fields"), dict) else {}
+        for field_name, field_payload in fields_obj.items():
+            if isinstance(field_payload, dict):
+                sources = field_payload.get("sources")
+                if not isinstance(sources, list):
+                    source_single = field_payload.get("source")
+                    sources = [source_single] if isinstance(source_single, dict) else []
+                source_text = "; ".join(
+                    f"{(s.get('file') or '').strip()}:{s.get('page')}" if isinstance(s, dict) else str(s)
+                    for s in sources
+                )
+                fields_rows.append(
+                    {
+                        "name": field_name,
+                        "value": _value_to_text(field_payload.get("value")),
+                        "status": field_payload.get("status", ""),
+                        "confidence": field_payload.get("confidence", ""),
+                        "sources": source_text,
+                    }
+                )
+            else:
+                fields_rows.append(
+                    {
+                        "name": field_name,
+                        "value": _value_to_text(field_payload),
+                        "status": "",
+                        "confidence": "",
+                        "sources": "",
+                    }
+                )
+        inst["fields_rows"] = fields_rows
+    doc_type_groups = []
+    groups_map = {}
+    for inst in instances:
+        doc_type_id = (inst.get("doc_type_id") or "").strip() or "unknown"
+        group = groups_map.get(doc_type_id)
+        if group is None:
+            group = {"doc_type_id": doc_type_id, "instances": []}
+            groups_map[doc_type_id] = group
+            doc_type_groups.append(group)
+        group["instances"].append(inst)
     set_project_step(project_id, 4)
     return render(
         request,
@@ -169,8 +314,10 @@ def doc_plan_view(request, project_id: str):
             **common_context(project_id),
             "plan": final,
             "instances": instances,
+            "doc_type_groups": doc_type_groups,
             "open_questions": final.get("open_questions") or [],
             "issues": final.get("issues") or [],
             "excluded_files": excluded_data.get("excluded") or [],
+            "p4_general_comment": _load_p4_general_comment(project_id),
         },
     )
