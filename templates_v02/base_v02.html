@@ -1,70 +1,41 @@
 <!doctype html>
 <html lang="ru">
+{% load static %}
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}Virtual Engineer v0.2{% endblock %}</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    table { border-collapse: collapse; width: 100%; margin: 10px 0; }
-    th, td { border: 1px solid #ddd; padding: 6px; vertical-align: top; }
-    .muted { color: #666; }
-    .warn { background: #fff0f0; }
-    .topbar { display: flex; gap: 10px; margin: 8px 0 16px; }
-    .step { padding: 4px 8px; border-radius: 4px; background: #efefef; }
-    .step.active { background: #d8ebff; }
-    .msgs li { margin-bottom: 6px; }
-    .inline { display: inline-block; margin-right: 8px; }
-    .stack { display: flex; flex-direction: column; gap: 10px; max-width: 900px; }
-    .upload-row { display: grid; grid-template-columns: 180px 1fr 140px; gap: 10px; align-items: center; }
-    .upload-row label { font-weight: 700; }
-    .btn-row { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
-  </style>
+  <link rel="stylesheet" href="{% static 'v02/css/tokens.css' %}" />
+  <link rel="stylesheet" href="{% static 'v02/css/components.css' %}" />
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-  <h1>Виртуальный инженер v0.2</h1>
-  {% if project_id %}
-  <div class="topbar">
-    <div class="step {% if meta.step == 1 %}active{% endif %}">1. Начало</div>
-    <div class="step {% if meta.step == 2 %}active{% endif %}">2. Документы качества</div>
-    <div class="step {% if meta.step == 3 %}active{% endif %}">3. Выбрать тип документов</div>
-    <div class="step {% if meta.step == 4 %}active{% endif %}">4. Формирование документов</div>
+  <div class="layout">
+    <div class="shell">
+      <h1>Виртуальный инженер v0.2</h1>
+      {% if project_id %}
+      <div class="topbar">
+        <div class="step {% if meta.step == 1 %}active{% endif %}">1. Начало</div>
+        <div class="step {% if meta.step == 2 %}active{% endif %}">2. Документы качества</div>
+        <div class="step {% if meta.step == 3 %}active{% endif %}">3. Выбрать тип документов</div>
+        <div class="step {% if meta.step == 4 %}active{% endif %}">4. Формирование документов</div>
+      </div>
+      <p class="muted">Project: {{ project_id }}</p>
+      <p>
+        {% if project_id %}<a href="{% url 'v02_logs_last' project_id=project_id %}">Открыть логи последнего запуска</a>{% endif %}
+      </p>
+      {% endif %}
+
+      {% if messages %}
+      <ul class="msgs">
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
   </div>
-  <p class="muted">Project: {{ project_id }}</p>
-  <p>
-    {% if project_id %}<a href="{% url 'v02_logs_last' project_id=project_id %}">Открыть логи последнего запуска</a>{% endif %}
-  </p>
-  {% endif %}
-
-  {% if messages %}
-  <ul class="msgs">
-    {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-  </ul>
-  {% endif %}
-
-  {% block content %}{% endblock %}
-  <script>
-    (() => {
-      const forms = document.querySelectorAll("form[data-disable-on-submit='true']");
-      forms.forEach((form) => {
-        form.addEventListener("submit", () => {
-          const btn = form.querySelector("button[type='submit'], button:not([type])");
-          if (btn) {
-            btn.disabled = true;
-            const busyText = form.getAttribute("data-busy-text") || "Выполняется...";
-            btn.dataset.originalText = btn.textContent;
-            btn.textContent = busyText;
-          }
-          const targetId = form.getAttribute("data-status-target");
-          if (targetId) {
-            const el = document.getElementById(targetId);
-            if (el) {
-              el.textContent = form.getAttribute("data-running-text") || "Статус: выполняется...";
-            }
-          }
-        });
-      });
-    })();
-  </script>
+  <script defer src="{% static 'v02/js/forms.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

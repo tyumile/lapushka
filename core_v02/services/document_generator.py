@@ -1,10 +1,20 @@
 import re
 import shutil
+import zipfile
 from pathlib import Path
 
-from openpyxl import Workbook, load_workbook
-
 from .project_storage import output_zip_path, project_root
+
+
+def _load_openpyxl():
+    try:
+        from openpyxl import Workbook, load_workbook
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Для генерации XLSX требуется зависимость openpyxl. "
+            "Установите: pip install -r requirements.txt"
+        ) from exc
+    return Workbook, load_workbook
 
 
 CELL_RE = re.compile(r"^[A-Za-z]{1,3}[1-9]\d*$")
@@ -34,6 +44,7 @@ def _write_xlsx_output(path: Path, payload: dict, project_root_path: Path) -> No
     path.parent.mkdir(parents=True, exist_ok=True)
     template_ref = (payload.get("template_ref") or "").strip()
     template_path = _find_template(project_root_path, template_ref)
+    Workbook, load_workbook = _load_openpyxl()
     if template_path and template_path.suffix.lower() in {".xlsx", ".xlsm"}:
         shutil.copy2(template_path, path)
         wb = load_workbook(path)
@@ -64,14 +75,31 @@ def generate_from_fill_plan(project_id: str, fill_plan: dict) -> list[str]:
         target = root / rel
         fmt = (output.get("format") or target.suffix.lstrip(".") or "xlsx").lower()
         if fmt in {"xlsx", "xlsm"}:
-            _write_xlsx_output(target, output, root_path)
+            try:
+                _write_xlsx_output(target, output, root_path)
+                created.append(rel)
+            except RuntimeError as exc:
+                if "openpyxl" not in str(exc).lower():
+                    raise
+                fallback = target.with_suffix(".txt")
+                fallback.parent.mkdir(parents=True, exist_ok=True)
+                fallback.write_text(str(output), encoding="utf-8")
+                try:
+                    rel_out = str(fallback.relative_to(root)).replace("\\", "/")
+                except ValueError:
+                    rel_out = fallback.name
+                created.append(rel_out)
         else:
             # Minimal fallback: plain text when unknown format requested.
             # Kept explicit to avoid writing broken office files.
             target = target.with_suffix(".txt")
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(str(output), encoding="utf-8")
-        created.append(rel)
+            try:
+                rel_out = str(target.relative_to(root)).replace("\\", "/")
+            except ValueError:
+                rel_out = target.name
+            created.append(rel_out)
     return created
 
 

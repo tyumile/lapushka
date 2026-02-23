@@ -96,6 +96,25 @@ class ResponsesClientV02:
         model: str = "gpt-4.1-mini",
         timeout_s: int = 120,
     ) -> tuple[dict, str]:
+        return self.call_json_with_mixed_inputs(
+            instructions=instructions,
+            user_text=user_text,
+            file_ids=file_ids,
+            input_texts=[],
+            model=model,
+            timeout_s=timeout_s,
+        )
+
+    def call_json_with_mixed_inputs(
+        self,
+        *,
+        instructions: str,
+        user_text: str,
+        file_ids: list[str],
+        input_texts: list[str] | None = None,
+        model: str = "gpt-4.1-mini",
+        timeout_s: int = 120,
+    ) -> tuple[dict, str]:
         pauses = [1, 2, 4]
         last_raw = ""
         for i, pause in enumerate(pauses, start=1):
@@ -103,6 +122,7 @@ class ResponsesClientV02:
                 instructions=instructions,
                 user_text=user_text if i == 1 else (user_text + "\n\nReturn valid JSON only."),
                 file_ids=file_ids,
+                input_texts=input_texts or [],
                 model=model,
                 timeout_s=timeout_s,
             )
@@ -120,10 +140,13 @@ class ResponsesClientV02:
         instructions: str,
         user_text: str,
         file_ids: list[str],
+        input_texts: list[str],
         model: str,
         timeout_s: int,
     ) -> str:
         content = [{"type": "input_file", "file_id": fid} for fid in file_ids]
+        for txt in input_texts:
+            content.append({"type": "input_text", "text": txt})
         content.append({"type": "input_text", "text": user_text})
         response = self._client(timeout_s=timeout_s).responses.create(
             model=model,

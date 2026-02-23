@@ -88,8 +88,22 @@ def quality_view(request, project_id: str):
     if request.method == "POST":
         action = request.POST.get("action")
         if action in {"upload_project", "upload_quality", "upload_ojr"}:
-            files = request.FILES.getlist("files")
+            file_field = {
+                "upload_project": "project_files",
+                "upload_quality": "quality_files",
+                "upload_ojr": "ojr_files",
+            }[action]
+            files = request.FILES.getlist(file_field) or request.FILES.getlist("files")
             block = {"upload_project": "project", "upload_quality": "quality", "upload_ojr": "ojr"}[action]
+            if not files:
+                labels = {
+                    "upload_project": "Проект",
+                    "upload_quality": "Документы качества",
+                    "upload_ojr": "ОЖР",
+                }
+                set_action_status(project_id, action, "error", f"{labels[action]}: файлы не выбраны.")
+                messages.error(request, "Выберите файл(ы) перед загрузкой.")
+                return redirect("v02_quality", project_id=project_id)
             saved = save_uploaded_files(project_id, block, files)
             labels = {
                 "upload_project": "Проект",
