@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 
 from .services.edit_logs import append_quality_edit_log, quality_row_key
 from .services.io_utils import read_processing
+from .services.process_p2_feedback_rule_miner import run_process_p2_feedback_rule_miner
 from .services.process_p2_quality_registry import run_process_p2
 from .services.project_storage import (
     list_uploaded_files,
@@ -62,6 +63,10 @@ def _general_comment_path(project_id: str) -> Path:
     return project_root(project_id) / "02_processing" / "p2_last_general_comment.txt"
 
 
+def _agent_feedback_rules_path(project_id: str) -> Path:
+    return project_root(project_id) / "02_processing" / "p2_agent_feedback_rules.txt"
+
+
 def _build_rules_from_edits(edits: list[dict]) -> list[str]:
     rules: list[str] = []
     for e in edits:
@@ -88,6 +93,35 @@ def _append_feedback_rules(project_id: str, rules: list[str]) -> str:
     return merged
 
 
+def _load_agent_feedback_rules(project_id: str) -> str:
+    path = _agent_feedback_rules_path(project_id)
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
+def _append_agent_feedback_rules(project_id: str, rules: list[str]) -> str:
+    if not rules:
+        return _load_agent_feedback_rules(project_id)
+    path = _agent_feedback_rules_path(project_id)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    existing_lines = {x.strip() for x in existing.splitlines() if x.strip()}
+    fresh_lines: list[str] = []
+    for rule in rules:
+        text = (rule or "").strip()
+        if not text:
+            continue
+        if text not in existing_lines:
+            fresh_lines.append(text)
+            existing_lines.add(text)
+    merged = existing
+    if fresh_lines:
+        merged = (existing.rstrip() + "\n" if existing.strip() else "") + "\n".join(fresh_lines) + "\n"
+        path.write_text(merged, encoding="utf-8")
+    return merged
+
+
 def _load_general_comment(project_id: str) -> str:
     path = _general_comment_path(project_id)
     if not path.exists():
@@ -104,12 +138,18 @@ def _save_general_comment(project_id: str, comment: str) -> None:
 def quality_view(request, project_id: str):
     if request.method == "POST":
         action = request.POST.get("action")
-        if action in {"upload_project", "upload_quality", "upload_ojr"}:
+        if action in {"upload_project", "upload_project_other", "upload_quality", "upload_ojr"}:
             files = request.FILES.getlist("files")
-            block = {"upload_project": "project", "upload_quality": "quality", "upload_ojr": "ojr"}[action]
+            block = {
+                "upload_project": "project",
+                "upload_project_other": "project",
+                "upload_quality": "quality",
+                "upload_ojr": "ojr",
+            }[action]
             saved = save_uploaded_files(project_id, block, files)
             labels = {
                 "upload_project": "Проект",
+                "upload_project_other": "Остальная рабочая документация",
                 "upload_quality": "Документы качества",
                 "upload_ojr": "ОЖР",
             }
@@ -130,7 +170,13 @@ def quality_view(request, project_id: str):
                 fp = _feedback_rules_path(project_id)
                 if fp.exists():
                     feedback_rules = fp.read_text(encoding="utf-8")
-                _, payload = run_process_p2(project_id, meta.get("comment", ""), feedback_rules=feedback_rules)
+                agent_feedback_rules = _load_agent_feedback_rules(project_id)
+                _, payload = run_process_p2(
+                    project_id,
+                    meta.get("comment", ""),
+                    feedback_rules=feedback_rules,
+                    agent_feedback_rules=agent_feedback_rules,
+                )
                 save_processing_json(project_id, "p2_quality_registry_final.json", payload)
                 rows_count = len(_flatten_quality_rows(payload))
                 set_action_status(project_id, "run_p2", "success", f"Process 2 завершён. Строк в реестре: {rows_count}.")
@@ -184,6 +230,25 @@ def quality_view(request, project_id: str):
             if general_comment:
                 rules.append(f"- Общий комментарий пользователя по исправлению реестра: {general_comment}")
             feedback_rules = _append_feedback_rules(project_id, rules)
+            agent_rules: list[str] = []
+            try:
+                meta = load_project_meta(project_id)
+                _, feedback_payload = run_process_p2_feedback_rule_miner(
+                    project_id=project_id,
+                    comment=meta.get("comment", ""),
+                    edits=edits,
+                    quality_registry_before=before,
+                    quality_registry_after=final,
+                    general_comment=general_comment,
+                    existing_user_rules=feedback_rules,
+                    existing_agent_rules=_load_agent_feedback_rules(project_id),
+                )
+                agent_rules = feedback_payload.get("prompt_rules") if isinstance(feedback_payload, dict) else []
+                if not isinstance(agent_rules, list):
+                    agent_rules = []
+                _append_agent_feedback_rules(project_id, agent_rules)
+            except Exception as exc:
+                messages.warning(request, f"Автогенерация agent-правил не удалась: {exc}")
             razdel_code = (final.get("razdel") or {}).get("razdel_code", "KJ")
             save_learning_diff(
                 project_id,
@@ -192,18 +257,32 @@ def quality_view(request, project_id: str):
                     "table": "quality_registry",
                     "edits_count": len(edits),
                     "rules_added": rules,
+                    "agent_rules_added": agent_rules,
                 },
                 razdel_code,
             )
             set_action_status(project_id, "run_p2", "running", "Process 2 повторно запущен с учетом исправлений...")
             try:
                 meta = load_project_meta(project_id)
-                _, rerun_payload = run_process_p2(project_id, meta.get("comment", ""), feedback_rules=feedback_rules)
+                _, rerun_payload = run_process_p2(
+                    project_id,
+                    meta.get("comment", ""),
+                    feedback_rules=feedback_rules,
+                    agent_feedback_rules=_load_agent_feedback_rules(project_id),
+                )
                 save_processing_json(project_id, "p2_quality_registry_final.json", rerun_payload)
                 rows_count = len(_flatten_quality_rows(rerun_payload))
                 set_action_status(project_id, "run_p2", "success", f"Process 2 (после исправлений) завершён. Строк: {rows_count}.")
-                set_action_status(project_id, "save_quality_edits", "success", f"Исправления сохранены и учтены в prompt: {len(edits)}.")
-                messages.success(request, f"Исправления сохранены, prompt обновлен, Process 2 перезапущен. Строк: {rows_count}.")
+                set_action_status(
+                    project_id,
+                    "save_quality_edits",
+                    "success",
+                    f"Исправления сохранены и учтены в prompt: {len(edits)}. Agent-правил: {len(agent_rules)}.",
+                )
+                messages.success(
+                    request,
+                    f"Исправления сохранены, prompt обновлен (user+agent), Process 2 перезапущен. Строк: {rows_count}.",
+                )
             except Exception as exc:
                 set_action_status(project_id, "run_p2", "error", f"Повторный Process 2 завершился ошибкой: {exc}")
                 set_action_status(project_id, "save_quality_edits", "error", f"Исправления сохранены, но повторный запуск упал: {exc}")

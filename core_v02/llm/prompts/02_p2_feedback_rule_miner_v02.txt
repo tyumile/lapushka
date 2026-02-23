@@ -1,0 +1,29 @@
+Контекст проекта:
+project_id={{project_id}}
+comment={{comment}}
+general_comment={{general_comment}}
+existing_user_rules={{existing_user_rules}}
+existing_agent_rules={{existing_agent_rules}}
+quality_registry_before={{quality_registry_before_json}}
+quality_registry_after={{quality_registry_after_json}}
+user_edits={{edits_json}}
+
+Задача:
+1) Сравни правки пользователя с данными в загруженных файлах.
+2) Сформулируй короткие, переносимые правила для следующего запуска Process 2.
+3) Правила должны предотвращать повторение ошибок, а не дублировать построчные фиксы.
+4) Не выдумывай факты и не указывай конкретные значения, если они одноразовые.
+
+Верни ТОЛЬКО валидный JSON без markdown:
+{
+  "prompt_rules": [
+    "- string"
+  ],
+  "agent_comment": "string"
+}
+
+Ограничения:
+- Максимум 12 правил.
+- Каждое правило: одна строка, начинается с "- ".
+- Правила должны быть применимы к новым проектам того же раздела.
+- Если качественных правил нет, верни пустой массив prompt_rules и поясни причину в agent_comment.

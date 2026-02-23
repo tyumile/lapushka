@@ -2,6 +2,20 @@ import json
 from pathlib import Path
 
 
+def _default_dictionary() -> dict:
+    return {
+        "version": "0.2.0-fallback",
+        "default_razdel_code": "KJ",
+        "razdels": [
+            {
+                "razdel_code": "KJ",
+                "razdel_name": "КЖ",
+                "doc_types": [],
+            }
+        ],
+    }
+
+
 def _is_executive_scheme_name(name: str) -> bool:
     lowered = (name or "").strip().lower()
     return "исполнитель" in lowered and ("схем" in lowered or "чертеж" in lowered)
@@ -135,18 +149,32 @@ def validate_dictionary(payload: dict) -> list[str]:
 def load_dictionary() -> dict:
     path = _v02_dictionary_path()
     if path.exists():
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        payload = _sanitize_remove_executive_schemes(payload)
-        if not validate_dictionary(payload):
-            return payload
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            payload = _sanitize_remove_executive_schemes(payload)
+            issues = validate_dictionary(payload)
+            if not issues:
+                return payload
+            # Best-effort mode: keep usable v0.2 dictionary even with non-critical issues.
+            if payload.get("razdels"):
+                return payload
+        except (json.JSONDecodeError, OSError):
+            pass
     v01_path = _v01_dictionary_path()
-    if not v01_path.exists():
-        raise FileNotFoundError("No dictionary found for v0.2")
-    v01 = json.loads(v01_path.read_text(encoding="utf-8"))
-    converted = adapt_v01_to_v02(v01)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(converted, ensure_ascii=False, indent=2), encoding="utf-8")
-    return converted
+    if v01_path.exists():
+        try:
+            v01 = json.loads(v01_path.read_text(encoding="utf-8"))
+            converted = adapt_v01_to_v02(v01)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(converted, ensure_ascii=False, indent=2), encoding="utf-8")
+            return converted
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Never crash Process 2 because of dictionary file issues.
+    # Important: do not overwrite repository dictionary file with fallback.
+    fallback = _default_dictionary()
+    return fallback
 
 
 def get_razdels() -> list[dict]:

@@ -235,6 +235,23 @@ def resolve_openai_model() -> str:
     return model
 
 
+def resolve_openai_fallback_model() -> str:
+    return (os.getenv("OPENAI_FALLBACK_MODEL") or "").strip()
+
+
+def _should_retry_with_fallback(exc: Exception) -> bool:
+    text = (str(exc) or "").lower()
+    hints = (
+        "rate_limit_exceeded",
+        "tokens per min",
+        "request too large",
+        "error code: 429",
+        "error code: 500",
+        "server_error",
+    )
+    return any(h in text for h in hints)
+
+
 def run_llm_json_process(
     *,
     project_id: str,
@@ -247,6 +264,7 @@ def run_llm_json_process(
 ) -> tuple[str, dict]:
     run_id = datetime.utcnow().strftime("%Y%m%d%H%M%S") + "-" + secrets.token_hex(3)
     model = resolve_openai_model()
+    fallback_model = resolve_openai_fallback_model()
     append_event(project_id, {"process": process_name, "stage": "start", "run_id": run_id})
 
     if settings.MOCK_MODE:
@@ -303,13 +321,42 @@ def run_llm_json_process(
 
     system_prompt = load_prompt("01_system_v02")
     user_prompt = load_prompt(prompt_name, prompt_vars) + TABLE_CONTEXT_PROMPT_NOTE
-    response_json, raw_text = client.call_json_with_files(
-        instructions=system_prompt,
-        user_text=user_prompt,
-        file_ids=file_ids,
-        model=model,
-        timeout_s=180,
-    )
+    used_model = model
+    try:
+        response_json, raw_text = client.call_json_with_files(
+            instructions=system_prompt,
+            user_text=user_prompt,
+            file_ids=file_ids,
+            model=model,
+            timeout_s=180,
+        )
+    except Exception as e:
+        can_fallback = (
+            bool(fallback_model)
+            and fallback_model != model
+            and _should_retry_with_fallback(e)
+        )
+        if not can_fallback:
+            raise
+        used_model = fallback_model
+        append_event(
+            project_id,
+            {
+                "process": process_name,
+                "stage": "retry_with_fallback_model",
+                "run_id": run_id,
+                "from_model": model,
+                "to_model": fallback_model,
+                "reason": str(e)[:300],
+            },
+        )
+        response_json, raw_text = client.call_json_with_files(
+            instructions=system_prompt,
+            user_text=user_prompt,
+            file_ids=file_ids,
+            model=fallback_model,
+            timeout_s=180,
+        )
     persist_run_json(project_id, process_name, run_id, "uploaded_files.json", upload_map)
     if excluded:
         persist_run_json(project_id, process_name, run_id, "excluded_files.json", {"excluded": excluded, "dir": EXCLUDED_REL})
@@ -323,7 +370,9 @@ def run_llm_json_process(
         {
             "process": process_name,
             "run_id": run_id,
-            "model": model,
+            "model": used_model,
+            "model_primary": model,
+            "model_fallback": fallback_model or "",
             "started_at": datetime.utcnow().isoformat(),
             "success": True,
         },

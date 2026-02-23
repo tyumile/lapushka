@@ -1,11 +1,13 @@
 from django.test import Client, TestCase, override_settings
 
 from .services.io_utils import read_processing
+from .services.process_p2_quality_registry import _normalize_payload
 from .services.process_p2_quality_registry import run_process_p2
 from .services.process_p4b_build_doc_plan import run_process_p4b_build_doc_plan
 from .services.process_p5_fill_plan import run_process_p5
 from .services.project_storage import create_project_structure, load_project_meta, save_processing_json, save_project_meta
 from .views_utils import resolve_files_for_process
+from pathlib import Path
 
 
 @override_settings(MOCK_MODE=True)
@@ -142,3 +144,40 @@ class V02P4BTests(TestCase):
         self.assertEqual(resp.status_code, 302)
         saved = read_processing(self.project_id, "p4b_doc_instances_final.json", {})
         self.assertEqual((saved.get("doc_instances") or [])[0].get("doc_name"), "edited")
+
+
+class V02P2NormalizationTests(TestCase):
+    def test_protocol_name_is_remapped_to_real_quality_filename(self):
+        quality_files = [
+            Path("Протокол испытаний №1 от 30.09.2025 г. pdf"),
+            Path("Протокол испытаний №2 от 12.11.2025 г. pdf"),
+        ]
+        payload = {
+            "project_cipher": {"value": "жилой комплекс по адресу", "status": "ok", "confidence": 1.0, "source": {}},
+            "razdel": {"razdel_code": "KJ", "razdel_name": "КЖ", "status": "ok", "confidence": 1, "source": {}},
+            "materials": [
+                {
+                    "material_id": "mat-001",
+                    "material_name": "Бетон B25",
+                    "docs": [
+                        {
+                            "doc_kind": "Протокол",
+                            "doc_number": "1",
+                            "doc_date": "30.09.2025",
+                            "volume": "12 суток",
+                            "manufacturer": "x",
+                            "issuer": "y",
+                            "file_ref": "01_input/02_quality_docs/protocol1.pdf",
+                            "status": "ok",
+                            "confidence": 1.0,
+                            "source": {"file": "protocol1.pdf", "page": "1", "snippet": ""},
+                        }
+                    ],
+                }
+            ],
+        }
+        out = _normalize_payload(payload, quality_files, "Project__123")
+        refs = {d.get("file_ref") for m in out.get("materials") or [] for d in m.get("docs") or []}
+        self.assertIn("01_input/02_quality_docs/Протокол испытаний №1 от 30.09.2025 г. pdf", refs)
+        self.assertIn("01_input/02_quality_docs/Протокол испытаний №2 от 12.11.2025 г. pdf", refs)
+        self.assertEqual((out.get("project_cipher") or {}).get("status"), "needs_extraction")

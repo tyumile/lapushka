@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from openai import APIConnectionError, OpenAI
+from openai import APIConnectionError, APIStatusError, OpenAI, RateLimitError
 
 # Ensure .env is loaded before reading OPENAI_API_KEY (handles cases when Django settings aren't loaded yet)
 _env_path = Path(__file__).resolve().parents[2] / ".env"
@@ -96,16 +96,23 @@ class ResponsesClientV02:
         model: str,
         timeout_s: int = 120,
     ) -> tuple[dict, str]:
-        pauses = [1, 2, 4]
+        pauses = [1, 2, 4, 8]
         last_raw = ""
         for i, pause in enumerate(pauses, start=1):
-            raw = self._request_with_files(
-                instructions=instructions,
-                user_text=user_text if i == 1 else (user_text + "\n\nReturn valid JSON only."),
-                file_ids=file_ids,
-                model=model,
-                timeout_s=timeout_s,
-            )
+            try:
+                raw = self._request_with_files(
+                    instructions=instructions,
+                    user_text=user_text if i == 1 else (user_text + "\n\nReturn valid JSON only."),
+                    file_ids=file_ids,
+                    model=model,
+                    timeout_s=timeout_s,
+                )
+            except (APIConnectionError, APIStatusError, RateLimitError) as e:
+                last_raw = str(e)
+                if i < len(pauses):
+                    time.sleep(pause)
+                    continue
+                raise
             last_raw = raw
             parsed = _parse_json_or_none(raw)
             if parsed is not None:

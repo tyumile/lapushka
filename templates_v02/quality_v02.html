@@ -22,6 +22,17 @@
   </form>
   <p id="status_upload_project" class="muted">Статус загрузки проекта: {{ ui_status.upload_project.message|default:"еще не загружалось" }}</p>
 
+  <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_project_other" data-running-text="Статус загрузки остальной рабочей документации: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="upload_project_other" />
+    <div class="upload-row">
+      <label for="upload_project_other_files">Остальная рабочая документация</label>
+      <input id="upload_project_other_files" type="file" name="files" multiple />
+      <button type="submit">Загрузить</button>
+    </div>
+  </form>
+  <p id="status_upload_project_other" class="muted">Статус загрузки остальной рабочей документации: {{ ui_status.upload_project_other.message|default:"еще не загружалось" }}</p>
+
   <form method="post" enctype="multipart/form-data" data-disable-on-submit="true" data-busy-text="Загружается..." data-status-target="status_upload_quality" data-running-text="Статус загрузки документов качества: выполняется...">
     {% csrf_token %}
     <input type="hidden" name="action" value="upload_quality" />
@@ -84,13 +95,13 @@
     <tbody>
       {% for row in rows %}
       <tr class="{% if row.status == 'blocked_missing_source' or row.status == 'needs_extraction' %}warn{% endif %}">
-        <td><input type="text" name="material_name_{{ forloop.counter0 }}" value="{{ row.material_name }}" /></td>
-        <td><input type="text" name="doc_kind_{{ forloop.counter0 }}" value="{{ row.doc_kind }}" /></td>
-        <td><input type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ row.doc_number }}" /></td>
-        <td><input type="text" name="doc_date_{{ forloop.counter0 }}" value="{{ row.doc_date }}" /></td>
-        <td><input type="text" name="manufacturer_{{ forloop.counter0 }}" value="{{ row.manufacturer }}" /></td>
-        <td><input type="text" name="issuer_{{ forloop.counter0 }}" value="{{ row.issuer }}" /></td>
-        <td><input type="text" name="volume_{{ forloop.counter0 }}" value="{{ row.volume }}" /></td>
+        <td><input class="value-tooltip" type="text" name="material_name_{{ forloop.counter0 }}" value="{{ row.material_name }}" title="{{ row.material_name }}" /></td>
+        <td><input class="value-tooltip" type="text" name="doc_kind_{{ forloop.counter0 }}" value="{{ row.doc_kind }}" title="{{ row.doc_kind }}" /></td>
+        <td><input class="value-tooltip" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ row.doc_number }}" title="{{ row.doc_number }}" /></td>
+        <td><input class="value-tooltip" type="text" name="doc_date_{{ forloop.counter0 }}" value="{{ row.doc_date }}" title="{{ row.doc_date }}" /></td>
+        <td><input class="value-tooltip" type="text" name="manufacturer_{{ forloop.counter0 }}" value="{{ row.manufacturer }}" title="{{ row.manufacturer }}" /></td>
+        <td><input class="value-tooltip" type="text" name="issuer_{{ forloop.counter0 }}" value="{{ row.issuer }}" title="{{ row.issuer }}" /></td>
+        <td><input class="value-tooltip" type="text" name="volume_{{ forloop.counter0 }}" value="{{ row.volume }}" title="{{ row.volume }}" /></td>
         <td>
           {% if row.file_ref %}
             <a href="{% url 'v02_input_file' project_id=project_id relative_path=row.file_ref %}" target="_blank" rel="noopener noreferrer">Документ</a>
@@ -120,6 +131,7 @@
 (() => {
   const statusMap = {
     upload_project: "status_upload_project",
+    upload_project_other: "status_upload_project_other",
     upload_quality: "status_upload_quality",
     upload_ojr: "status_upload_ojr",
     run_p2: "status_run_p2",
@@ -162,6 +174,18 @@
     }
   };
 
+  const bindValueTooltips = () => {
+    document.querySelectorAll("input.value-tooltip").forEach((input) => {
+      const syncTitle = () => {
+        input.title = input.value || "";
+      };
+      syncTitle();
+      input.addEventListener("input", syncTitle);
+      input.addEventListener("change", syncTitle);
+    });
+  };
+
+  bindValueTooltips();
   setInterval(poll, 3000);
 })();
 </script>

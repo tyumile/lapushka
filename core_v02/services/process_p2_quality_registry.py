@@ -12,6 +12,7 @@ from .project_storage import (
 
 
 ALLOWED_STATUS = {"ok", "needs_extraction", "needs_disambiguation", "blocked_missing_source"}
+PROJECT_CIPHER_BAD_HINTS = ("жилой комплекс", "расположенный по адресу", "этап")
 
 
 def _slug(value: str) -> str:
@@ -22,6 +23,161 @@ def _slug(value: str) -> str:
 
 def _default_source(file_ref: str = "") -> dict:
     return {"file": file_ref, "page": "", "snippet": ""}
+
+
+def _quality_ref(path: Path) -> str:
+    return f"01_input/02_quality_docs/{path.name}"
+
+
+def _normalize_rel_path(value: str) -> str:
+    return (value or "").strip().replace("\\", "/")
+
+
+def _extract_protocol_number(value: str) -> str:
+    text = (value or "").lower()
+    patterns = (
+        r"№\s*0*(\d+)",
+        r"протокол[^0-9]{0,20}0*(\d+)",
+        r"protocol[_\-\s]*0*(\d+)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if not match:
+            continue
+        raw = (match.group(1) or "").strip()
+        if not raw:
+            continue
+        try:
+            return str(int(raw))
+        except ValueError:
+            return raw
+    return ""
+
+
+def _looks_like_project_name_not_cipher(value: str) -> bool:
+    text = (value or "").strip().lower()
+    if not text:
+        return False
+    if any(hint in text for hint in PROJECT_CIPHER_BAD_HINTS):
+        return True
+    # Ciphers are usually compact; long narrative text is suspicious.
+    return len(text) > 60 and text.count(" ") > 5
+
+
+def _build_quality_indexes(quality_refs: list[str]) -> tuple[set[str], dict[str, str], dict[str, str]]:
+    exact = set(quality_refs)
+    by_name: dict[str, str] = {}
+    by_protocol_no: dict[str, str] = {}
+    for ref in quality_refs:
+        name = Path(ref).name.lower()
+        by_name[name] = ref
+        proto_no = _extract_protocol_number(name) or _extract_protocol_number(ref)
+        if proto_no and proto_no not in by_protocol_no:
+            by_protocol_no[proto_no] = ref
+    return exact, by_name, by_protocol_no
+
+
+def _map_quality_ref(candidate: str, exact: set[str], by_name: dict[str, str], by_protocol_no: dict[str, str]) -> str:
+    c = _normalize_rel_path(candidate)
+    if not c:
+        return ""
+    if c in exact:
+        return c
+    name = Path(c).name.lower()
+    if name in by_name:
+        return by_name[name]
+    proto_no = _extract_protocol_number(c)
+    if proto_no and proto_no in by_protocol_no:
+        return by_protocol_no[proto_no]
+    return ""
+
+
+def _enforce_quality_file_coverage(payload: dict, quality_refs: list[str]) -> tuple[int, int]:
+    if not quality_refs:
+        return 0, 0
+    exact, by_name, by_protocol_no = _build_quality_indexes(quality_refs)
+    remapped = 0
+    synthetic_docs = 0
+    unresolved_docs: list[dict] = []
+
+    for material in payload.get("materials") or []:
+        docs = material.get("docs") if isinstance(material.get("docs"), list) else []
+        for doc in docs:
+            if not isinstance(doc, dict):
+                continue
+            source = doc.get("source") if isinstance(doc.get("source"), dict) else _default_source()
+            mapped = _map_quality_ref(doc.get("file_ref", ""), exact, by_name, by_protocol_no)
+            if not mapped:
+                mapped = _map_quality_ref(source.get("file", ""), exact, by_name, by_protocol_no)
+            if mapped:
+                if doc.get("file_ref") != mapped:
+                    remapped += 1
+                doc["file_ref"] = mapped
+                if not source.get("file") or source.get("file") != mapped:
+                    source["file"] = mapped
+                doc["source"] = source
+            else:
+                unresolved_docs.append(doc)
+
+    covered: set[str] = set()
+    for material in payload.get("materials") or []:
+        for doc in material.get("docs") or []:
+            file_ref = _normalize_rel_path(doc.get("file_ref", ""))
+            if file_ref in exact:
+                covered.add(file_ref)
+
+    missing = [x for x in quality_refs if x not in covered]
+    for doc in unresolved_docs:
+        target = missing.pop(0) if missing else quality_refs[0]
+        doc["file_ref"] = target
+        source = doc.get("source") if isinstance(doc.get("source"), dict) else _default_source()
+        source["file"] = target
+        doc["source"] = source
+        if doc.get("status") == "ok":
+            doc["status"] = "needs_disambiguation"
+        remapped += 1
+        covered.add(target)
+
+    missing = [x for x in quality_refs if x not in covered]
+    for idx, file_ref in enumerate(missing, start=1):
+        stem = Path(file_ref).stem.replace("_", " ").replace("-", " ").strip() or f"Материал missing {idx}"
+        payload.setdefault("materials", []).append(
+            {
+                "material_id": f"mat-missing-{idx:03d}",
+                "material_name": stem,
+                "material_norm_name": _slug(stem),
+                "status": "needs_disambiguation",
+                "confidence": 0,
+                "source": _default_source(file_ref),
+                "docs": [
+                    {
+                        "doc_kind": "документ качества",
+                        "doc_number": "б/н",
+                        "doc_date": "б/д",
+                        "volume": "needs_extraction",
+                        "manufacturer": "needs_extraction",
+                        "issuer": "needs_extraction",
+                        "file_ref": file_ref,
+                        "status": "needs_disambiguation",
+                        "confidence": 0,
+                        "source": _default_source(file_ref),
+                    }
+                ],
+            }
+        )
+        synthetic_docs += 1
+
+    if remapped or synthetic_docs:
+        payload.setdefault("agent_comments", []).append(
+            {
+                "comment": (
+                    f"Пост-валидация Process 2: remap file_ref={remapped}, "
+                    f"добавлено синтетических docs для покрытия файлов={synthetic_docs}."
+                ),
+                "source": _default_source("01_input/02_quality_docs"),
+            }
+        )
+    return remapped, synthetic_docs
 
 
 def _normalize_doc(doc: dict, file_ref_fallback: str) -> dict:
@@ -65,7 +221,12 @@ def _normalize_payload(payload: dict, quality_files: list[Path], project_id: str
         project_cipher_confidence = float(p.get("confidence") or 0)
         project_cipher_source = p.get("source") if isinstance(p.get("source"), dict) else _default_source()
     # Reject accidental fallback to project id/name-like value.
-    if not project_cipher_raw or project_cipher_raw == project_id or "__" in project_cipher_raw:
+    if (
+        not project_cipher_raw
+        or project_cipher_raw == project_id
+        or "__" in project_cipher_raw
+        or _looks_like_project_name_not_cipher(project_cipher_raw)
+    ):
         project_cipher_raw = ""
         project_cipher_status = "needs_extraction"
         project_cipher_confidence = 0.0
@@ -89,7 +250,7 @@ def _normalize_payload(payload: dict, quality_files: list[Path], project_id: str
         "agent_comments": [],
     }
 
-    quality_refs = [f"01_input/02_quality_docs/{p.name}" for p in quality_files]
+    quality_refs = [_quality_ref(p) for p in quality_files]
     raw_materials = data.get("materials") if isinstance(data.get("materials"), list) else []
     for idx, m in enumerate(raw_materials, start=1):
         if not isinstance(m, dict):
@@ -181,6 +342,7 @@ def _normalize_payload(payload: dict, quality_files: list[Path], project_id: str
                     "source": source,
                 }
             )
+    _enforce_quality_file_coverage(out, quality_refs)
     return out
 
 
@@ -240,7 +402,12 @@ def _mock_payload(project_id: str, comment: str, quality_files: list[Path]) -> d
     }
 
 
-def run_process_p2(project_id: str, comment: str, feedback_rules: str = "") -> tuple[str, dict]:
+def run_process_p2(
+    project_id: str,
+    comment: str,
+    feedback_rules: str = "",
+    agent_feedback_rules: str = "",
+) -> tuple[str, dict]:
     root = project_root(project_id)
     files_project = [p for p in (root / "01_input" / "01_project").rglob("*") if p.is_file()]
     files_quality = [p for p in (root / "01_input" / "02_quality_docs").rglob("*") if p.is_file()]
@@ -256,6 +423,7 @@ def run_process_p2(project_id: str, comment: str, feedback_rules: str = "") -> t
             "comment": comment,
             "dictionary_json": get_razdel(None),
             "feedback_rules": feedback_rules or "нет дополнительных правил",
+            "agent_feedback_rules": agent_feedback_rules or "нет самогенерированных правил",
         },
         files=files,
         output_filename="p2_quality_registry_v1.json",
