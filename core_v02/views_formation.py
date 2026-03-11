@@ -12,6 +12,10 @@ from .services.ui_status import set_action_status
 from .views_utils import common_context, resolve_files_for_process
 
 
+def _as_dict(payload) -> dict:
+    return payload if isinstance(payload, dict) else {}
+
+
 def _docs_rows(payload: dict) -> list[dict]:
     rows: list[dict] = []
     source = payload.get("doc_instances") if isinstance(payload.get("doc_instances"), list) else payload.get("docs_to_generate") or []
@@ -29,9 +33,9 @@ def _docs_rows(payload: dict) -> list[dict]:
 
 
 def formation_view(request, project_id: str):
-    p4_v1 = read_processing(project_id, "p4b_doc_instances_v1.json", read_processing(project_id, "p4_doc_list_v1.json", {}))
-    p4_final = read_processing(project_id, "p4b_doc_instances_final.json", read_processing(project_id, "p4_doc_list_final.json", p4_v1))
-    quality_final = read_processing(project_id, "p2_quality_registry_final.json", {})
+    p4_v1 = _as_dict(read_processing(project_id, "p4b_doc_instances_v1.json", read_processing(project_id, "p4_doc_list_v1.json", {})))
+    p4_final = _as_dict(read_processing(project_id, "p4b_doc_instances_final.json", read_processing(project_id, "p4_doc_list_final.json", p4_v1)))
+    quality_final = _as_dict(read_processing(project_id, "p2_quality_registry_final.json", {}))
     razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
 
     if request.method == "POST":
@@ -70,26 +74,30 @@ def formation_view(request, project_id: str):
 
         if action == "run_p5":
             set_action_status(project_id, "run_p5", "running", "Process 5 запущен...")
-            files = resolve_files_for_process(project_id)
-            _, fill_plan = run_process_p5(
-                project_id=project_id,
-                razdel_code=razdel_code,
-                doc_list=p4_final,
-                quality_registry=quality_final,
-                files=files,
-            )
-            generated = generate_from_fill_plan(project_id, fill_plan)
-            save_learning_diff(
-                project_id,
-                "process_5",
-                {"docs_sent": p4_final.get("doc_instances") or p4_final.get("docs_to_generate", []), "generated": generated},
-                razdel_code,
-            )
-            set_action_status(project_id, "run_p5", "success", f"Process 5 завершён. Сформировано файлов: {len(generated)}.")
-            messages.success(request, f"Документы сформированы: {len(generated)}")
+            try:
+                files = resolve_files_for_process(project_id)
+                _, fill_plan = run_process_p5(
+                    project_id=project_id,
+                    razdel_code=razdel_code,
+                    doc_list=p4_final,
+                    quality_registry=quality_final,
+                    files=files,
+                )
+                generated = generate_from_fill_plan(project_id, fill_plan)
+                save_learning_diff(
+                    project_id,
+                    "process_5",
+                    {"docs_sent": p4_final.get("doc_instances") or p4_final.get("docs_to_generate", []), "generated": generated},
+                    razdel_code,
+                )
+                set_action_status(project_id, "run_p5", "success", f"Process 5 завершён. Сформировано файлов: {len(generated)}.")
+                messages.success(request, f"Документы сформированы: {len(generated)}")
+            except Exception as exc:
+                set_action_status(project_id, "run_p5", "error", f"Process 5 ошибка: {exc}")
+                messages.error(request, f"Process 5 ошибка: {exc}")
             return redirect("v02_formation", project_id=project_id)
 
-    fill_plan = read_processing(project_id, "p5_fill_plan.json", {})
+    fill_plan = _as_dict(read_processing(project_id, "p5_fill_plan.json", {}))
     outputs = fill_plan.get("outputs") or []
     set_project_step(project_id, 4)
     return render(

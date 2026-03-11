@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
@@ -11,10 +9,15 @@ from .services.ui_status import set_action_status
 from .views_utils import common_context
 
 
+def _as_dict(payload) -> dict:
+    return payload if isinstance(payload, dict) else {}
+
+
 def doc_types_view(request, project_id: str):
-    quality_final = read_processing(project_id, "p2_quality_registry_final.json", {})
-    p4_v1 = read_processing(project_id, "p4b_doc_instances_v1.json", read_processing(project_id, "p4_doc_list_v1.json", {}))
+    quality_final = _as_dict(read_processing(project_id, "p2_quality_registry_final.json", {}))
+    p4_v1 = _as_dict(read_processing(project_id, "p4b_doc_instances_v1.json", read_processing(project_id, "p4_doc_list_v1.json", {})))
     razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
+
     if request.method == "POST":
         action = request.POST.get("action")
         if action in {"upload_sample_project", "upload_sample_id", "upload_doc_type_sample"}:
@@ -41,7 +44,7 @@ def doc_types_view(request, project_id: str):
             if not selected_doc_type_ids:
                 set_action_status(project_id, "run_p4b", "error", "Для раздела не найдено типов документов.")
                 messages.error(request, "Для раздела не найдено типов документов.")
-                return redirect("v02_doc_types", project_id=project_id)
+                return redirect("v02_formation", project_id=project_id)
             try:
                 _, payload, excluded = run_process_p4b_build_doc_plan(project_id, razdel_code, selected_doc_type_ids)
                 status_msg = f"Process P4B завершён. Инстансов: {len(payload.get('doc_instances') or [])}."
@@ -54,8 +57,8 @@ def doc_types_view(request, project_id: str):
             except Exception as exc:
                 set_action_status(project_id, "run_p4b", "error", f"Process P4B завершился ошибкой: {exc}")
                 messages.error(request, f"Process P4B ошибка: {exc}")
-                return redirect("v02_doc_types", project_id=project_id)
-            return redirect("v02_doc_plan", project_id=project_id)
+                return redirect("v02_formation", project_id=project_id)
+            return redirect("v02_formation", project_id=project_id)
 
     set_project_step(project_id, 3)
     return render(

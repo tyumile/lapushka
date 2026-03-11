@@ -64,26 +64,72 @@ def _extract_json_object(text: str) -> str | None:
     return None
 
 
+def _is_connection_like_error(exc: Exception) -> bool:
+    if isinstance(exc, APIConnectionError):
+        return True
+    text = (str(exc) or "").lower()
+    hints = (
+        "connection error",
+        "connection reset",
+        "timed out",
+        "timeout",
+        "temporarily unavailable",
+        "dns",
+        "name resolution",
+    )
+    return any(h in text for h in hints)
+
+
+def _retry_pauses_from_env(var_name: str, default: str) -> list[int]:
+    raw = (os.getenv(var_name) or default).strip()
+    parts = [x.strip() for x in raw.split(",") if x.strip()]
+    out: list[int] = []
+    for p in parts:
+        try:
+            val = int(p)
+        except ValueError:
+            continue
+        if val > 0:
+            out.append(val)
+    return out or [1, 2, 4, 8, 16]
+
+
 class ResponsesClientV02:
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: str | None = None, on_retry=None):
         self._api_key = api_key or os.getenv("OPENAI_API_KEY", "")
         if not self._api_key:
             raise ValueError("OPENAI_API_KEY is not set")
+        self._on_retry = on_retry
 
     def _client(self, timeout_s: int = 120) -> OpenAI:
         return OpenAI(api_key=self._api_key, timeout=timeout_s)
 
     def upload_file_bytes(self, filename: str, content: bytes, timeout_s: int = 300) -> str:
-        pauses = [1, 2, 4]
+        pauses = _retry_pauses_from_env("OPENAI_UPLOAD_RETRY_PAUSES", "1,2,4,8,16")
         for i, pause in enumerate(pauses, start=1):
             try:
                 stream = io.BytesIO(content)
                 file_obj = (filename, stream)
                 f = self._client(timeout_s=timeout_s).files.create(file=file_obj, purpose="user_data")
                 return f.id
-            except APIConnectionError:
+            except Exception as e:
+                if not _is_connection_like_error(e):
+                    raise
                 if i == len(pauses):
                     raise
+                if callable(self._on_retry):
+                    try:
+                        self._on_retry(
+                            {
+                                "kind": "upload",
+                                "attempt": i,
+                                "next_pause_s": pause,
+                                "error": str(e)[:300],
+                                "filename": filename,
+                            }
+                        )
+                    except Exception:
+                        pass
                 time.sleep(pause)
         raise RuntimeError("Upload retries exhausted")
 
@@ -96,7 +142,7 @@ class ResponsesClientV02:
         model: str,
         timeout_s: int = 120,
     ) -> tuple[dict, str]:
-        pauses = [1, 2, 4, 8]
+        pauses = _retry_pauses_from_env("OPENAI_CALL_RETRY_PAUSES", "1,2,4,8,16,24")
         last_raw = ""
         for i, pause in enumerate(pauses, start=1):
             try:
@@ -110,6 +156,38 @@ class ResponsesClientV02:
             except (APIConnectionError, APIStatusError, RateLimitError) as e:
                 last_raw = str(e)
                 if i < len(pauses):
+                    if callable(self._on_retry):
+                        try:
+                            self._on_retry(
+                                {
+                                    "kind": "call",
+                                    "attempt": i,
+                                    "next_pause_s": pause,
+                                    "error": str(e)[:300],
+                                    "model": model,
+                                }
+                            )
+                        except Exception:
+                            pass
+                    time.sleep(pause)
+                    continue
+                raise
+            except Exception as e:
+                last_raw = str(e)
+                if _is_connection_like_error(e) and i < len(pauses):
+                    if callable(self._on_retry):
+                        try:
+                            self._on_retry(
+                                {
+                                    "kind": "call",
+                                    "attempt": i,
+                                    "next_pause_s": pause,
+                                    "error": str(e)[:300],
+                                    "model": model,
+                                }
+                            )
+                        except Exception:
+                            pass
                     time.sleep(pause)
                     continue
                 raise

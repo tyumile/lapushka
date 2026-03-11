@@ -290,7 +290,22 @@ def run_llm_json_process(
 
     root = project_root(project_id)
     existing = _collect_paths(files)
-    client = ResponsesClientV02()
+    def _on_retry(event: dict) -> None:
+        append_event(
+            project_id,
+            {
+                "process": process_name,
+                "stage": "retry_upload" if event.get("kind") == "upload" else "retry_call",
+                "run_id": run_id,
+                "attempt": int(event.get("attempt") or 0),
+                "next_pause_s": int(event.get("next_pause_s") or 0),
+                "error": str(event.get("error") or "")[:300],
+                "filename": event.get("filename") or "",
+                "model": event.get("model") or "",
+            },
+        )
+
+    client = ResponsesClientV02(on_retry=_on_retry)
     upload_map: dict[str, dict] = {}
     file_ids: list[str] = []
     excluded: list[dict] = []

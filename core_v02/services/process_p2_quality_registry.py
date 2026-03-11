@@ -1,10 +1,14 @@
 from pathlib import Path
+import os
 import re
 
 from .dictionary_service import get_razdel
 from .llm_runtime import run_llm_json_process
+from .log_service import append_event
+from .quality_gate import run_quality_gate
 from .project_storage import (
     duplicate_output_to_run,
+    persist_run_json,
     processing_path,
     project_root,
     save_processing_json,
@@ -13,6 +17,12 @@ from .project_storage import (
 
 ALLOWED_STATUS = {"ok", "needs_extraction", "needs_disambiguation", "blocked_missing_source"}
 PROJECT_CIPHER_BAD_HINTS = ("жилой комплекс", "расположенный по адресу", "этап")
+TOO_LARGE_HINTS = (
+    "rate_limit_exceeded",
+    "tokens per min",
+    "request too large",
+    "error code: 429",
+)
 
 
 def _slug(value: str) -> str:
@@ -27,6 +37,44 @@ def _default_source(file_ref: str = "") -> dict:
 
 def _quality_ref(path: Path) -> str:
     return f"01_input/02_quality_docs/{path.name}"
+
+
+def _env_int(name: str, default: int, minimum: int = 1) -> int:
+    raw = (os.getenv(name) or "").strip()
+    if not raw:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        return default
+    return max(minimum, value)
+
+
+def _looks_like_too_large_error(exc: Exception) -> bool:
+    text = (str(exc) or "").lower()
+    return any(h in text for h in TOO_LARGE_HINTS)
+
+
+def _chunk_by_limits(paths: list[Path], max_files: int, max_bytes: int) -> list[list[Path]]:
+    if not paths:
+        return []
+    batches: list[list[Path]] = []
+    current: list[Path] = []
+    current_bytes = 0
+    for p in paths:
+        size = p.stat().st_size if p.exists() else 0
+        can_fit = bool(current) and len(current) < max_files and (current_bytes + size) <= max_bytes
+        if can_fit:
+            current.append(p)
+            current_bytes += size
+            continue
+        if current:
+            batches.append(current)
+        current = [p]
+        current_bytes = size
+    if current:
+        batches.append(current)
+    return batches
 
 
 def _normalize_rel_path(value: str) -> str:
@@ -402,6 +450,154 @@ def _mock_payload(project_id: str, comment: str, quality_files: list[Path]) -> d
     }
 
 
+def _pick_project_cipher(payloads: list[dict], project_id: str) -> dict:
+    for payload in payloads:
+        project_cipher = payload.get("project_cipher")
+        if not isinstance(project_cipher, dict):
+            continue
+        value = (project_cipher.get("value") or "").strip()
+        if not value:
+            continue
+        if value == project_id or "__" in value or _looks_like_project_name_not_cipher(value):
+            continue
+        return project_cipher
+    return {"value": "", "status": "needs_extraction", "confidence": 0, "source": _default_source()}
+
+
+def _pick_razdel(payloads: list[dict]) -> dict:
+    for payload in payloads:
+        razdel = payload.get("razdel")
+        if isinstance(razdel, dict):
+            return razdel
+    info = get_razdel("KJ")
+    return {
+        "razdel_code": info.get("razdel_code", "KJ"),
+        "razdel_name": info.get("razdel_name", "КЖ"),
+        "status": "ok",
+        "confidence": 0.0,
+        "source": _default_source(),
+    }
+
+
+def _merge_partial_payloads(payloads: list[dict], project_id: str) -> dict:
+    merged = {
+        "project_cipher": _pick_project_cipher(payloads, project_id),
+        "razdel": _pick_razdel(payloads),
+        "materials": [],
+        "agent_comments": [],
+    }
+    for payload in payloads:
+        mats = payload.get("materials")
+        if isinstance(mats, list):
+            merged["materials"].extend([x for x in mats if isinstance(x, dict)])
+        comments = payload.get("agent_comments")
+        if isinstance(comments, list):
+            merged["agent_comments"].extend([x for x in comments if isinstance(x, dict)])
+    return merged
+
+
+def _run_batch_with_auto_split(
+    *,
+    project_id: str,
+    prompt_vars: dict,
+    comment: str,
+    context_files: list[Path],
+    quality_files: list[Path],
+    batch_no: int,
+    depth: int = 0,
+) -> list[tuple[str, dict]]:
+    if not quality_files:
+        return []
+    all_files = list(context_files) + list(quality_files)
+    try:
+        run_id, payload = run_llm_json_process(
+            project_id=project_id,
+            process_name="process_2",
+            prompt_name="02_p2_quality_registry_v02",
+            prompt_vars=prompt_vars,
+            files=all_files,
+            output_filename="p2_quality_registry_v1.json",
+            mock_payload=_mock_payload(project_id, comment, quality_files),
+        )
+        append_event(
+            project_id,
+            {
+                "process": "process_2",
+                "stage": "batch_success",
+                "batch_no": batch_no,
+                "depth": depth,
+                "quality_files": len(quality_files),
+                "context_files": len(context_files),
+                "run_id": run_id,
+            },
+        )
+        return [(run_id, payload)]
+    except Exception as exc:
+        if not _looks_like_too_large_error(exc):
+            raise
+        if len(quality_files) > 1:
+            mid = len(quality_files) // 2
+            left = quality_files[:mid]
+            right = quality_files[mid:]
+            append_event(
+                project_id,
+                {
+                    "process": "process_2",
+                    "stage": "batch_split",
+                    "batch_no": batch_no,
+                    "depth": depth,
+                    "left": len(left),
+                    "right": len(right),
+                    "reason": str(exc)[:300],
+                },
+            )
+            out: list[tuple[str, dict]] = []
+            out.extend(
+                _run_batch_with_auto_split(
+                    project_id=project_id,
+                    prompt_vars=prompt_vars,
+                    comment=comment,
+                    context_files=context_files,
+                    quality_files=left,
+                    batch_no=batch_no,
+                    depth=depth + 1,
+                )
+            )
+            out.extend(
+                _run_batch_with_auto_split(
+                    project_id=project_id,
+                    prompt_vars=prompt_vars,
+                    comment=comment,
+                    context_files=[],
+                    quality_files=right,
+                    batch_no=batch_no,
+                    depth=depth + 1,
+                )
+            )
+            return out
+        if context_files:
+            append_event(
+                project_id,
+                {
+                    "process": "process_2",
+                    "stage": "batch_retry_without_context",
+                    "batch_no": batch_no,
+                    "depth": depth,
+                    "reason": str(exc)[:300],
+                },
+            )
+            return _run_batch_with_auto_split(
+                project_id=project_id,
+                prompt_vars=prompt_vars,
+                comment=comment,
+                context_files=[],
+                quality_files=quality_files,
+                batch_no=batch_no,
+                depth=depth + 1,
+            )
+        raise
+
+
 def run_process_p2(
     project_id: str,
     comment: str,
@@ -411,25 +607,101 @@ def run_process_p2(
     root = project_root(project_id)
     files_project = [p for p in (root / "01_input" / "01_project").rglob("*") if p.is_file()]
     files_quality = [p for p in (root / "01_input" / "02_quality_docs").rglob("*") if p.is_file()]
-    files = list(files_project)
-    files += files_quality
-    files += [p for p in (root / "01_input" / "03_ojr").rglob("*") if p.is_file()]
-    run_id, payload = run_llm_json_process(
-        project_id=project_id,
-        process_name="process_2",
-        prompt_name="02_p2_quality_registry_v02",
-        prompt_vars={
-            "project_id": project_id,
-            "comment": comment,
-            "dictionary_json": get_razdel(None),
-            "feedback_rules": feedback_rules or "нет дополнительных правил",
-            "agent_feedback_rules": agent_feedback_rules or "нет самогенерированных правил",
+    files_ojr = [p for p in (root / "01_input" / "03_ojr").rglob("*") if p.is_file()]
+    prompt_vars = {
+        "project_id": project_id,
+        "comment": comment,
+        "dictionary_json": get_razdel(None),
+        "feedback_rules": feedback_rules or "нет дополнительных правил",
+        "agent_feedback_rules": agent_feedback_rules or "нет самогенерированных правил",
+    }
+    if not files_quality:
+        run_id, raw_payload = run_llm_json_process(
+            project_id=project_id,
+            process_name="process_2",
+            prompt_name="02_p2_quality_registry_v02",
+            prompt_vars=prompt_vars,
+            files=list(files_project) + list(files_ojr),
+            output_filename="p2_quality_registry_v1.json",
+            mock_payload=_mock_payload(project_id, comment, files_quality),
+        )
+        payload = _normalize_payload(raw_payload, files_quality, project_id)
+        all_input_files = list(files_project) + list(files_quality) + list(files_ojr)
+        manifest, gate_report = run_quality_gate(
+            process_name="process_2",
+            root=root,
+            payload=payload,
+            input_files=all_input_files,
+            excluded_refs=[],
+            required_files=files_quality,
+        )
+        persist_run_json(project_id, "process_2", run_id, "input_manifest.json", manifest)
+        persist_run_json(project_id, "process_2", run_id, "quality_gate_report.json", gate_report)
+        if not gate_report.get("pass"):
+            append_event(
+                project_id,
+                {"process": "process_2", "stage": "quality_gate_failed", "run_id": run_id, "reason": gate_report.get("summary", "")},
+            )
+            raise ValueError(f"Process 2 quality gate failed: {gate_report.get('summary', 'unknown reason')}")
+        save_processing_json(project_id, "p2_quality_registry_v1.json", payload)
+        duplicate_output_to_run(project_id, "process_2", run_id, "p2_quality_registry_v1.json")
+        save_processing_json(project_id, "p2_quality_registry_final.json", payload)
+        return run_id, payload
+    max_files = _env_int("P2_MAX_FILES_PER_BATCH", default=3, minimum=1)
+    max_bytes = _env_int("P2_MAX_BATCH_BYTES", default=2_000_000, minimum=100_000)
+    quality_batches = _chunk_by_limits(files_quality, max_files=max_files, max_bytes=max_bytes)
+    total_quality_bytes = sum((p.stat().st_size if p.exists() else 0) for p in files_quality)
+    append_event(
+        project_id,
+        {
+            "process": "process_2",
+            "stage": "batch_plan",
+            "quality_files": len(files_quality),
+            "quality_total_bytes": total_quality_bytes,
+            "project_files": len(files_project),
+            "ojr_files": len(files_ojr),
+            "batches_planned": len(quality_batches),
+            "max_files_per_batch": max_files,
+            "max_batch_bytes": max_bytes,
+            "env_model": (os.getenv("OPENAI_MODEL") or "").strip(),
+            "env_fallback_model": (os.getenv("OPENAI_FALLBACK_MODEL") or "").strip(),
         },
-        files=files,
-        output_filename="p2_quality_registry_v1.json",
-        mock_payload=_mock_payload(project_id, comment, files_quality),
     )
-    payload = _normalize_payload(payload, files_quality, project_id)
+    all_runs: list[tuple[str, dict]] = []
+    for idx, batch in enumerate(quality_batches, start=1):
+        context = (files_project + files_ojr) if idx == 1 else []
+        all_runs.extend(
+            _run_batch_with_auto_split(
+                project_id=project_id,
+                prompt_vars=prompt_vars,
+                comment=comment,
+                context_files=context,
+                quality_files=batch,
+                batch_no=idx,
+            )
+        )
+    if not all_runs:
+        raise ValueError("Process 2: no batch runs were produced.")
+    run_id = all_runs[-1][0]
+    merged_payload = _merge_partial_payloads([x[1] for x in all_runs], project_id)
+    payload = _normalize_payload(merged_payload, files_quality, project_id)
+    all_input_files = list(files_project) + list(files_quality) + list(files_ojr)
+    manifest, gate_report = run_quality_gate(
+        process_name="process_2",
+        root=root,
+        payload=payload,
+        input_files=all_input_files,
+        excluded_refs=[],
+        required_files=files_quality,
+    )
+    persist_run_json(project_id, "process_2", run_id, "input_manifest.json", manifest)
+    persist_run_json(project_id, "process_2", run_id, "quality_gate_report.json", gate_report)
+    if not gate_report.get("pass"):
+        append_event(
+            project_id,
+            {"process": "process_2", "stage": "quality_gate_failed", "run_id": run_id, "reason": gate_report.get("summary", "")},
+        )
+        raise ValueError(f"Process 2 quality gate failed: {gate_report.get('summary', 'unknown reason')}")
     save_processing_json(project_id, "p2_quality_registry_v1.json", payload)
     duplicate_output_to_run(project_id, "process_2", run_id, "p2_quality_registry_v1.json")
     # Always refresh final baseline after a new Process 2 run.

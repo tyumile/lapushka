@@ -8,12 +8,14 @@ from pathlib import Path
 from ..llm.prompt_loader_v02 import load_prompt
 from ..llm.responses_client_v02 import ResponsesClientV02
 from .dictionary_service import get_razdel, load_dictionary
+from .log_service import append_event
 from .llm_runtime import (
     SUPPORTED_CONTEXT_EXTS,
     TABLE_CONTEXT_PROMPT_NOTE,
     prepare_context_file_for_upload,
     resolve_openai_model,
 )
+from .quality_gate import run_quality_gate
 from .project_storage import persist_run_artifact, persist_run_json, project_root, save_processing_json
 
 EXCLUDED_REL = "01_input/099_excluded"
@@ -250,10 +252,20 @@ def run_process_p4b_build_doc_plan(
         if settings.MOCK_MODE:
             payload = _mock_payload(razdel_code, selected_doc_type_ids)
             payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
+            manifest, gate_report = run_quality_gate(
+                process_name="process_p4b",
+                root=root,
+                payload=payload,
+                input_files=input_files,
+                excluded_refs=[],
+                required_files=pdf_input_files,
+            )
             save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
             save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)
             save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
             persist_run_json(project_id, "process_p4b", run_id, "uploaded_files.json", {"files": []})
+            persist_run_json(project_id, "process_p4b", run_id, "input_manifest.json", manifest)
+            persist_run_json(project_id, "process_p4b", run_id, "quality_gate_report.json", gate_report)
             persist_run_artifact(project_id, "process_p4b", run_id, "raw_response.txt", json.dumps(payload, ensure_ascii=False))
             persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
             persist_run_json(
@@ -265,7 +277,22 @@ def run_process_p4b_build_doc_plan(
             )
             return run_id, payload, []
 
-    client = ResponsesClientV02(api_key=api_key or None)
+    def _on_retry(event: dict) -> None:
+        append_event(
+            project_id,
+            {
+                "process": "process_p4b",
+                "stage": "retry_upload" if event.get("kind") == "upload" else "retry_call",
+                "run_id": run_id,
+                "attempt": int(event.get("attempt") or 0),
+                "next_pause_s": int(event.get("next_pause_s") or 0),
+                "error": str(event.get("error") or "")[:300],
+                "filename": event.get("filename") or "",
+                "model": event.get("model") or model,
+            },
+        )
+
+    client = ResponsesClientV02(api_key=api_key or None, on_retry=_on_retry)
     upload_map: dict[str, dict] = {}
     file_ids: list[str] = []
     items: list[tuple[Path, str, str]] = []
@@ -376,6 +403,20 @@ def run_process_p4b_build_doc_plan(
     payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
     if not isinstance(payload.get("doc_instances"), list):
         raise ValueError("p4b invalid payload: doc_instances missing")
+
+    excluded_refs = [str(x.get("path") or "").strip() for x in excluded if isinstance(x, dict)]
+    manifest, gate_report = run_quality_gate(
+        process_name="process_p4b",
+        root=root,
+        payload=payload,
+        input_files=input_files,
+        excluded_refs=excluded_refs,
+        required_files=pdf_input_files,
+    )
+    persist_run_json(project_id, "process_p4b", run_id, "input_manifest.json", manifest)
+    persist_run_json(project_id, "process_p4b", run_id, "quality_gate_report.json", gate_report)
+    if not gate_report.get("pass"):
+        raise ValueError(f"Process P4B quality gate failed: {gate_report.get('summary', 'unknown reason')}")
 
     save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
     save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)

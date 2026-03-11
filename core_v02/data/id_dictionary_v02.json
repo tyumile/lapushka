@@ -1,227 +1,496 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "default_razdel_code": "KJ",
   "razdels": [
     {
       "razdel_code": "KJ",
       "razdel_name": "КЖ",
       "doc_types": [
-        {
-          "doc_type_id": "acts_hidden",
-          "doc_type_name": "Акты скрытых работ",
-          "docs": [
-            {
-              "doc_id": "AOSR",
-              "name": "Акт освидетельствования скрытых работ",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "section",
-                "floor",
-                "axis",
-                "line",
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "table"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "acts_responsible_structures",
-          "doc_type_name": "Акты ответственных конструкций",
-          "docs": [
-            {
-              "doc_id": "AOOK",
-              "name": "Акт освидетельствования ответственных конструкций",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "table"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_REGISTERS",
-          "doc_type_name": "Реестры",
-          "docs": [
-            {
-              "doc_id": "KJ_REESTR_ID",
-              "name": "Реестр исполнительной документации",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_reestr_id"
-            },
-            {
-              "doc_id": "KJ_REESTR_AOSR",
-              "name": "Реестр актов освидетельствования скрытых работ (АОСР)",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_reestr_aosr"
-            },
-            {
-              "doc_id": "KJ_REESTR_CERTS",
-              "name": "Реестр сертификатов и паспортов качества",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_reestr_certs"
-            },
-            {
-              "doc_id": "KJ_REESTR_SCHEMES_TESTS",
-              "name": "Реестр исполнительных схем и протоколов испытаний",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_reestr_schemes_tests"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_TITLE_SHEETS",
-          "doc_type_name": "Титульные листы",
-          "docs": [
-            {
-              "doc_id": "KJ_TITLE_SHEET",
-              "name": "Титульный лист тома исполнительной документации",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_title_sheet"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_EXEC_SCHEMES",
-          "doc_type_name": "Исполнительные схемы",
-          "docs": [
-            {
-              "doc_id": "KJ_EXEC_SCHEME_GEODETIC",
-              "name": "Исполнительные геодезические схемы",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "section",
-                "floor",
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_exec_scheme_geodetic"
-            },
-            {
-              "doc_id": "KJ_EXEC_SCHEME_REBAR",
-              "name": "Исполнительные схемы армирования",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "layer",
-                "section",
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_exec_scheme_rebar"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_PROTOCOLS_TESTS",
-          "doc_type_name": "Протоколы и испытания",
-          "docs": [
-            {
-              "doc_id": "KJ_PROTOCOL_BETON",
-              "name": "Протоколы лабораторных испытаний бетона",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_protocol_beton"
-            },
-            {
-              "doc_id": "KJ_TEMP_SHEETS",
-              "name": "Температурные листы бетонных работ",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_temp_sheets"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_INPUT_CONTROL",
-          "doc_type_name": "Входной контроль (ВИК)",
-          "docs": [
-            {
-              "doc_id": "KJ_VIK_ACT",
-              "name": "Акт входного контроля материалов и конструкций",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_vik_act"
-            },
-            {
-              "doc_id": "KJ_VIK_JOURNAL",
-              "name": "Журнал входного контроля материалов и конструкций",
-              "multi_rule": "single",
-              "multi_axis_allowed": [],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_vik_journal"
-            }
-          ]
-        },
-        {
-          "doc_type_id": "KJ_APPENDICES",
-          "doc_type_name": "Приложения к актам",
-          "docs": [
-            {
-              "doc_id": "KJ_REESTR_DOCS_QUALITY",
-              "name": "Реестр документов качества (приложение к АОСР)",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "layer",
-                "section",
-                "stage",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "xlsx_reestr_docs_quality"
-            }
-          ]
-        }
+        {"doc_type_id": "acts_hidden", "doc_type_name": "Акты скрытых работ", "docs": [
+          {"doc_id": "AOSR","name": "Акт освидетельствования скрытых работ","multi_rule": "multi","multi_axis_allowed": ["section","floor","axis","line","stage","lot"],"default_output_format": "xlsx","template_kind": "table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs": [
+          {"doc_id": "AOOK","name": "Акт освидетельствования ответственных конструкций","multi_rule": "single","multi_axis_allowed": [],"default_output_format": "xlsx","template_kind": "table"}
+        ]},
+        {"doc_type_id": "KJ_REGISTERS","doc_type_name": "Реестры","docs": [
+          {"doc_id": "KJ_REESTR_ID","name": "Реестр исполнительной документации","multi_rule": "single","default_output_format": "xlsx","template_kind": "xlsx_reestr"},
+          {"doc_id": "KJ_REESTR_AOSR","name": "Реестр актов освидетельствования скрытых работ","multi_rule": "single","default_output_format": "xlsx","template_kind": "xlsx_reestr"},
+          {"doc_id": "KJ_REESTR_CERTS","name": "Реестр сертификатов и паспортов качества","multi_rule": "single","default_output_format": "xlsx","template_kind": "xlsx_reestr"},
+          {"doc_id": "KJ_REESTR_SCHEMES_TESTS","name": "Реестр исполнительных схем и протоколов испытаний","multi_rule": "single","default_output_format": "xlsx","template_kind": "xlsx_reestr"}
+        ]},
+        {"doc_type_id": "KJ_TITLE_SHEETS","doc_type_name": "Титульные листы","docs": [
+          {"doc_id": "KJ_TITLE_SHEET","name": "Титульный лист тома исполнительной документации","multi_rule": "single","multi_axis_allowed": [],"default_output_format": "xlsx","template_kind": "xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "KJ_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs": [
+          {"doc_id": "KJ_EXEC_SCHEME_GEODETIC","name": "Исполнительные геодезические схемы","multi_rule": "multi","multi_axis_allowed": ["section","floor"],"default_output_format": "xlsx","template_kind": "xlsx_schemes"},
+          {"doc_id": "KJ_EXEC_SCHEME_REBAR","name": "Исполнительные схемы армирования","multi_rule": "multi","multi_axis_allowed": ["section","floor"],"default_output_format": "xlsx","template_kind": "xlsx_schemes"}
+        ]},
+        {"doc_type_id": "KJ_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs": [
+          {"doc_id": "KJ_PROTOCOL_BETON","name": "Протоколы лабораторных испытаний бетона","multi_rule": "multi","multi_axis_allowed": ["stage","lot"],"default_output_format": "xlsx","template_kind": "xlsx_protocol_beton"},
+          {"doc_id": "KJ_TEMP_SHEETS","name": "Температурные листы бетонных работ","multi_rule": "multi","multi_axis_allowed": ["stage","lot"],"default_output_format": "xlsx","template_kind": "xlsx_temp_sheets"}
+        ]},
+        {"doc_type_id": "KJ_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs": [
+          {"doc_id": "KJ_VIK_ACT","name": "Акт входного контроля материалов и конструкций","multi_rule": "multi","multi_axis_allowed": ["stage","lot"],"default_output_format": "xlsx","template_kind": "xlsx_vik_act"},
+          {"doc_id": "KJ_VIK_JOURNAL","name": "Журнал входного контроля материалов и конструкций","multi_rule": "single","multi_axis_allowed": [],"default_output_format": "xlsx","template_kind": "xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "KJ_APPENDICES","doc_type_name": "Приложения к актам","docs": [
+          {"doc_id": "KJ_REESTR_DOCS_QUALITY","name": "Реестр документов качества (приложение к АОСР)","multi_rule": "multi","multi_axis_allowed": ["layer","section","stage","lot"],"default_output_format": "xlsx","template_kind": "xlsx_reestr_docs_quality"}
+        ]}
       ]
     },
     {
       "razdel_code": "GP",
       "razdel_name": "ГП",
       "doc_types": [
-        {
-          "doc_type_id": "geodesy",
-          "doc_type_name": "Геодезия",
-          "docs": [
-            {
-              "doc_id": "GP_AXIS_LAYOUT_ACT",
-              "name": "Акт разбивки осей объекта капитального строительства на местности",
-              "multi_rule": "multi",
-              "multi_axis_allowed": [
-                "section",
-                "axis",
-                "line",
-                "lot"
-              ],
-              "default_output_format": "xlsx",
-              "template_kind": "table"
-            }
-          ]
-        }
+        {"doc_type_id": "geodesy","doc_type_name": "Геодезия","docs": [
+          {"doc_id": "GP_AXIS_LAYOUT_ACT","name": "Акт разбивки осей объекта капитального строительства на местности","multi_rule": "single","multi_axis_allowed": [],"default_output_format": "xlsx","template_kind": "xlsx_geodetic"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "AR",
+      "razdel_name": "АР",
+      "doc_types": [
+        {"doc_type_id": "AR_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id": "AR_TITLE_SHEET","name":"Титульный лист раздела АР","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "AR_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"AR_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"AR_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"AR_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"AR_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "AR_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"AR_EXEC_SCHEME_PLAN","name":"Исполнительная схема планировки","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "AR_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"AR_PROTOCOL_TESTS","name":"Протоколы испытаний и приёмки","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "AR_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"AR_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"AR_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "AR_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"AR_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "KM",
+      "razdel_name": "КМ",
+      "doc_types": [
+        {"doc_type_id": "KM_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"KM_TITLE_SHEET","name":"Титульный лист раздела КМ","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "KM_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"KM_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KM_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KM_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KM_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "KM_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"KM_EXEC_SCHEME_PLAN","name":"Исполнительная схема сборки КМ","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "KM_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"KM_PROTOCOL_TESTS","name":"Протоколы испытаний сварных швов","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "KM_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"KM_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"KM_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "KM_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"KM_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "KMD",
+      "razdel_name": "КМД",
+      "doc_types": [
+        {"doc_type_id": "KMD_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"KMD_TITLE_SHEET","name":"Титульный лист раздела КМД","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "KMD_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"KMD_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KMD_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KMD_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KMD_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "KMD_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"KMD_EXEC_SCHEME_PLAN","name":"Исполнительная схема деталировки КМ","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "KMD_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"KMD_PROTOCOL_TESTS","name":"Протоколы испытаний металлоконструкций","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "KMD_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"KMD_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"KMD_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "KMD_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"KMD_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "KD",
+      "razdel_name": "КД",
+      "doc_types": [
+        {"doc_type_id": "KD_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"KD_TITLE_SHEET","name":"Титульный лист раздела КД","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "KD_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"KD_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KD_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KD_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"KD_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "KD_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"KD_EXEC_SCHEME_PLAN","name":"Исполнительная схема конструкций КД","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "KD_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"KD_PROTOCOL_TESTS","name":"Протоколы испытаний деревянных конструкций","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "KD_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"KD_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"KD_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "KD_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"KD_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "OV",
+      "razdel_name": "ОВК",
+      "doc_types": [
+        {"doc_type_id": "OV_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"OV_TITLE_SHEET","name":"Титульный лист раздела ОВК","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "OV_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"OV_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OV_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OV_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OV_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "OV_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"OV_EXEC_SCHEME_PLAN","name":"Исполнительная схема прокладки воздуховодов и труб","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "OV_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"OV_PROTOCOL_TESTS","name":"Протоколы испытаний систем ОВК","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "OV_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"OV_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"OV_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "OV_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"OV_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "VK",
+      "razdel_name": "ВК",
+      "doc_types": [
+        {"doc_type_id": "VK_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"VK_TITLE_SHEET","name":"Титульный лист раздела ВК","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "VK_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"VK_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"VK_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"VK_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"VK_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "VK_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"VK_EXEC_SCHEME_PLAN","name":"Исполнительная схема прокладки труб","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "VK_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"VK_PROTOCOL_TESTS","name":"Протоколы гидростатических испытаний","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "VK_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"VK_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"VK_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "VK_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"VK_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "ES",
+      "razdel_name": "ЭС",
+      "doc_types": [
+        {"doc_type_id": "ES_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"ES_TITLE_SHEET","name":"Титульный лист раздела ЭС","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "ES_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"ES_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ES_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ES_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ES_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "ES_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"ES_EXEC_SCHEME_PLAN","name":"Исполнительная схема прокладки электрических сетей","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "ES_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"ES_PROTOCOL_TESTS","name":"Протоколы испытаний электрических сетей","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "ES_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"ES_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"ES_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "ES_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"ES_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "SS",
+      "razdel_name": "СС",
+      "doc_types": [
+        {"doc_type_id": "SS_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"SS_TITLE_SHEET","name":"Титульный лист раздела СС","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "SS_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"SS_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"SS_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"SS_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"SS_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "SS_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"SS_EXEC_SCHEME_PLAN","name":"Исполнительная схема прокладки каналов связи","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "SS_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"SS_PROTOCOL_TESTS","name":"Протоколы испытаний сетей связи","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "SS_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"SS_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"SS_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "SS_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"SS_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "GS",
+      "razdel_name": "ГС",
+      "doc_types": [
+        {"doc_type_id": "GS_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"GS_TITLE_SHEET","name":"Титульный лист раздела ГС","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "GS_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"GS_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"GS_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"GS_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"GS_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "GS_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"GS_EXEC_SCHEME_PLAN","name":"Исполнительная схема прокладки газовых труб","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "GS_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"GS_PROTOCOL_TESTS","name":"Протоколы гидравлических испытаний газопроводов","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "GS_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"GS_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"GS_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "GS_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"GS_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "TX",
+      "razdel_name": "ТХ",
+      "doc_types": [
+        {"doc_type_id": "TX_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"TX_TITLE_SHEET","name":"Титульный лист раздела ТХ","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "TX_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"TX_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"TX_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"TX_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"TX_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "acts_hidden","doc_type_name": "Акты скрытых работ","docs":[
+          {"doc_id":"AOSR","name":"Акт освидетельствования скрытых работ","multi_rule":"multi","multi_axis_allowed":["section","floor","column","grid"],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "acts_responsible_structures","doc_type_name": "Акты ответственных конструкций","docs":[
+          {"doc_id":"AOOK","name":"Акт освидетельствования ответственных конструкций","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"table"}
+        ]},
+        {"doc_type_id": "TX_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"TX_EXEC_SCHEME_PLAN","name":"Исполнительная схема технологических трубопроводов","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "TX_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"TX_PROTOCOL_TESTS","name":"Протоколы испытаний технологического оборудования","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "TX_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"TX_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"TX_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "TX_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"TX_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "POS",
+      "razdel_name": "ПОС",
+      "doc_types": [
+        {"doc_type_id": "POS_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"POS_TITLE_SHEET","name":"Титульный лист раздела ПОС","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "POS_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"POS_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"POS_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"POS_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"POS_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "POS_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"POS_EXEC_SCHEME_SITE","name":"Исполнительная схема участка строительства","multi_rule":"multi","multi_axis_allowed":["site"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "POS_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"POS_PROTOCOL_TESTS","name":"Протоколы проверки систем временного электроснабжения","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "POS_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"POS_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"POS_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "POS_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"POS_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "OOS",
+      "razdel_name": "ООС",
+      "doc_types": [
+        {"doc_type_id": "OOS_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"OOS_TITLE_SHEET","name":"Титульный лист раздела ООС","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "OOS_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"OOS_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OOS_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OOS_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"OOS_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "OOS_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"OOS_PROTOCOL_TESTS","name":"Протоколы экологического мониторинга","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "OOS_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"OOS_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"OOS_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "OOS_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"OOS_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "PB",
+      "razdel_name": "ПБ",
+      "doc_types": [
+        {"doc_type_id": "PB_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"PB_TITLE_SHEET","name":"Титульный лист раздела ПБ","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "PB_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"PB_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"PB_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"PB_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"PB_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "PB_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"PB_EXEC_SCHEME_PLAN","name":"Схема системы пожарной сигнализации","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "PB_PROTOCOLS_TESTS","doc_type_name": "Протоколы и испытания","docs":[
+          {"doc_id":"PB_PROTOCOL_TESTS","name":"Протоколы испытаний систем пожаротушения","multi_rule":"multi","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_protocols"}
+        ]},
+        {"doc_type_id": "PB_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"PB_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"PB_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "PB_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"PB_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
+      ]
+    },
+    {
+      "razdel_code": "ODI",
+      "razdel_name": "ОДИ",
+      "doc_types": [
+        {"doc_type_id": "ODI_TITLE_SHEETS","doc_type_name": "Титульные листы","docs":[
+          {"doc_id":"ODI_TITLE_SHEET","name":"Титульный лист раздела ОДИ","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_title_sheet"}
+        ]},
+        {"doc_type_id": "ODI_REGISTERS","doc_type_name": "Реестры","docs":[
+          {"doc_id":"ODI_REESTR_ID","name":"Реестр исполнительной документации","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ODI_REESTR_AOSR","name":"Реестр актов скрытых работ","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ODI_REESTR_CERTS","name":"Реестр сертификатов и паспортов качества","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"},
+          {"doc_id":"ODI_REESTR_SCHEMES_TESTS","name":"Реестр исполнительных схем и протоколов","multi_rule":"single","default_output_format":"xlsx","template_kind":"xlsx_reestr"}
+        ]},
+        {"doc_type_id": "ODI_EXEC_SCHEMES","doc_type_name": "Исполнительные схемы","docs":[
+          {"doc_id":"ODI_EXEC_SCHEME_PLAN","name":"Схема доступности для инвалидов","multi_rule":"multi","multi_axis_allowed":["floor"],"default_output_format":"xlsx","template_kind":"xlsx_schemes"}
+        ]},
+        {"doc_type_id": "ODI_INPUT_CONTROL","doc_type_name": "Входной контроль (ВИК)","docs":[
+          {"doc_id":"ODI_VIK_ACT","name":"Акт входного контроля материалов","multi_rule":"multi","multi_axis_allowed":["stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_vik_act"},
+          {"doc_id":"ODI_VIK_JOURNAL","name":"Журнал входного контроля","multi_rule":"single","multi_axis_allowed":[],"default_output_format":"xlsx","template_kind":"xlsx_vik_journal"}
+        ]},
+        {"doc_type_id": "ODI_APPENDICES","doc_type_name": "Приложения к актам","docs":[
+          {"doc_id":"ODI_REESTR_DOCS_QUALITY","name":"Реестр документов качества (приложение)","multi_rule":"multi","multi_axis_allowed":["layer","section","stage","lot"],"default_output_format":"xlsx","template_kind":"xlsx_reestr_docs_quality"}
+        ]}
       ]
     }
   ]

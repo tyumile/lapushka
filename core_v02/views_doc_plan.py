@@ -379,7 +379,7 @@ def _apply_diff_overrides(payload: dict, diff: list[dict]) -> dict:
 
 def run_p4b_build_doc_plan_view(request, project_id: str):
     if request.method != "POST":
-        return redirect("v02_doc_plan", project_id=project_id)
+        return redirect("v02_formation", project_id=project_id)
     quality_final = read_processing(project_id, "p2_quality_registry_final.json", {})
     razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
     selected = [d.get("doc_type_id") for d in get_doc_types(razdel_code) if d.get("doc_type_id")]
@@ -404,16 +404,16 @@ def run_p4b_build_doc_plan_view(request, project_id: str):
     except Exception as exc:
         set_action_status(project_id, "run_p4b", "error", f"Process P4B РѕС€РёР±РєР°: {exc}")
         messages.error(request, f"Process P4B РѕС€РёР±РєР°: {exc}")
-    return redirect("v02_doc_plan", project_id=project_id)
+    return redirect("v02_formation", project_id=project_id)
 
 
 def save_doc_plan_view(request, project_id: str):
     if request.method != "POST":
-        return redirect("v02_doc_plan", project_id=project_id)
+        return redirect("v02_formation", project_id=project_id)
     source = read_processing(project_id, "p4b_doc_instances_final.json", read_processing(project_id, "p4b_doc_instances_v1.json", {}))
     if not source:
         messages.error(request, "Нет плана для сохранения. Сначала запустите P4B.")
-        return redirect("v02_doc_plan", project_id=project_id)
+        return redirect("v02_formation", project_id=project_id)
     original = deepcopy(source)
     instances = source.get("doc_instances") or []
     order = request.POST.get("rows_order", "")
@@ -490,7 +490,7 @@ def save_doc_plan_view(request, project_id: str):
         except Exception as exc:
             set_action_status(project_id, "run_p4b", "error", f"Повторный Process P4B завершился ошибкой: {exc}")
             messages.error(request, f"План сохранен, но повторный Process P4B завершился ошибкой: {exc}")
-    return redirect("v02_doc_plan", project_id=project_id)
+    return redirect("v02_formation", project_id=project_id)
 def doc_plan_view(request, project_id: str):
     v1 = read_processing(project_id, "p4b_doc_instances_v1.json", {})
     final = read_processing(project_id, "p4b_doc_instances_final.json", v1)

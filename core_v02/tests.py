@@ -5,9 +5,22 @@ from .services.process_p2_quality_registry import _normalize_payload
 from .services.process_p2_quality_registry import run_process_p2
 from .services.process_p4b_build_doc_plan import run_process_p4b_build_doc_plan
 from .services.process_p5_fill_plan import run_process_p5
-from .services.project_storage import create_project_structure, load_project_meta, save_processing_json, save_project_meta
+from .services.project_storage import create_project_structure, load_project_meta, project_root, save_processing_json, save_project_meta
+from .services.quality_gate import run_quality_gate
+from .test_cleanup import TestArtifactsCleaner
 from .views_utils import resolve_files_for_process
 from pathlib import Path
+
+
+_cleaner = TestArtifactsCleaner(Path(__file__).resolve().parents[1])
+
+
+def setUpModule():  # noqa: N802
+    _cleaner.snapshot()
+
+
+def tearDownModule():  # noqa: N802
+    _cleaner.cleanup_new_artifacts()
 
 
 @override_settings(MOCK_MODE=True)
@@ -73,7 +86,7 @@ class V02E2ESmokeTest(TestCase):
 
         resp = c.post(f"/project/{project_id}/doc-types/", {"action": "run_p4b", "doc_type_ids": ["acts_hidden"]})
         self.assertEqual(resp.status_code, 302)
-        self.assertIn("/doc-plan/", resp.headers.get("Location", ""))
+        self.assertIn("/formation/", resp.headers.get("Location", ""))
 
         p4 = read_processing(project_id, "p4b_doc_instances_final.json", {})
         docs_count = len(p4.get("doc_instances") or [])
@@ -181,3 +194,66 @@ class V02P2NormalizationTests(TestCase):
         self.assertIn("01_input/02_quality_docs/Протокол испытаний №1 от 30.09.2025 г. pdf", refs)
         self.assertIn("01_input/02_quality_docs/Протокол испытаний №2 от 12.11.2025 г. pdf", refs)
         self.assertEqual((out.get("project_cipher") or {}).get("status"), "needs_extraction")
+
+class V02QualityGateTests(TestCase):
+    def test_quality_gate_passes_when_required_files_are_covered_with_traceability(self):
+        project_id = create_project_structure("QG pass")
+        root = project_root(project_id)
+        quality_file = root / "01_input" / "02_quality_docs" / "doc-1.pdf"
+        quality_file.write_bytes(b"%PDF-1.4 test")
+        payload = {
+            "materials": [
+                {
+                    "docs": [
+                        {
+                            "file_ref": "01_input/02_quality_docs/doc-1.pdf",
+                            "status": "ok",
+                            "source": {"file": "01_input/02_quality_docs/doc-1.pdf", "page": "1", "snippet": "s"},
+                        }
+                    ]
+                }
+            ]
+        }
+        _, report = run_quality_gate(
+            process_name="process_test",
+            root=root,
+            payload=payload,
+            input_files=[quality_file],
+            required_files=[quality_file],
+            excluded_refs=[],
+        )
+        self.assertTrue(report.get("pass"))
+
+    def test_quality_gate_fails_when_required_file_not_covered(self):
+        project_id = create_project_structure("QG fail uncovered")
+        root = project_root(project_id)
+        quality_file = root / "01_input" / "02_quality_docs" / "doc-2.pdf"
+        quality_file.write_bytes(b"%PDF-1.4 test")
+        payload = {"materials": []}
+        _, report = run_quality_gate(
+            process_name="process_test",
+            root=root,
+            payload=payload,
+            input_files=[quality_file],
+            required_files=[quality_file],
+            excluded_refs=[],
+        )
+        self.assertFalse(report.get("pass"))
+        self.assertEqual(report.get("totals", {}).get("uncovered_required"), 1)
+
+    def test_quality_gate_fails_when_traceability_missing_for_ok_status(self):
+        project_id = create_project_structure("QG fail trace")
+        root = project_root(project_id)
+        quality_file = root / "01_input" / "02_quality_docs" / "doc-3.pdf"
+        quality_file.write_bytes(b"%PDF-1.4 test")
+        payload = {"doc_instances": [{"status": "ok", "source": {"file": "", "page": "1", "snippet": ""}}]}
+        _, report = run_quality_gate(
+            process_name="process_test",
+            root=root,
+            payload=payload,
+            input_files=[quality_file],
+            required_files=[],
+            excluded_refs=[],
+        )
+        self.assertFalse(report.get("pass"))
+        self.assertGreater(report.get("totals", {}).get("traceability_errors", 0), 0)
