@@ -1,0 +1,31 @@
+{
+  "total_files": 5,
+  "files": [
+    {
+      "path": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "size_bytes": 2148038,
+      "sha256": "fbc70bacf145c9af9982874c77da62943e3dfbf53314864c88797b8b02046057"
+    },
+    {
+      "path": "02_processing/p2_quality_registry_final.json",
+      "size_bytes": 10244,
+      "sha256": "032a3a641f62ff5f0b68809bef3054213ec27af65e1e5ed790d0ed292d5692e5"
+    },
+    {
+      "path": "06_regs/KJ/rules.json",
+      "size_bytes": 22,
+      "sha256": "5595d447f42ae187c427a9d12498dbebc7877497a558f2eb611d4db695737753"
+    },
+    {
+      "path": "06_regs/KJ/rules.md",
+      "size_bytes": 9,
+      "sha256": "22c0cd3ddd6683bf84865ecdbb905fab78576d2a2235d95d869db2ad2245ea43"
+    },
+    {
+      "path": "id_dictionary_v02.json",
+      "size_bytes": 54131,
+      "sha256": "a4f9108ae6bf26d6c625252982b43e0095aaf6fd806b3788f295e8bf2fbf6fb3"
+    }
+  ],
+  "excluded_refs": []
+}

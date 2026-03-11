@@ -1,0 +1,7 @@
+{"process": "process_2", "stage": "start", "run_id": "20260311201949-505e9f", "timestamp": "2026-03-11T20:19:49.623422"}
+{"process": "process_2", "stage": "start", "run_id": "20260311203758-a6fff9", "timestamp": "2026-03-11T20:37:58.525033"}
+{"process": "process_2", "stage": "finish", "run_id": "20260311203758-a6fff9", "status": "success", "timestamp": "2026-03-11T20:39:10.459271"}
+{"process": "process_p4b", "stage": "retry_upload", "run_id": "20260311213819-f5ce11", "attempt": 1, "next_pause_s": 1, "error": "Connection error.", "filename": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf", "model": "gpt-4.1-mini", "timestamp": "2026-03-11T21:38:21.193409"}
+{"process": "process_p4b", "stage": "retry_upload", "run_id": "20260311213819-f5ce11", "attempt": 2, "next_pause_s": 2, "error": "Connection error.", "filename": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf", "model": "gpt-4.1-mini", "timestamp": "2026-03-11T21:38:23.858435"}
+{"process": "process_p4b", "stage": "retry_upload", "run_id": "20260311213819-f5ce11", "attempt": 3, "next_pause_s": 4, "error": "Connection error.", "filename": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf", "model": "gpt-4.1-mini", "timestamp": "2026-03-11T21:38:27.667919"}
+{"process": "process_p4b", "stage": "retry_upload", "run_id": "20260311213819-f5ce11", "attempt": 4, "next_pause_s": 8, "error": "Connection error.", "filename": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf", "model": "gpt-4.1-mini", "timestamp": "2026-03-11T21:38:33.519731"}

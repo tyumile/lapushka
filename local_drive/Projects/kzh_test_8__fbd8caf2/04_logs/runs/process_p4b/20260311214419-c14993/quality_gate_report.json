@@ -1,0 +1,267 @@
+{
+  "process": "process_p4b",
+  "pass": false,
+  "summary": "quality_gate=FAIL; uncovered_required=1; trace_errors=49",
+  "totals": {
+    "input_files": 5,
+    "required_files": 1,
+    "excluded_files": 0,
+    "matched_refs": 1,
+    "covered_required": 0,
+    "uncovered_required": 1,
+    "traceability_errors": 49
+  },
+  "uncovered_required_files": [
+    "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf"
+  ],
+  "matched_refs": [
+    "id_dictionary_v02.json"
+  ],
+  "traceability_errors": [
+    {
+      "path": "$.project_passport.object_name.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.object_address.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.project_code.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.stage.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.designer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.customer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.sheets_index.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.project_passport.structure_axes.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].work_breakdown[0].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].multiplier_evidence.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].work_scope[0].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.object_name.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.object_address.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.project_code.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.stage.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.sheet_refs.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.organizations.designer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.common.organizations.customer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.presented_works_text.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.project_basis_text.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.materials_used[0].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№1.1 Сертификат качества 8170 6А240.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.materials_used[1].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№1.1 Сертификат качества 8170 6А240.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.materials_used[2].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№1.2 Сертификат качества 8170 8А500.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.materials_used[3].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.conformance_docs[0].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.conformance_docs[1].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№1.1 Сертификат качества 8170 6А240.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.conformance_docs[2].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№1.2 Сертификат качества 8170 8А500.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.conformance_docs[3].sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[0].fields.template_specific.data.allow_next_works_text.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.object_name.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.object_address.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.project_code.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.stage.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.sheet_refs.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.organizations.designer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[1].fields.common.organizations.customer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.object_name.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.object_address.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.project_code.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.stage.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.sheet_refs.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.organizations.designer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[0].doc_instances[2].fields.common.organizations.customer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.object_name.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.object_address.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.project_code.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.stage.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.organizations.designer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    },
+    {
+      "path": "$.razdels[1].doc_instances[0].fields.common.organizations.customer_org.sources[0].file",
+      "issue": "unknown_source_file",
+      "value": "218-4-24-КЖ2.1.В.pdf"
+    }
+  ]
+}
