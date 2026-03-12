@@ -1,0 +1,203 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0.0,
+    "source": {
+      "file": "",
+      "page": "",
+      "snippet": ""
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1.0,
+    "source": {
+      "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "page": "2",
+      "snippet": "ОПАЛУБКА РАЗБОРНО-ПЕРЕСТАВНАЯ ЩИТОВАЯ ДЛЯ МОНОЛИТНЫХ КОНСТРУКЦИЙ"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "concrete_B25_F200",
+      "material_name": "Бетон класса В25, морозостойкость F200",
+      "material_norm_name": "Бетон В25, F200 по ГОСТ 26633-2015",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "сертификат качества или паспорт",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Документ не содержит данных для точного извлечения информации"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "formwork_SYSTEM_MONOKOM",
+      "material_name": "Опалубка разборно-переставная щитовая",
+      "material_norm_name": "Опалубка разборно-переставная щитовая для монолитных конструкций",
+      "status": "ok",
+      "confidence": 0.95,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "page": "2",
+        "snippet": "Опалубка «МОНОКОМ» представляет собой универсальную систему разборно-переставной крупнощитовой опалубки"
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "file_doc_id": "DOC-CA09126C7251",
+          "status": "ok",
+          "confidence": 0.95,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "page": "2",
+            "snippet": "Документ содержит данные по опалубке «МОНОКОМ»"
+          }
+        },
+        {
+          "doc_kind": "сертификат",
+          "doc_number": "38513",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "file_doc_id": "DOC-E478A6FB8984",
+          "status": "needs_extraction",
+          "confidence": 0.8,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "page": "1",
+            "snippet": "Документ содержит сертификат на опалубку (точные данные не извлечены)"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "concrete_generic",
+      "material_name": "Бетон (объем 9м3)",
+      "material_norm_name": "бетон согласно паспорту",
+      "status": "needs_extraction",
+      "confidence": 0.7,
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "page": "1",
+        "snippet": "Паспорт №17-016 от 17.01.2026 с объемом 9 м3"
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт",
+          "doc_number": "17-016",
+          "doc_date": "17.01.2026",
+          "volume": "9 м3",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+          "file_doc_id": "DOC-9E11A6E6213B",
+          "status": "ok",
+          "confidence": 0.9,
+          "source": {
+            "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+            "page": "1",
+            "snippet": "Паспорт №17-016 от 17.01.2026 указан объем 9 м3"
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Проектный шифр не найден в документах.",
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      }
+    },
+    {
+      "comment": "Для материала бетон класса В25, Морозостойкость F200 нет данных по сертификатам в загруженных файлах.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "Документ не содержит данных для точного извлечения информации"
+      }
+    },
+    {
+      "comment": "Опалубка «МОНОКОМ» раскрыта в паспорте и сертификате. Сертификат №38513 содержится, но подробные данные не извлечены.",
+      "source": {
+        "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+        "page": "1",
+        "snippet": "Сертификат на опалубку"
+      }
+    },
+    {
+      "comment": "Паспорт бетона №17-016 содержит объем 9 м3 и дату 17.01.2026.",
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "page": "1",
+        "snippet": "объем 9 м3 дата 17.01.2026"
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1-1",
+      "status": "ok",
+      "notes": "Полный просмотр документа."
+    },
+    {
+      "doc_id": "DOC-E478A6FB8984",
+      "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+      "pages_total": 1,
+      "pages_checked": "1-1",
+      "status": "ok",
+      "notes": "Сертификат опалубки просмотрен целиком."
+    },
+    {
+      "doc_id": "DOC-CA09126C7251",
+      "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "pages_total": 9,
+      "pages_checked": "1-9",
+      "status": "ok",
+      "notes": "Паспорт опалубки просмотрен полностью."
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Паспорт бетона просмотрен полностью."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "create_project": {
+    "state": "success",
+    "message": "Проект создан.",
+    "updated_at": "2026-03-12T11:43:14.950255"
+  },
+  "upload_project": {
+    "state": "success",
+    "message": "Проект: загружено 1 файл(ов).",
+    "updated_at": "2026-03-12T11:43:57.405004"
+  },
+  "upload_project_other": {
+    "state": "success",
+    "message": "Остальная рабочая документация: загружено 0 файл(ов).",
+    "updated_at": "2026-03-12T11:44:17.618634"
+  },
+  "upload_quality": {
+    "state": "success",
+    "message": "Документы качества: загружено 4 файл(ов).",
+    "updated_at": "2026-03-12T11:44:27.121276"
+  },
+  "run_p2": {
+    "state": "error",
+    "message": "Process 2 завершился ошибкой: _mock_payload() takes 3 positional arguments but 5 were given",
+    "updated_at": "2026-03-12T11:45:50.605905"
+  }
+}

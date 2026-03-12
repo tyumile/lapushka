@@ -1,0 +1,126 @@
+{
+  "project_cipher": {
+    "value": "218-4-24-КЖ2.1.В",
+    "status": "ok",
+    "confidence": 1,
+    "source": {
+      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "doc_id": "DOC-075A2834D9FC",
+      "page": "1",
+      "snippet": "218-4-24-КЖ2.1.В Генеральный директор __________ А.И. Петров Главный инженер проекта __________ А.В. Айдакова Тюмень, 2024"
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1,
+    "source": {
+      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "doc_id": "DOC-075A2834D9FC",
+      "page": "2",
+      "snippet": "Ведомость рабочих чертежей основного комплекта Лист Наименование Примечание... Раздел: КЖ"
+    }
+  },
+  "project_materials": [
+    {
+      "material_id": "concrete_B25_F200",
+      "material_name": "Бетон класса В25, морозостойкость F200",
+      "material_norm_name": "ГОСТ 26633-2015",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Материалы П1-К1.20А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³"
+      }
+    },
+    {
+      "material_id": "armature_A500S",
+      "material_name": "Арматура класса А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Арматура класса А500С, А240 по ГОСТ 34028-2016"
+      }
+    },
+    {
+      "material_id": "armature_A240",
+      "material_name": "Арматура класса А240",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Арматура класса А500С, А240 по ГОСТ 34028-2016"
+      }
+    },
+    {
+      "material_id": "covered_electrodes_E50",
+      "material_name": "Электроды покрытые металлические типа Э50",
+      "material_norm_name": "ГОСТ 9467-75",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Сварку ручную электродуговую производить согласно ГОСТ 5264-80 и ГОСТ14098-2014 электродами типа Э50 ГОСТ 9467-75"
+      }
+    },
+    {
+      "material_id": "ground_GF021",
+      "material_name": "Грунтовка ГФ-021",
+      "material_norm_name": "ГОСТ 25129-2020",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Открытые участки металлических элементов грунтовать и покрыть эмалью, общую толщину покрытия обеспечить не менее 80 мкм грунт Г Ф-021 по ГОСТ 25129-2020"
+      }
+    },
+    {
+      "material_id": "enamel_PF115",
+      "material_name": "Эмаль ПФ-115",
+      "material_norm_name": "ГОСТ 6465-76",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Открытые участки металлических элементов грунтовать и покрыть эмалью, ... эмаль ПФ-115 по ГОСТ 6465-76"
+      }
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Извлечены основные материалы проекта с указанием нормативной документации: бетон В25 F200, арматуры классов А500С и А240, покрытые электроды, грунтовка и эмаль.",
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "Материалы и нормативы, описанные на странице 2"
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-075A2834D9FC",
+      "file_ref": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "pages_total": 19,
+      "pages_checked": "1-19",
+      "status": "ok",
+      "notes": "Полное покрытие проекта"
+    }
+  ]
+}

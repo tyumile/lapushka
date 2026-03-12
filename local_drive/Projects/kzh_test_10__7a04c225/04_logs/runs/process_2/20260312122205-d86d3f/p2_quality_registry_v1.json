@@ -1,0 +1,265 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0.0,
+    "source": {
+      "file": "",
+      "page": "",
+      "snippet": ""
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 0.95,
+    "source": {
+      "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "page": "1",
+      "snippet": "ПРОКАТ АРМАТУРНЫЙ ДЛЯ ЖЕЛЕЗОБЕТОННЫХ КОНСТРУКЦИЙ МОТОК 6-А240 ГОСТ 34028-2016"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "concrete_B25_F200",
+      "material_name": "Бетон класса В25, морозостойкость F200",
+      "material_norm_name": "Бетон В25, F200 по ГОСТ 26633-2015",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "page": "7",
+        "snippet": "Материалы П1-К1.20А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³"
+      },
+      "docs": [
+        {
+          "doc_kind": "needs_extraction",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Документ относится к арматурному прокату, нет данных о бетоне"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "rebar_A500C",
+      "material_name": "Арматура класса А500С",
+      "material_norm_name": "Арматура A500С по ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "page": "2",
+        "snippet": "Арматура класса А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "needs_extraction",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Документ сертификации арматурного проката класса 6-А240, нет данных по А500С"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "rebar_A240",
+      "material_name": "Арматура класса А240",
+      "material_norm_name": "Арматура A240 по ГОСТ 34028-2016",
+      "status": "ok",
+      "confidence": 0.95,
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "ПРОКАТ АРМАТУРНЫЙ ДЛЯ ЖЕЛЕЗОБЕТОННЫХ КОНСТРУКЦИЙ МОТОК 6-А240 ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "№ 8170",
+          "doc_date": "04.06.2025",
+          "volume": "31720 кг",
+          "manufacturer": "АО \"ПромСорт-Урал\"",
+          "issuer": "Система Мосстройсертификация",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "ok",
+          "confidence": 0.95,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "ПРОКАТ АРМАТУРНЫЙ ... МОТОК 6-А240 ГОСТ 34028-2016 ... Масса 31720 кг ... Подпись ОТК Черемных.С.Д Дата: 04.06.2025"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "electrodes_E50_GOST9467_75",
+      "material_name": "Электроды покрытые металлические типа Э50",
+      "material_norm_name": "ГОСТ 9467-75 Электроды Э50 для ручной дуговой сварки",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "page": "2",
+        "snippet": "Сварка ручная электродуговая... электродами типа Э50 ГОСТ 9467-75"
+      },
+      "docs": [
+        {
+          "doc_kind": "needs_extraction",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Документ про арматурный прокат, без данных по электродам"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "primer_GF021_GOST25129_2020",
+      "material_name": "Грунтовка ГФ-021",
+      "material_norm_name": "ГОСТ 25129-2020 Грунтовка ГФ-021",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "page": "2",
+        "snippet": "Грунтовка ГФ-021 по ГОСТ 25129-2020"
+      },
+      "docs": [
+        {
+          "doc_kind": "needs_extraction",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Нет данных о грунтовке в данном качестве"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "enamel_PF115_GOST6465_76",
+      "material_name": "Эмаль ПФ-115",
+      "material_norm_name": "ГОСТ 6465-76 Эмаль ПФ-115",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "page": "2",
+        "snippet": "Эмаль ПФ-115 по ГОСТ 6465-76"
+      },
+      "docs": [
+        {
+          "doc_kind": "needs_extraction",
+          "doc_number": "не найдено",
+          "doc_date": "б/д",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Нет информации о эмали ПФ-115"
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Документ №1.1 Сертификат качества №8170 6А240 содержит подробные сведения о прокате арматурном класса А240 с массой 31720 кг, датой 04.06.2025, изготовитель и выдающая организация указаны. По остальным материалам данных из приложенных документов для КЖ не найдено.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "Основной документ по арматуре класса 6-А240"
+      }
+    },
+    {
+      "comment": "Документ №2.1 Сертификат Опалубка №38513.pdf прочитан, содержит данные по опалубке, не относящейся к материалам КЖ по проекту.",
+      "source": {
+        "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+        "page": "1",
+        "snippet": "Опалубка разборно-переставная щитовая"
+      }
+    },
+    {
+      "comment": "Отсутствуют данные к материалам электродов, грунтовок и эмалей в приложенных файлах качества.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "Не найдено упоминаний в данном документе"
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Документ качества арматуры класса 6-А240 полностью проверен."
+    },
+    {
+      "doc_id": "DOC-E478A6FB8984",
+      "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Документ сертификации опалубки полностью проверен, материал по проекту отсутствует."
+    },
+    {
+      "doc_id": "DOC-CA09126C7251",
+      "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "pages_total": 9,
+      "pages_checked": "1-9",
+      "status": "ok",
+      "notes": "Паспорт опалубки полностью проверен, данные по материалам КЖ не найдены."
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Паспорт с объемом 9 м3, но материал по проекту не распознан внутри."
+    }
+  ]
+}

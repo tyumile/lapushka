@@ -1,0 +1,313 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0,
+    "source": {}
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1,
+    "source": {
+      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "doc_id": "DOC-075A2834D9FC",
+      "page": "1-10",
+      "snippet": "defined in user dictionary and prompt context"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "beton_B25_F200",
+      "material_name": "Бетон В25, F200",
+      "material_norm_name": "ГОСТ 26633-2015 Бетон В25, F200",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "П1-К1.20А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "ПРОКАТ АРМАТУРНЫЙ ДЛЯ ЖЕЛЕЗОБЕТОННЫХ КОНСТРУКЦИЙ МОТОК 6-А240 ГОСТ 34028-2016"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_6_A240",
+      "material_name": "Арматура Ø6 А240",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "ok",
+      "confidence": 1,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "⌀6 А240 ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "№8170",
+          "doc_date": "04.06.2025",
+          "volume": "31720 кг (масса итого)",
+          "manufacturer": "АО \"ПромСорт-Урал\"",
+          "issuer": "ТЮМЕНСКАЯ МЕХАНИЗИРОВАННАЯ ДИСТАНЦИЯ ПОГРУЗОЧНО-РАЗГРУЗОЧНЫХ РАБОТ",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "ok",
+          "confidence": 1,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Продукция: ПРОКАТ АРМАТУРНЫЙ ДЛЯ ЖЕЛЕЗОБЕТОННЫХ КОНСТРУКЦИЙ МОТОК 6-А240 ГОСТ 34028-2016"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_8_A500C",
+      "material_name": "Арматура Ø8 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "∅8 А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Сертификат качества содержит данные по арматуре 6 А240, нет информации по Ø8 А500С"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_10_A500C",
+      "material_name": "Арматура Ø10 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "∅10 А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Сертификат содержит данные по 6А240, отсутствует по Ø10 А500С"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_16_A500C",
+      "material_name": "Арматура Ø16 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "∅16 А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Сертификат содержит сведения по 6А240, отсутствует по Ø16 А500С"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_20_A500C",
+      "material_name": "Арматура Ø20 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "∅20 А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Сертификат не содержит данных по Ø20 А500С"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_25_A500C",
+      "material_name": "Арматура Ø25 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "2",
+        "snippet": "∅25 А500С ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Сертификат отсутствует по данной марке Ø25 А500С"
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Проектный шифр не найден в загруженных документах, требуется дополнительно извлечь.",
+      "source": {}
+    },
+    {
+      "comment": "Файл '№1.1 Сертификат качества №8170 6А240.pdf' содержит данные только по арматуре Ø6 А240. Для других марок арматуры данные отсутствуют, поэтому присвоен статус needs_extraction у соответствующих материалов.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1"
+      }
+    },
+    {
+      "comment": "Файл '№2.1 Сертификат Опалубка №38513.pdf' было невозможно прочитать (полностью не представлен OCR текст), поэтому все данные из него не извлечены.",
+      "source": {
+        "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+        "doc_id": "DOC-E478A6FB8984",
+        "page": "1"
+      }
+    },
+    {
+      "comment": "Для всех арматурных материалов кроме Ø6 А240 отсутствуют соответствующие качественные документы с извлечёнными данными и объемом, установлены статусы needs_extraction.",
+      "source": {}
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Весь документ просмотрен, данные по Ø6 А240 извлечены, по прочим арматурам данные отсутствуют."
+    },
+    {
+      "doc_id": "DOC-E478A6FB8984",
+      "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "blocked_missing_source",
+      "notes": "Не удалось извлечь текст из документа, рассмотрен один лист."
+    },
+    {
+      "doc_id": "DOC-CA09126C7251",
+      "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "pages_total": 9,
+      "pages_checked": "1-9",
+      "status": "blocked_missing_source",
+      "notes": "Документ не загружен или не обработан, нет данных для извлечения."
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "blocked_missing_source",
+      "notes": "Документ не использован в извлечении данных, отсутствуют данные соответствия."
+    }
+  ]
+}

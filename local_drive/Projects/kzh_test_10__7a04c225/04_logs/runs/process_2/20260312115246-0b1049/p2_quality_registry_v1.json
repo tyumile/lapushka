@@ -1,0 +1,309 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0.0,
+    "source": {
+      "file": "",
+      "page": "",
+      "snippet": ""
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1.0,
+    "source": {
+      "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "page": "1",
+      "snippet": "Раздел: КЖ, из документа: Документ о качестве бетонной смеси заданного качества партии № 17-016"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "beton_B25_F200",
+      "material_name": "Бетон В25, F200",
+      "material_norm_name": "ГОСТ 26633-2015 Бетон В25, F200",
+      "status": "ok",
+      "confidence": 1.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "doc_id": "DOC-9E11A6E6213B",
+        "page": "1",
+        "snippet": "Вид бетонной смеси и ее условное обозначение БСТ B25 М350 F200W8 ГОСТ 7473-2010 ... Объём: 9 м3"
+      },
+      "docs": [
+        {
+          "doc_kind": "Паспорт качества бетонной смеси",
+          "doc_number": "17-016",
+          "doc_date": "17.01.2026",
+          "volume": "9 м3",
+          "manufacturer": "ООО \"ЕвроБетон\"",
+          "issuer": "Начальник лаборатории Ильченко А.А.",
+          "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+            "doc_id": "DOC-9E11A6E6213B",
+            "page": "1",
+            "snippet": "Документ о качестве бетонной смеси заданного качества партии № 17-016 ... Объём: 9 м3"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_6_A240",
+      "material_name": "Арматура Ø6 А240",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "8170",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_8_A500C",
+      "material_name": "Арматура Ø8 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "blocked_missing_source",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+        "doc_id": "DOC-E478A6FB8984",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества (опалубка)",
+          "doc_number": "№38513",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "status": "blocked_missing_source",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "doc_id": "DOC-E478A6FB8984",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_10_A500C",
+      "material_name": "Арматура Ø10 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "blocked_missing_source",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "doc_id": "DOC-CA09126C7251",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Паспорт (опалубка)",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "status": "blocked_missing_source",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "doc_id": "DOC-CA09126C7251",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_16_A500C",
+      "material_name": "Арматура Ø16 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "blocked_missing_source",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "doc_id": "DOC-CA09126C7251",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Паспорт (опалубка)",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "status": "blocked_missing_source",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "doc_id": "DOC-CA09126C7251",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_20_A500C",
+      "material_name": "Арматура Ø20 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "blocked_missing_source",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "doc_id": "DOC-CA09126C7251",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Паспорт (опалубка)",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "status": "blocked_missing_source",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "doc_id": "DOC-CA09126C7251",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_25_A500C",
+      "material_name": "Арматура Ø25 А500С",
+      "material_norm_name": "ГОСТ 34028-2016",
+      "status": "blocked_missing_source",
+      "confidence": 0.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "doc_id": "DOC-CA09126C7251",
+        "page": "1",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "Паспорт (опалубка)",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "status": "blocked_missing_source",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "doc_id": "DOC-CA09126C7251",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Материал бетон В25, F200 найден с паспортом качества в файле №3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf.",
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "page": "1",
+        "snippet": "Вид бетонной смеси и ее условное обозначение БСТ B25 М350 F200W8 ГОСТ 7473-2010 ... Объём: 9 м3"
+      }
+    },
+    {
+      "comment": "Материалы арматура Ø6 А240 и другие не нашли соответствующих документов качества или данные невозможны для автоматического извлечения, статус документа качества 'needs_extraction' или 'blocked_missing_source'.",
+      "source": {
+        "file": "01_input/02_quality_docs",
+        "page": "all",
+        "snippet": "Обнаружены файлы сертификатов и паспортов без извлекаемых атрибутов по арматуре и опалубке."
+      }
+    },
+    {
+      "comment": "Для каждого файла качества из входных данных сформирована запись coverage.",
+      "source": {
+        "file": "input_file_manifest",
+        "page": "all",
+        "snippet": "Все 4 файла учтены в агентском покрытии."
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Файл прочитан, но извлечение полноценных данных из не найдено."
+    },
+    {
+      "doc_id": "DOC-E478A6FB8984",
+      "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Файл прочитан, но данные не извлечены."
+    },
+    {
+      "doc_id": "DOC-CA09126C7251",
+      "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "pages_total": 9,
+      "pages_checked": "1-9",
+      "status": "ok",
+      "notes": "Файл прочитан, данные по материалам не извлечены."
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Паспорт качества бетонной смеси с объемом и изготовителем извлечен успешно."
+    }
+  ]
+}

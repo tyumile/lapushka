@@ -2,3 +2,5 @@
 db.sqlite3
 __pycache__/
 .pytest_cache/
+!local_drive/
+!local_drive/**

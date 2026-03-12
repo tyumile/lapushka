@@ -1,0 +1,330 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0.0,
+    "source": {
+      "file": "",
+      "page": "",
+      "snippet": ""
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1.0,
+    "source": {
+      "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "page": "2",
+      "snippet": "ОПАЛУБКА РАЗБОРНО-ПЕРЕСТАВНАЯ ЩИТОВАЯ ДЛЯ МОНОЛИТНЫХ КОНСТРУКЦИЙ"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "beton_B25_F200_GOST_26633_2015",
+      "material_name": "Бетон В25, F200",
+      "material_norm_name": "ГОСТ 26633-2015 Бетоны тяжелые и мелкозернистые. Технические условия",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Сертификат качества"
+          }
+        },
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "file_doc_id": "DOC-E478A6FB8984",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "page": "1",
+            "snippet": "Сертификат"
+          }
+        },
+        {
+          "doc_kind": "паспорт",
+          "doc_number": "б/н",
+          "doc_date": "11.09.2025",
+          "volume": "needs_extraction",
+          "manufacturer": "MONOKOM",
+          "issuer": "MONOKOM",
+          "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+          "file_doc_id": "DOC-CA09126C7251",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+            "page": "9",
+            "snippet": "Дата выпуска 11.09.2025 г."
+          }
+        },
+        {
+          "doc_kind": "паспорт",
+          "doc_number": "№17-016",
+          "doc_date": "17.01.2026",
+          "volume": "9 м3",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+          "file_doc_id": "DOC-9E11A6E6213B",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+            "page": "1-2",
+            "snippet": "Паспорт №17-016 от 17.01.2026, объем 9м3"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_A500C_GOST_34028_2016",
+      "material_name": "Арматура класс А500С",
+      "material_norm_name": "ГОСТ 34028-2016 Прокат арматурный для железобетонных конструкций. Технические условия",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Сертификат качества"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armatura_A240_GOST_34028_2016",
+      "material_name": "Арматура класс А240",
+      "material_norm_name": "ГОСТ 34028-2016 Прокат арматурный для железобетонных конструкций. Технические условия",
+      "status": "ok",
+      "confidence": 1.0,
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "Сертификат качества А240"
+      },
+      "docs": [
+        {
+          "doc_kind": "сертификат качества",
+          "doc_number": "8170",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "page": "1",
+            "snippet": "Сертификат качества №8170 подтверждает арматуру класса А240"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "svarnye_electrody_type_E50_GOST_9467_75",
+      "material_name": "Электроды типа Э50",
+      "material_norm_name": "ГОСТ 9467-75 Электроды покрытые металлические для ручной дуговой сварки конструкционных и теплоустойчивых сталей",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "file_doc_id": "DOC-E478A6FB8984",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "page": "1",
+            "snippet": "Сертификат"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "grunt_GF_021_GOST_25129_2020",
+      "material_name": "Грунтовка ГФ-021",
+      "material_norm_name": "ГОСТ 25129-2020 Грунтовка ГФ-021. Технические условия",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "file_doc_id": "DOC-E478A6FB8984",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "page": "1",
+            "snippet": "Сертификат"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "emal_PF_115_GOST_6465_76",
+      "material_name": "Эмаль ПФ-115",
+      "material_norm_name": "ГОСТ 6465-76 Эмали ПФ-115. Технические условия",
+      "status": "needs_extraction",
+      "confidence": 0.0,
+      "source": {
+        "file": "",
+        "page": "",
+        "snippet": ""
+      },
+      "docs": [
+        {
+          "doc_kind": "паспорт/сертификат",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "needs_extraction",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+          "file_doc_id": "DOC-E478A6FB8984",
+          "status": "needs_extraction",
+          "confidence": 0.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+            "page": "1",
+            "snippet": "Сертификат"
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "В паспорте опалубки указан дата выпуска 11.09.2025 г.",
+      "source": {
+        "file": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+        "page": "9",
+        "snippet": "Дата выпуска 11.09.2025 г."
+      }
+    },
+    {
+      "comment": "Объем материала в паспорте №17-016 указан 9 м3, дата 17.01.2026.",
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "page": "1-2",
+        "snippet": "№17-016 от 17.01.2026 = 9м3"
+      }
+    },
+    {
+      "comment": "Сертификат качества №8170 связан с арматурой А240.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "page": "1",
+        "snippet": "Сертификат качества №8170 подтверждает арматуру класса А240"
+      }
+    },
+    {
+      "comment": "Данные по материалам: объем, изготовитель, дата, номер документов по большинству файлов не извлечены, требуется дополнительный разбор.",
+      "source": {
+        "file": "все",
+        "page": "все",
+        "snippet": "недостаток данных по объему, изготовителям, номерам и датам документов в большинстве файлов"
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Покрыт всеми страницами файла"
+    },
+    {
+      "doc_id": "DOC-E478A6FB8984",
+      "file_ref": "01_input/02_quality_docs/№2.1 Сертификат Опалубка №38513.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Покрыт всеми страницами файла"
+    },
+    {
+      "doc_id": "DOC-CA09126C7251",
+      "file_ref": "01_input/02_quality_docs/№2.2 Паспорт Опалубка .pdf",
+      "pages_total": 9,
+      "pages_checked": "1-9",
+      "status": "ok",
+      "notes": "Покрыт всеми страницами файла"
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Покрыт всеми страницами файла"
+    }
+  ]
+}
