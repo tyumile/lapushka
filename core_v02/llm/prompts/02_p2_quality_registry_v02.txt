@@ -74,3 +74,25 @@ agent_self_feedback_rules={{agent_feedback_rules}}
    - project_cipher.status = "needs_extraction"
 7) Добавь agent_comments: краткие комментарии/наблюдения, извлеченные из файлов, с обязательным source.
 8) Если есть docs со статусом != ok, добавь в agent_comments причину по каждому такому file_ref.
+ADDITIONAL STRICT CONTRACT:
+project_materials_json={{project_materials_json}}
+input_file_manifest={{input_file_manifest_json}}
+
+You must return the final registry for ALL materials from `project_materials_json`.
+For every material from project_materials_json:
+- keep the same `material_id`
+- keep the material in output even if no quality document was found
+- if no matching quality doc exists, return one docs[] item with text fields set to `не найдено` and status=`blocked_missing_source`
+
+File identity rules:
+- Use `input_file_manifest` as the only source of truth for file identity.
+- For every docs[] entry include `file_doc_id`.
+- For every `source` include `doc_id`.
+- `source.file` and `file_ref` must match the exact path from input_file_manifest.
+- Prefer matching by `doc_id`; never invent or normalize file names.
+
+Page coverage rules:
+- Add top-level `agent_file_coverage`.
+- For EVERY file from input_file_manifest return one coverage item:
+  {"doc_id":"DOC-...","file_ref":"exact path","pages_total":N,"pages_checked":"1-N","status":"ok","notes":"..."}
+- `pages_checked` must cover ALL pages for every file.

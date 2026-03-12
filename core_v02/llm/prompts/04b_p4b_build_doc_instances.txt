@@ -356,3 +356,25 @@ quality_registry_hint={{quality_registry_hint}}
 samples_hint={{samples_hint}}
 
 Верни только JSON по схеме выше.
+STRICT INPUT MANIFEST:
+input_file_manifest={{input_file_manifest_json}}
+
+For every `source` / `sources[]` / `evidence[]` / `presence_evidence[]` / `multiplier_evidence.sources[]`:
+- use exact `file` from input_file_manifest
+- include `doc_id` from input_file_manifest
+- do not invent, rename, shorten, transliterate, or normalize file names
+
+Add top-level `agent_file_coverage`:
+[
+  {
+    "doc_id": "DOC-...",
+    "file_ref": "exact path from input_file_manifest",
+    "pages_total": 1,
+    "pages_checked": "1 or 1-4,6 or all",
+    "status": "ok",
+    "notes": "short string"
+  }
+]
+
+Coverage is mandatory for EVERY file from input_file_manifest.
+`pages_checked` must cover ALL pages for each file.

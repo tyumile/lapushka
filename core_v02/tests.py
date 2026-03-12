@@ -87,6 +87,8 @@ class V02E2ESmokeTest(TestCase):
         resp = c.post(f"/project/{project_id}/doc-types/", {"action": "run_p4b", "doc_type_ids": ["acts_hidden"]})
         self.assertEqual(resp.status_code, 302)
         self.assertIn("/formation/", resp.headers.get("Location", ""))
+        resp = c.get(f"/project/{project_id}/formation/")
+        self.assertEqual(resp.status_code, 200)
 
         p4 = read_processing(project_id, "p4b_doc_instances_final.json", {})
         docs_count = len(p4.get("doc_instances") or [])
@@ -207,12 +209,23 @@ class V02QualityGateTests(TestCase):
                     "docs": [
                         {
                             "file_ref": "01_input/02_quality_docs/doc-1.pdf",
+                            "file_doc_id": "DOC-ANY",
                             "status": "ok",
-                            "source": {"file": "01_input/02_quality_docs/doc-1.pdf", "page": "1", "snippet": "s"},
+                            "source": {"file": "01_input/02_quality_docs/doc-1.pdf", "doc_id": "DOC-ANY", "page": "1", "snippet": "s"},
                         }
                     ]
                 }
-            ]
+            ],
+            "agent_file_coverage": [
+                {
+                    "doc_id": "DOC-ANY",
+                    "file_ref": "01_input/02_quality_docs/doc-1.pdf",
+                    "pages_total": 1,
+                    "pages_checked": "1",
+                    "status": "ok",
+                    "notes": "checked",
+                }
+            ],
         }
         _, report = run_quality_gate(
             process_name="process_test",
@@ -229,7 +242,10 @@ class V02QualityGateTests(TestCase):
         root = project_root(project_id)
         quality_file = root / "01_input" / "02_quality_docs" / "doc-2.pdf"
         quality_file.write_bytes(b"%PDF-1.4 test")
-        payload = {"materials": []}
+        payload = {
+            "materials": [],
+            "agent_file_coverage": [],
+        }
         _, report = run_quality_gate(
             process_name="process_test",
             root=root,
@@ -246,7 +262,10 @@ class V02QualityGateTests(TestCase):
         root = project_root(project_id)
         quality_file = root / "01_input" / "02_quality_docs" / "doc-3.pdf"
         quality_file.write_bytes(b"%PDF-1.4 test")
-        payload = {"doc_instances": [{"status": "ok", "source": {"file": "", "page": "1", "snippet": ""}}]}
+        payload = {
+            "doc_instances": [{"status": "ok", "source": {"file": "", "doc_id": "", "page": "1", "snippet": ""}}],
+            "agent_file_coverage": [],
+        }
         _, report = run_quality_gate(
             process_name="process_test",
             root=root,
@@ -257,3 +276,42 @@ class V02QualityGateTests(TestCase):
         )
         self.assertFalse(report.get("pass"))
         self.assertGreater(report.get("totals", {}).get("traceability_errors", 0), 0)
+
+    def test_quality_gate_fails_when_page_coverage_is_incomplete(self):
+        project_id = create_project_structure("QG fail pages")
+        root = project_root(project_id)
+        quality_file = root / "01_input" / "02_quality_docs" / "doc-4.pdf"
+        quality_file.write_bytes(b"%PDF-1.4\n1 0 obj<</Type/Page>>endobj\n2 0 obj<</Type/Page>>endobj")
+        payload = {
+            "materials": [
+                {
+                    "docs": [
+                        {
+                            "file_ref": "01_input/02_quality_docs/doc-4.pdf",
+                            "status": "ok",
+                            "source": {"file": "01_input/02_quality_docs/doc-4.pdf", "doc_id": "", "page": "1", "snippet": "s"},
+                        }
+                    ]
+                }
+            ],
+            "agent_file_coverage": [
+                {
+                    "doc_id": "",
+                    "file_ref": "01_input/02_quality_docs/doc-4.pdf",
+                    "pages_total": 2,
+                    "pages_checked": "1",
+                    "status": "ok",
+                    "notes": "partial",
+                }
+            ],
+        }
+        _, report = run_quality_gate(
+            process_name="process_test",
+            root=root,
+            payload=payload,
+            input_files=[quality_file],
+            required_files=[quality_file],
+            excluded_refs=[],
+        )
+        self.assertFalse(report.get("pass"))
+        self.assertGreater(report.get("totals", {}).get("page_coverage_errors", 0), 0)

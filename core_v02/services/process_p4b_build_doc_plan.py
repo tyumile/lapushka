@@ -8,6 +8,7 @@ from pathlib import Path
 from ..llm.prompt_loader_v02 import load_prompt
 from ..llm.responses_client_v02 import ResponsesClientV02
 from .dictionary_service import get_razdel, load_dictionary
+from .input_manifest import build_input_manifest, build_manifest_indexes, match_manifest_row
 from .log_service import append_event
 from .llm_runtime import (
     SUPPORTED_CONTEXT_EXTS,
@@ -157,6 +158,26 @@ def _normalize_doc_instance(inst: dict, idx: int) -> dict:
     return out
 
 
+def _default_coverage_from_manifest(manifest: dict) -> list[dict]:
+    rows = manifest.get("files") or []
+    out: list[dict] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        pages_total = int(row.get("pages_total") or 1)
+        out.append(
+            {
+                "doc_id": row.get("doc_id", ""),
+                "file_ref": row.get("path", ""),
+                "pages_total": pages_total,
+                "pages_checked": f"1-{pages_total}" if pages_total > 1 else "1",
+                "status": "ok",
+                "notes": "auto",
+            }
+        )
+    return out
+
+
 def _normalize_payload(payload: dict, razdel_code: str, selected_doc_type_ids: list[str]) -> dict:
     out = payload if isinstance(payload, dict) else {}
     out.setdefault("razdel_code", razdel_code)
@@ -164,6 +185,7 @@ def _normalize_payload(payload: dict, razdel_code: str, selected_doc_type_ids: l
     out.setdefault("doc_instances", [])
     out.setdefault("open_questions", [])
     out.setdefault("issues", [])
+    out.setdefault("agent_file_coverage", [])
     if not isinstance(out["doc_instances"], list):
         out["doc_instances"] = []
     out["doc_instances"] = [_normalize_doc_instance(inst, i) for i, inst in enumerate(out["doc_instances"])]
@@ -234,6 +256,7 @@ def run_process_p4b_build_doc_plan(
     quality_registry_hint = "p2_quality_registry_final.json attached"
     regs_hint = f"regs_dir=06_regs/{razdel_code}"
     samples_hint = f"samples_dir=01_input/04_samples/{razdel_code}"
+    input_file_manifest = build_input_manifest(root, input_files, [])
 
     api_key = ""
     try:
@@ -252,13 +275,14 @@ def run_process_p4b_build_doc_plan(
         if settings.MOCK_MODE:
             payload = _mock_payload(razdel_code, selected_doc_type_ids)
             payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
+            payload["agent_file_coverage"] = _default_coverage_from_manifest(input_file_manifest)
             manifest, gate_report = run_quality_gate(
                 process_name="process_p4b",
                 root=root,
                 payload=payload,
                 input_files=input_files,
                 excluded_refs=[],
-                required_files=pdf_input_files,
+                required_files=input_files,
             )
             save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
             save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)
@@ -351,6 +375,7 @@ def run_process_p4b_build_doc_plan(
             "regs_hint": regs_hint,
             "samples_hint": samples_hint,
             "feedback_rules": feedback_rules or "нет дополнительных правил",
+            "input_file_manifest_json": input_file_manifest,
         },
     ) + TABLE_CONTEXT_PROMPT_NOTE + supplemental_context
 
@@ -411,7 +436,7 @@ def run_process_p4b_build_doc_plan(
         payload=payload,
         input_files=input_files,
         excluded_refs=excluded_refs,
-        required_files=pdf_input_files,
+        required_files=input_files,
     )
     persist_run_json(project_id, "process_p4b", run_id, "input_manifest.json", manifest)
     persist_run_json(project_id, "process_p4b", run_id, "quality_gate_report.json", gate_report)
