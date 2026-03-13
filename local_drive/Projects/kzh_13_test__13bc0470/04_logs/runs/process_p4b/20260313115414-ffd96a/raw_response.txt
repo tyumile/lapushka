@@ -1,0 +1,3342 @@
+{
+  "project_passport": {
+    "object_name": {
+      "value": "Многофункциональный жилой комплекс",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "Многофункциональный жилой комплекс"
+        }
+      ]
+    },
+    "object_address": {
+      "value": "г. Тюмень, ул. Полевая. 1 этап",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+        }
+      ]
+    },
+    "project_code": {
+      "value": "218-4-24-КЖ2.1.В",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "218-4-24-КЖ2.1.В"
+        }
+      ]
+    },
+    "stage": {
+      "value": "P",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "Часть 1 (1-4 этажи)"
+        }
+      ]
+    },
+    "designer_org": {
+      "value": "ООО «АСП Вертикаль»",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "«АСП Вертикаль» Общество с ограниченной ответственностью"
+        }
+      ]
+    },
+    "customer_org": {
+      "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "Заказчик - ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+        }
+      ]
+    },
+    "general_contractor_org": {
+      "value": "",
+      "status": "blocked_missing_source",
+      "confidence": 0,
+      "sources": []
+    },
+    "subcontractor_org": {
+      "value": "",
+      "status": "blocked_missing_source",
+      "confidence": 0,
+      "sources": []
+    },
+    "revision_info": {
+      "value": "",
+      "status": "blocked_missing_source",
+      "confidence": 0,
+      "sources": []
+    },
+    "sheets_index": {
+      "value": [
+        {
+          "page": 0,
+          "sheet_no": "",
+          "sheet_name": "Титульный лист",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Конструкции железобетонные выше отметки 0,000 Часть 1 (1-4 этажи) Корпус 4"
+        },
+        {
+          "page": 1,
+          "sheet_no": "1",
+          "sheet_name": "Общие данные",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Ведомость рабочих чертежей основного комплекта"
+        },
+        {
+          "page": 2,
+          "sheet_no": "2",
+          "sheet_name": "Схема расположения вертикальных конструкций 1 этажа",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Схема расположения вертикальных конструкций 1 этажа на отм. -0,150"
+        },
+        {
+          "page": 3,
+          "sheet_no": "3",
+          "sheet_name": "Схема расположения вертикальных конструкций 2 этажа",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Схема расположения вертикальных конструкций 2 этажа на отм. +4,700"
+        },
+        {
+          "page": 4,
+          "sheet_no": "4",
+          "sheet_name": "Схема расположения вертикальных конструкций 3 этажа",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Схема расположения вертикальных конструкций 3 этажа на отм. +7,700"
+        },
+        {
+          "page": 5,
+          "sheet_no": "5",
+          "sheet_name": "Схема расположения вертикальных конструкций 4 этажа",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Схема расположения вертикальных конструкций 4 этажа на отм. +10,700"
+        },
+        {
+          "page": 6,
+          "sheet_no": "6",
+          "sheet_name": "Пилоны П1-К1.20А, П1-К1.16А, П1-К1.25А",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Пилоны П1-К1.20А, П1-К1.16А, П1-К1.25А"
+        },
+        {
+          "page": 7,
+          "sheet_no": "7",
+          "sheet_name": "Пилоны П2-К1.16А, П3-К1.20А",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Пилоны П2-К1.16А, П3-К1.20А"
+        },
+        {
+          "page": 8,
+          "sheet_no": "8",
+          "sheet_name": "Пилоны ПУ1-К1.10А",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Пилоны ПУ1-К1.10А"
+        },
+        {
+          "page": 9,
+          "sheet_no": "9",
+          "sheet_name": "Пилоны П1-Т1.16А, П1-Т2.16А, ПУ1-Т1.10А",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Пилоны П1-Т1.16А, П1-Т2.16А, ПУ1-Т1.10А"
+        },
+        {
+          "page": 10,
+          "sheet_no": "10",
+          "sheet_name": "Стены СтЛ1...СтЛ3 на отм. -0,150",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стены СтЛ1...СтЛ3 на отм. -0,150"
+        },
+        {
+          "page": 11,
+          "sheet_no": "11",
+          "sheet_name": "Стена СтЛ4 на отм. -0,150",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стена СтЛ4 на отм. -0,150"
+        },
+        {
+          "page": 12,
+          "sheet_no": "12",
+          "sheet_name": "Стена СтЛ5 на отм. -0,150",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стена СтЛ5 на отм. -0,150"
+        },
+        {
+          "page": 13,
+          "sheet_no": "13",
+          "sheet_name": "Стены СтЛ6, СтЛ7 на отм. -0,150",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стены СтЛ6, СтЛ7 на отм. -0,150"
+        },
+        {
+          "page": 14,
+          "sheet_no": "14",
+          "sheet_name": "Стены СтЛ8, СтЛ9 на отм. -0,150",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стены СтЛ8, СтЛ9 на отм. -0,150"
+        },
+        {
+          "page": 15,
+          "sheet_no": "15",
+          "sheet_name": "Сечение 1-1, Сечение 2-2",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Сечение 1-1, Сечение 2-2"
+        },
+        {
+          "page": 16,
+          "sheet_no": "16",
+          "sheet_name": "Стены СтЛ1...СтЛ4 на отм. +4,700...+10,700",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стены СтЛ1...СтЛ4 на отм. +4,700...+10,700"
+        },
+        {
+          "page": 17,
+          "sheet_no": "17",
+          "sheet_name": "Стены СтЛ5...СтЛ9 на отм. +4,700...+10,700",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Стены СтЛ5...СтЛ9 на отм. +4,700...+10,700"
+        },
+        {
+          "page": 18,
+          "sheet_no": "18",
+          "sheet_name": "Сечение 1-1, Сечение 2-2",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Сечение 1-1, Сечение 2-2"
+        },
+        {
+          "page": 19,
+          "sheet_no": "19",
+          "sheet_name": "Сечение 1-1, Сечение 2-2",
+          "razdel_code": "KJ",
+          "project_code": "218-4-24-КЖ2.1.В",
+          "stage": "P",
+          "snippet": "Сечение 1-1, Сечение 2-2"
+        }
+      ],
+      "status": "ok",
+      "confidence": 1,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "Титульный лист и содержание"
+        }
+      ]
+    },
+    "structure_axes": {
+      "value": {
+        "sections": ["Корпус 4"],
+        "floors": ["-0,150", "+4,700", "+7,700", "+10,700"],
+        "axes": ["1","2","3","4","5","6","7","8","9","10","А","Б","В","Г","Д"],
+        "systems": ["П1-К1.16А", "П1-К1.20А", "П1-К1.25А", "П2-К1.16А", "П3-К1.20А", "ПУ1-К1.10А", "ПУ1н-К1.10А", "П1-Т1.16А", "П1-Т2.16А", "ПУ1-Т1.10А", "СтЛ1", "СтЛ2", "СтЛ3", "СтЛ4", "СтЛ5", "СтЛ6", "СтЛ7", "СтЛ8", "СтЛ9"],
+        "stages": ["1 этап"],
+        "lots": [],
+        "sites": []
+      },
+      "status": "ok",
+      "confidence": 0.9,
+      "sources": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 1,
+          "snippet": "Корпус 4, этажи 1-4, пилоны и стены с маркировками"
+        }
+      ]
+    }
+  },
+  "razdels": [
+    {
+      "razdel_code": "KJ",
+      "razdel_name": "КЖ",
+      "present_in_project": "yes",
+      "presence_evidence": [
+        {
+          "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+          "doc_id": "DOC-075A2834D9FC",
+          "page": 0,
+          "snippet": "Конструкции железобетонные выше отметки 0,000 Часть 1 (1-4 этажи) Корпус 4"
+        }
+      ],
+      "selected_doc_type_ids": [
+        "acts_hidden",
+        "acts_responsible_structures",
+        "KJ_REGISTERS",
+        "KJ_TITLE_SHEETS",
+        "KJ_EXEC_SCHEMES",
+        "KJ_PROTOCOLS_TESTS",
+        "KJ_INPUT_CONTROL",
+        "KJ_APPENDICES"
+      ],
+      "work_breakdown": [
+        {
+          "work_id": "WB_wall_pilons_floors",
+          "work_name": "Армирование, бетонирование, устройство монолитных стен и пилонов этажей 1-4",
+          "work_kind": "installation",
+          "related_system_or_element": "стены СтЛ1...СтЛ9, пилоны П1-К1.16А и др.",
+          "suggested_axes": {
+            "section": "Корпус 4",
+            "floor": ["-0,150", "+4,700", "+7,700", "+10,700"],
+            "axis": null,
+            "line": null,
+            "stage": "1 этап",
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "status": "ok",
+          "confidence": 0.9,
+          "sources": [
+            {
+              "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+              "doc_id": "DOC-075A2834D9FC",
+              "page": 1,
+              "snippet": "Рабочая документация части 1 (1-4 этажи). Вертикальные конструкции. Пилоны и стены"
+            }
+          ]
+        }
+      ],
+      "doc_instances": [
+        {
+          "instance_id": "KJ_acts_hidden_1",
+          "doc_type_id": "acts_hidden",
+          "doc_id": "AOSR",
+          "doc_name": "Акт освидетельствования скрытых работ",
+          "template_kind": "table",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": "Корпус 4",
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": "1 этап",
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "needs_disambiguation",
+            "confidence": 0,
+            "sources": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 1,
+                "snippet": "Часть 1 (1-4 этажи). Корпус 4. Вертикальные конструкции"
+              }
+            ]
+          },
+          "work_scope": [
+            {
+              "work_id": "WB_wall_pilons_floors",
+              "work_name": "Армирование, бетонирование, устройство монолитных стен и пилонов этажей 1-4",
+              "status": "ok",
+              "confidence": 0.9,
+              "sources": [
+                {
+                  "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                  "doc_id": "DOC-075A2834D9FC",
+                  "page": 1,
+                  "snippet": "Пилоны и стены Корпус 4"
+                }
+              ]
+            }
+          ],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  },
+                  {
+                    "page": 2,
+                    "sheet_no": "2",
+                    "sheet_name": "Схема расположения вертикальных конструкций 1 этажа"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Ведомость рабочих чертежей"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Акт освидетельствования скрытых работ",
+              "data": {
+                "act_type": {
+                  "value": "AOSR",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "id_dictionary_v02.json",
+                      "doc_id": "DOC-84C8B60C5D5A",
+                      "page": 0,
+                      "snippet": "doc_id AOSR"
+                    }
+                  ]
+                },
+                "presented_works_text": {
+                  "value": "Выполнены следующие работы: армирование и бетонирование монолитных свайных и стеновых конструкций 1-4 этажей корпуса 4.",
+                  "status": "ok",
+                  "confidence": 0.9,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 1,
+                      "snippet": "Пилоны и стены вертикальные конструкции 1-4 этажей"
+                    }
+                  ]
+                },
+                "project_basis_text": {
+                  "value": "Работы выполнены в соответствии с проектом 218-4-24-КЖ2.1.В, листы 1-19.",
+                  "status": "ok",
+                  "confidence": 0.9,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "Рабочая документация 218-4-24-КЖ2.1.В"
+                    }
+                  ]
+                },
+                "materials_used": [
+                  {
+                    "material": "Бетон класса B25, F200",
+                    "from_quality_registry_doc_ref": "DOC-9E11A6E6213B",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 26633-2015 Бетон В25, F200"
+                      }
+                    ]
+                  },
+                  {
+                    "material": "Арматура A500С",
+                    "from_quality_registry_doc_ref": "DOC-57C259DF4F8F",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 34028-2016 Арматура класса А500С"
+                      }
+                    ]
+                  },
+                  {
+                    "material": "Арматура A240",
+                    "from_quality_registry_doc_ref": "DOC-B8B68980EA66",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 34028-2016 Арматура класса А240"
+                      }
+                    ]
+                  }
+                ],
+                "conformance_docs": [
+                  {
+                    "doc_kind": "Документ о качестве бетонной смеси",
+                    "number": "№ 17-016",
+                    "date": "17.01.2026",
+                    "issuer": "ООО \"ЕвроБетон\"",
+                    "for_material": "Бетон класса B25, F200",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Документ о качестве бетонной смеси... Объём: 9 м3"
+                      }
+                    ]
+                  },
+                  {
+                    "doc_kind": "Сертификат качества",
+                    "number": "№ 10332",
+                    "date": "29.07.2025",
+                    "issuer": "Акционерное общество \"ПромСорт-Урал\"",
+                    "for_material": "Арматура A500С",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №10332 для арматуры A500С"
+                      }
+                    ]
+                  },
+                  {
+                    "doc_kind": "Сертификат качества",
+                    "number": "№ 8170",
+                    "date": "04.06.2025",
+                    "issuer": "АО \"ПромСорт-Урал\"",
+                    "for_material": "Арматура A240",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №8170 для арматуры A240"
+                      }
+                    ]
+                  }
+                ],
+                "dates": {
+                  "start": "",
+                  "end": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "norms": [
+                  "СП 70.13330.2012",
+                  "ГОСТ 34028-2016",
+                  "ГОСТ 26633-2015",
+                  "ГОСТ 9467-75",
+                  "СП 20.13330.2016"
+                ],
+                "allow_next_works_text": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "responsible_persons": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "overall_status": "ok",
+            "evidence": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 0,
+                "snippet": "Часть 1 (1-4 этажи)"
+              }
+            ]
+          }
+        },
+        {
+          "instance_id": "KJ_acts_responsible_structures_1",
+          "doc_type_id": "acts_responsible_structures",
+          "doc_id": "AOOK",
+          "doc_name": "Акт освидетельствования ответственных конструкций",
+          "template_kind": "table",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "blocked_missing_source",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Акт освидетельствования ответственных конструкций",
+              "data": {}
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_REESTR_ID_1",
+          "doc_type_id": "KJ_REGISTERS",
+          "doc_id": "KJ_REESTR_ID",
+          "doc_name": "Реестр исполнительной документации",
+          "template_kind": "xlsx_reestr",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "blocked_missing_source",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  },
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Реестр исполнительной документации",
+              "data": {
+                "register_kind": "ID",
+                "rows": []
+              }
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_REESTR_AOSR_1",
+          "doc_type_id": "KJ_REGISTERS",
+          "doc_id": "KJ_REESTR_AOSR",
+          "doc_name": "Реестр актов освидетельствования скрытых работ",
+          "template_kind": "xlsx_reestr",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "blocked_missing_source",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Реестр актов освидетельствования скрытых работ",
+              "data": {
+                "register_kind": "AOSR",
+                "rows": []
+              }
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_REESTR_CERTS_1",
+          "doc_type_id": "KJ_REGISTERS",
+          "doc_id": "KJ_REESTR_CERTS",
+          "doc_name": "Реестр сертификатов и паспортов качества",
+          "template_kind": "xlsx_reestr",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "ok",
+            "confidence": 1,
+            "sources": [
+              {
+                "file": "02_processing/p2_quality_registry_final.json",
+                "doc_id": "DOC-42AE11D48E1E",
+                "page": 0,
+                "snippet": "материалы бетон, арматура, сертификаты"
+              }
+            ]
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Реестр сертификатов и паспортов качества",
+              "data": {
+                "register_kind": "CERTS",
+                "rows": [
+                  {
+                    "pp": 1,
+                    "doc_name": "Сертификат качества №10332 для арматуры A500С",
+                    "doc_number": "№10332",
+                    "doc_date": "29.07.2025",
+                    "notes": "Акционерное общество \"ПромСорт-Урал\"",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №10332 для арматуры A500С"
+                      }
+                    ]
+                  },
+                  {
+                    "pp": 2,
+                    "doc_name": "Документ о качестве бетонной смеси № 17-016",
+                    "doc_number": "№17-016",
+                    "doc_date": "17.01.2026",
+                    "notes": "ООО \"ЕвроБетон\"",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Документ о качестве бетонной смеси № 17-016"
+                      }
+                    ]
+                  },
+                  {
+                    "pp": 3,
+                    "doc_name": "Сертификат качества №8170 для арматуры A240",
+                    "doc_number": "№8170",
+                    "doc_date": "04.06.2025",
+                    "notes": "АО \"ПромСорт-Урал\"",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "01_input/02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №8170 для арматуры A240"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "02_processing/p2_quality_registry_final.json",
+              "doc_id": "DOC-42AE11D48E1E",
+              "page": 0,
+              "snippet": "материалы и сертификаты качества"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_REESTR_SCHEMES_TESTS_1",
+          "doc_type_id": "KJ_REGISTERS",
+          "doc_id": "KJ_REESTR_SCHEMES_TESTS",
+          "doc_name": "Реестр исполнительных схем и протоколов испытаний",
+          "template_kind": "xlsx_reestr",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "blocked_missing_source",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Реестр исполнительных схем и протоколов испытаний",
+              "data": {
+                "register_kind": "SCHEMES_TESTS",
+                "rows": []
+              }
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_TITLE_SHEET_1",
+          "doc_type_id": "KJ_TITLE_SHEETS",
+          "doc_id": "KJ_TITLE_SHEET",
+          "doc_name": "Титульный лист тома исполнительной документации",
+          "template_kind": "xlsx_title_sheet",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "ok",
+            "confidence": 1,
+            "sources": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 0,
+                "snippet": "Титульный лист"
+              }
+            ]
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "volume_title": {
+                "value": "Конструкции железобетонные выше отметки 0,000. Часть 1 (1-4 этажи). Корпус 4. Вертикальные конструкции.",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Конструкции железобетонные выше отм. 0,000. Часть 1 (1-4 этажи). Корпус 4. Вертикальные конструкции"
+                  }
+                ]
+              },
+              "volume_code": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              },
+              "year": {
+                "value": "2024",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Тюмень, 2024"
+                  }
+                ]
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+              "doc_id": "DOC-075A2834D9FC",
+              "page": 0,
+              "snippet": "Титульный лист"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_EXEC_SCHEME_GEODETIC_Корпус 4_floor -0,150",
+          "doc_type_id": "KJ_EXEC_SCHEMES",
+          "doc_id": "KJ_EXEC_SCHEME_GEODETIC",
+          "doc_name": "Исполнительные геодезические схемы",
+          "template_kind": "xlsx_schemes",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": "Корпус 4",
+            "floor": "-0,150",
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "ok",
+            "confidence": 0.9,
+            "sources": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 1,
+                "snippet": "Корпус 4, отм. -0,150"
+              }
+            ]
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Пилоны и стены при отм. -0,150"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "scheme_name": {
+                "value": "Исполнительные геодезические схемы - Корпус 4 - этаж -0,150",
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Корпус 4 отм. -0,150"
+                  }
+                ]
+              },
+              "scope_description": {
+                "value": "Геодезическая разбивка осей и отметок по корпусу 4 на этаже -0,150.",
+                "status": "ok",
+                "confidence": 0.8,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Схема расположения вертикальных конструкций 1 этажа на отм. -0,150"
+                  }
+                ]
+              },
+              "referenced_drawings": [
+                {
+                  "sheet_no": "1",
+                  "sheet_name": "Общие данные",
+                  "page": 1
+                }
+              ],
+              "as_built_note": {
+                "value": "Заполняется по факту",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+              "doc_id": "DOC-075A2834D9FC",
+              "page": 1,
+              "snippet": "Схема расположения вертикальных конструкций"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_EXEC_SCHEME_GEODETIC_Корпус 4_floor +4,700",
+          "doc_type_id": "KJ_EXEC_SCHEMES",
+          "doc_id": "KJ_EXEC_SCHEME_GEODETIC",
+          "doc_name": "Исполнительные геодезические схемы",
+          "template_kind": "xlsx_schemes",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": "Корпус 4",
+            "floor": "+4,700",
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "ok",
+            "confidence": 0.9,
+            "sources": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 3,
+                "snippet": "Корпус 4, отм. +4,700"
+              }
+            ]
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 3,
+                    "sheet_no": "3",
+                    "sheet_name": "Схема расположения вертикальных конструкций 2 этажа"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 3,
+                    "snippet": "Схема расположения вертикальных конструкций 2 этажа"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "scheme_name": {
+                "value": "Исполнительные геодезические схемы - Корпус 4 - этаж +4,700",
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 3,
+                    "snippet": "Корпус 4 отм. +4,700"
+                  }
+                ]
+              },
+              "scope_description": {
+                "value": "Геодезическая разбивка осей и отметок по корпусу 4 на этаже +4,700.",
+                "status": "ok",
+                "confidence": 0.8,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 3,
+                    "snippet": "Схема расположения вертикальных конструкций 2 этажа"
+                  }
+                ]
+              },
+              "referenced_drawings": [
+                {
+                  "sheet_no": "3",
+                  "sheet_name": "Схема расположения вертикальных конструкций 2 этажа",
+                  "page": 3
+                }
+              ],
+              "as_built_note": {
+                "value": "Заполняется по факту",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+              "doc_id": "DOC-075A2834D9FC",
+              "page": 3,
+              "snippet": "Схема расположения вертикальных конструкций"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_PROTOCOL_BETON_1",
+          "doc_type_id": "KJ_PROTOCOLS_TESTS",
+          "doc_id": "KJ_PROTOCOL_BETON",
+          "doc_name": "Протоколы лабораторных испытаний бетона",
+          "template_kind": "xlsx_protocol_beton",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": "1 этап",
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "needs_disambiguation",
+            "confidence": 0,
+            "sources": [
+              {
+                "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                "doc_id": "DOC-075A2834D9FC",
+                "page": 1,
+                "snippet": "Производство конструктивных решений для монолитных стен, пилонов"
+              }
+            ]
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Общие данные"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "concrete_class": {
+                "value": "B25",
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 6,
+                    "snippet": "бетон класса не ниже В25"
+                  }
+                ]
+              },
+              "lab_requirements": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              },
+              "samples": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+              "doc_id": "DOC-075A2834D9FC",
+              "page": 6,
+              "snippet": "Требования по бетону класса B25"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_TEMP_SHEETS_1",
+          "doc_type_id": "KJ_PROTOCOLS_TESTS",
+          "doc_id": "KJ_TEMP_SHEETS",
+          "doc_name": "Температурные листы бетонных работ",
+          "template_kind": "xlsx_temp_sheets",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": "1 этап",
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "needs_disambiguation",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Общие данные"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "temperature_control_requirements": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              },
+              "measurements": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_VIK_ACT_1",
+          "doc_type_id": "KJ_INPUT_CONTROL",
+          "doc_id": "KJ_VIK_ACT",
+          "doc_name": "Акт входного контроля материалов и конструкций",
+          "template_kind": "xlsx_vik_act",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": "1 этап",
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "needs_disambiguation",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 1,
+                    "sheet_no": "1",
+                    "sheet_name": "Общие данные"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.9,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 1,
+                    "snippet": "Общие данные"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "materials": {
+                "value": [
+                  {
+                    "material": "Бетон класса B25, F200",
+                    "from_quality_registry_doc_ref": "DOC-9E11A6E6213B",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 26633-2015 Бетон В25, F200"
+                      }
+                    ]
+                  },
+                  {
+                    "material": "Арматура A500С",
+                    "from_quality_registry_doc_ref": "DOC-57C259DF4F8F",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 34028-2016 Арматура класса А500С"
+                      }
+                    ]
+                  },
+                  {
+                    "material": "Арматура A240",
+                    "from_quality_registry_doc_ref": "DOC-B8B68980EA66",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "ГОСТ 34028-2016 Арматура класса А240"
+                      }
+                    ]
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.85,
+                "sources": [
+                  {
+                    "file": "02_processing/p2_quality_registry_final.json",
+                    "doc_id": "DOC-42AE11D48E1E",
+                    "page": 0,
+                    "snippet": "материалы бетон, арматура, сертификаты"
+                  }
+                ]
+              },
+              "quality_docs": {
+                "value": [
+                  {
+                    "doc_kind": "Документ о качестве бетонной смеси",
+                    "number": "№ 17-016",
+                    "date": "17.01.2026",
+                    "issuer": "ООО \"ЕвроБетон\"",
+                    "for_material": "Бетон класса B25, F200",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Документ о качестве бетонной смеси № 17-016"
+                      }
+                    ]
+                  },
+                  {
+                    "doc_kind": "Сертификат качества",
+                    "number": "№ 10332",
+                    "date": "29.07.2025",
+                    "issuer": "Акционерное общество \"ПромСорт-Урал\"",
+                    "for_material": "Арматура A500С",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №10332"
+                      }
+                    ]
+                  },
+                  {
+                    "doc_kind": "Сертификат качества",
+                    "number": "№ 8170",
+                    "date": "04.06.2025",
+                    "issuer": "АО \"ПромСорт-Урал\"",
+                    "for_material": "Арматура A240",
+                    "status": "ok",
+                    "confidence": 1,
+                    "sources": [
+                      {
+                        "file": "02_processing/p2_quality_registry_final.json",
+                        "doc_id": "DOC-42AE11D48E1E",
+                        "page": 0,
+                        "snippet": "Сертификат качества №8170"
+                      }
+                    ]
+                  }
+                ],
+                "status": "ok",
+                "confidence": 0.85,
+                "sources": [
+                  {
+                    "file": "02_processing/p2_quality_registry_final.json",
+                    "doc_id": "DOC-42AE11D48E1E",
+                    "page": 0,
+                    "snippet": "материалы и сертификаты качества"
+                  }
+                ]
+              },
+              "inspection_result": {
+                "value": "",
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "ok",
+          "evidence": [
+            {
+              "file": "02_processing/p2_quality_registry_final.json",
+              "doc_id": "DOC-42AE11D48E1E",
+              "page": 0,
+              "snippet": "материалы и сертификаты качества"
+            }
+          ]
+        },
+        {
+          "instance_id": "KJ_KJ_VIK_JOURNAL_1",
+          "doc_type_id": "KJ_INPUT_CONTROL",
+          "doc_id": "KJ_VIK_JOURNAL",
+          "doc_name": "Журнал входного контроля материалов и конструкций",
+          "template_kind": "xlsx_vik_journal",
+          "default_output_format": "xlsx",
+          "multi": false,
+          "instance_key": {
+            "section": null,
+            "floor": null,
+            "axis": null,
+            "line": null,
+            "stage": null,
+            "lot": null,
+            "site": null,
+            "layer": null,
+            "column": null,
+            "grid": null
+          },
+          "multiplier_evidence": {
+            "status": "blocked_missing_source",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [
+                  {
+                    "page": 0,
+                    "sheet_no": "",
+                    "sheet_name": "Титульный лист"
+                  }
+                ],
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Титульный лист"
+                  }
+                ]
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "rows": {
+                "value": [],
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              }
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        },
+        {
+          "instance_id": "KJ_KJ_REESTR_DOCS_QUALITY_1",
+          "doc_type_id": "KJ_APPENDICES",
+          "doc_id": "KJ_REESTR_DOCS_QUALITY",
+          "doc_name": "Реестр документов качества (приложение к АОСР)",
+          "template_kind": "xlsx_reestr_docs_quality",
+          "default_output_format": "xlsx",
+          "multi": true,
+          "instance_key": {
+            "layer": null,
+            "section": null,
+            "stage": null,
+            "lot": null
+          },
+          "multiplier_evidence": {
+            "status": "needs_disambiguation",
+            "confidence": 0,
+            "sources": []
+          },
+          "work_scope": [],
+          "fields": {
+            "common": {
+              "object_name": {
+                "value": "Многофункциональный жилой комплекс",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Многофункциональный жилой комплекс"
+                  }
+                ]
+              },
+              "object_address": {
+                "value": "г. Тюмень, ул. Полевая. 1 этап",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "г. Тюмень, ул. Полевая. 1 этап"
+                  }
+                ]
+              },
+              "project_code": {
+                "value": "218-4-24-КЖ2.1.В",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "218-4-24-КЖ2.1.В"
+                  }
+                ]
+              },
+              "razdel_code": {
+                "value": "KJ",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "id_dictionary_v02.json",
+                    "doc_id": "DOC-84C8B60C5D5A",
+                    "page": 0,
+                    "snippet": "razdel_code"
+                  }
+                ]
+              },
+              "stage": {
+                "value": "P",
+                "status": "ok",
+                "confidence": 1,
+                "sources": [
+                  {
+                    "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                    "doc_id": "DOC-075A2834D9FC",
+                    "page": 0,
+                    "snippet": "Часть 1 (1-4 этажи)"
+                  }
+                ]
+              },
+              "sheet_refs": {
+                "value": [],
+                "status": "blocked_missing_source",
+                "confidence": 0,
+                "sources": []
+              },
+              "organizations": {
+                "designer_org": {
+                  "value": "ООО «АСП Вертикаль»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "«АСП Вертикаль»"
+                    }
+                  ]
+                },
+                "customer_org": {
+                  "value": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»",
+                  "status": "ok",
+                  "confidence": 1,
+                  "sources": [
+                    {
+                      "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+                      "doc_id": "DOC-075A2834D9FC",
+                      "page": 0,
+                      "snippet": "ООО «СЗ «СИБМАШ-СЕВЕРСТРОЙ»"
+                    }
+                  ]
+                },
+                "general_contractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                },
+                "subcontractor_org": {
+                  "value": "",
+                  "status": "blocked_missing_source",
+                  "confidence": 0,
+                  "sources": []
+                }
+              }
+            },
+            "template_specific": {
+              "note": "Реестр документов качества (приложение к АОСР)",
+              "data": {}
+            }
+          },
+          "overall_status": "blocked_missing_source",
+          "evidence": []
+        }
+      ],
+      "registers_auto_build": {
+        "reestrof_id_doc_ids": ["AOSR", "AOOK"],
+        "reestrof_aosr_doc_ids": ["AOSR"],
+        "reestrof_certs_source": "quality_registry",
+        "reestrof_schemes_tests_source": "doc_instances"
+      },
+      "open_questions": [
+        "В проекте не найдено точное деление на этажи/секции/оси для актов скрытых работ (AOSR); как делить экземпляры?"
+      ],
+      "issues": []
+    },
+    {
+      "razdel_code": "GP",
+      "razdel_name": "ГП",
+      "present_in_project": "no",
+      "presence_evidence": [],
+      "selected_doc_type_ids": ["geodesy"],
+      "work_breakdown": [],
+      "doc_instances": [],
+      "registers_auto_build": {
+        "reestrof_id_doc_ids": [],
+        "reestrof_aosr_doc_ids": [],
+        "reestrof_certs_source": "project_only",
+        "reestrof_schemes_tests_source": "doc_instances"
+      },
+      "open_questions": [],
+      "issues": []
+    }
+  ],
+  "global_open_questions": [
+    "В проекте не найдено точное деление на этажи/секции/оси для актов скрытых работ (AOSR); как делить экземпляры?"
+  ],
+  "global_issues": [],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-075A2834D9FC",
+      "file_ref": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "pages_total": 19,
+      "pages_checked": "all",
+      "status": "ok",
+      "notes": "Полный анализ всех страниц проекта КЖ"
+    },
+    {
+      "doc_id": "DOC-42AE11D48E1E",
+      "file_ref": "02_processing/p2_quality_registry_final.json",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Реестр качества и сертификаты"
+    },
+    {
+      "doc_id": "DOC-AC1766BFB5CC",
+      "file_ref": "06_regs/KJ/rules.json",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Правила для раздела КЖ"
+    },
+    {
+      "doc_id": "DOC-0709E35353DC",
+      "file_ref": "06_regs/KJ/rules.md",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Правила для раздела КЖ в виде md"
+    },
+    {
+      "doc_id": "DOC-84C8B60C5D5A",
+      "file_ref": "id_dictionary_v02.json",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Словарь документов"
+    }
+  ]
+}

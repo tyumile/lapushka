@@ -1,0 +1,34 @@
+{
+  "process": "process_p4b",
+  "pass": true,
+  "summary": "quality_gate=PASS; required=5; covered=5; page_coverage=5; trace_errors=0",
+  "totals": {
+    "input_files": 5,
+    "required_files": 5,
+    "excluded_files": 0,
+    "matched_refs": 5,
+    "covered_required": 5,
+    "uncovered_required": 0,
+    "files_with_full_page_coverage": 5,
+    "files_missing_page_coverage": 0,
+    "page_coverage_errors": 0,
+    "traceability_errors": 0
+  },
+  "uncovered_required_files": [],
+  "matched_refs": [
+    "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+    "02_processing/p2_quality_registry_final.json",
+    "06_regs/KJ/rules.json",
+    "06_regs/KJ/rules.md",
+    "id_dictionary_v02.json"
+  ],
+  "page_coverage_errors": [],
+  "files_with_full_page_coverage": [
+    "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+    "02_processing/p2_quality_registry_final.json",
+    "06_regs/KJ/rules.json",
+    "06_regs/KJ/rules.md",
+    "id_dictionary_v02.json"
+  ],
+  "traceability_errors": []
+}

@@ -1,0 +1,46 @@
+{
+  "total_files": 5,
+  "files": [
+    {
+      "path": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "file_name": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "doc_id": "DOC-075A2834D9FC",
+      "pages_total": 19,
+      "size_bytes": 2148038,
+      "sha256": "fbc70bacf145c9af9982874c77da62943e3dfbf53314864c88797b8b02046057"
+    },
+    {
+      "path": "02_processing/p2_quality_registry_final.json",
+      "file_name": "p2_quality_registry_final.json",
+      "doc_id": "DOC-42AE11D48E1E",
+      "pages_total": 1,
+      "size_bytes": 16626,
+      "sha256": "67cf99ae86b3a4979fbc4673758ae407d35047e5ba848880e35d08cd651403f1"
+    },
+    {
+      "path": "06_regs/KJ/rules.json",
+      "file_name": "rules.json",
+      "doc_id": "DOC-AC1766BFB5CC",
+      "pages_total": 1,
+      "size_bytes": 20,
+      "sha256": "f3febf3c0bec28d7de5be226dc48e764fa8be2716a54019dee2d5e55b3fe93ef"
+    },
+    {
+      "path": "06_regs/KJ/rules.md",
+      "file_name": "rules.md",
+      "doc_id": "DOC-0709E35353DC",
+      "pages_total": 1,
+      "size_bytes": 8,
+      "sha256": "a3af2177809b3c009bfec4d1c507c6ee32757385e856bce9ae5ac3aec41a791b"
+    },
+    {
+      "path": "id_dictionary_v02.json",
+      "file_name": "id_dictionary_v02.json",
+      "doc_id": "DOC-84C8B60C5D5A",
+      "pages_total": 1,
+      "size_bytes": 53635,
+      "sha256": "00c383f5043333ad2e81fb709fecdbd29822905d0571ae87aefa75b1969e26f0"
+    }
+  ],
+  "excluded_refs": []
+}

@@ -1,0 +1,62 @@
+{
+  "total_files": 7,
+  "files": [
+    {
+      "path": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "file_name": "10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "doc_id": "DOC-075A2834D9FC",
+      "pages_total": 19,
+      "size_bytes": 2148038,
+      "sha256": "fbc70bacf145c9af9982874c77da62943e3dfbf53314864c88797b8b02046057"
+    },
+    {
+      "path": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "file_name": "№1.1 Сертификат качества №8170 6А240.pdf",
+      "doc_id": "DOC-B8B68980EA66",
+      "pages_total": 1,
+      "size_bytes": 131553,
+      "sha256": "dbde215c4ef2de37cfc312aab136947de448f7bc5870218a7032b4a37a250eff"
+    },
+    {
+      "path": "01_input/02_quality_docs/№1.2 Сертификат качества №8170 8А500.pdf",
+      "file_name": "№1.2 Сертификат качества №8170 8А500.pdf",
+      "doc_id": "DOC-F9F722B9D9FE",
+      "pages_total": 1,
+      "size_bytes": 137288,
+      "sha256": "69ce853019fef833ec000f38d297cfcb43d9e05ea3f12e6a5bc54c19818064d1"
+    },
+    {
+      "path": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+      "file_name": "№1.3 Сертификат качества №10332 10А500.pdf",
+      "doc_id": "DOC-57C259DF4F8F",
+      "pages_total": 1,
+      "size_bytes": 129382,
+      "sha256": "3b61d3ffaf5008b00b8acfdfbe1b792e83cee45265860e957fa6783ad72c74c6"
+    },
+    {
+      "path": "01_input/02_quality_docs/№1.7 Док о кач Проволока 144347.pdf",
+      "file_name": "№1.7 Док о кач Проволока 144347.pdf",
+      "doc_id": "DOC-2BF5B48FD6F2",
+      "pages_total": 1,
+      "size_bytes": 1582230,
+      "sha256": "cb49e33c18b0ba5ba439178290461e251ad88c155ffb4eee9ff5a96ea681b78c"
+    },
+    {
+      "path": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "file_name": "№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "doc_id": "DOC-9E11A6E6213B",
+      "pages_total": 2,
+      "size_bytes": 152370,
+      "sha256": "0d36faeb80cce0cccf88f7570fc129308e24ae8640ae89980e764bf09c8518b6"
+    },
+    {
+      "path": "01_input/02_quality_docs/№3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf",
+      "file_name": "№3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf",
+      "doc_id": "DOC-A4DAFFCE79C8",
+      "pages_total": 2,
+      "size_bytes": 152380,
+      "sha256": "32960aac3796597f53f9efa830edd302cb12e1fc931b343e028e817ac176432c"
+    }
+  ],
+  "excluded_refs": []
+}

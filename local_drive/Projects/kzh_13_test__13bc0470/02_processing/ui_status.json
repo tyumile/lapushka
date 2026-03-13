@@ -1,0 +1,32 @@
+{
+  "create_project": {
+    "state": "success",
+    "message": "Проект создан.",
+    "updated_at": "2026-03-13T11:03:51.440810"
+  },
+  "upload_project": {
+    "state": "success",
+    "message": "Проект: загружено 1 файл(ов).",
+    "updated_at": "2026-03-13T11:04:01.861620"
+  },
+  "upload_quality": {
+    "state": "success",
+    "message": "Документы качества: загружено 6 файл(ов).",
+    "updated_at": "2026-03-13T11:04:21.094916"
+  },
+  "run_p2": {
+    "state": "success",
+    "message": "Process 2 завершён. Строк в реестре: 6.",
+    "updated_at": "2026-03-13T11:07:15.614804"
+  },
+  "next_to_doc_types": {
+    "state": "success",
+    "message": "Process P4B выполнен, открыт план документов.",
+    "updated_at": "2026-03-13T11:59:41.475215"
+  },
+  "run_p4b": {
+    "state": "success",
+    "message": "Process P4B завершён. Инстансов: 14.",
+    "updated_at": "2026-03-13T11:59:41.474838"
+  }
+}

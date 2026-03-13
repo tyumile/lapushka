@@ -1,0 +1,375 @@
+{
+  "project_cipher": {
+    "value": "",
+    "status": "needs_extraction",
+    "confidence": 0.0,
+    "source": {
+      "file": "",
+      "doc_id": "",
+      "page": "",
+      "snippet": ""
+    }
+  },
+  "razdel": {
+    "razdel_code": "KJ",
+    "razdel_name": "КЖ",
+    "status": "ok",
+    "confidence": 1.0,
+    "source": {
+      "file": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+      "doc_id": "DOC-57C259DF4F8F",
+      "page": "1",
+      "snippet": "КЖ, КЖ, Акционерное общество 'ПромСорт-Урал', ГОСТ 34028-2016, Прокат арматурный свариваемый периодического профиля"
+    }
+  },
+  "materials": [
+    {
+      "material_id": "beton_B25_F200",
+      "material_name": "Бетон класса B25, F200",
+      "material_norm_name": "ГОСТ 26633-2015 Бетон В25, F200",
+      "status": "ok",
+      "confidence": 1.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "8",
+        "snippet": "П1-К1.20А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³\nП1-К1.16А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³\nП1-К1.25А ГОСТ 26633-2015 Бетон В25, F200 0,84 м³"
+      },
+      "docs": [
+        {
+          "doc_kind": "Документ о качестве бетонной смеси",
+          "doc_number": "№ 17-016",
+          "doc_date": "17.01.2026",
+          "volume": "9 м3",
+          "manufacturer": "ООО \"ЕвроБетон\"",
+          "issuer": "ООО \"ЕвроБетон\"",
+          "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+          "file_doc_id": "DOC-9E11A6E6213B",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+            "doc_id": "DOC-9E11A6E6213B",
+            "page": "2",
+            "snippet": "Документ о качестве бетонной смеси... BСТ B25 М350 F200W8 ГОСТ 7473-2010... Объём: 9 м3"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armat_A500С",
+      "material_name": "Арматура A500С",
+      "material_norm_name": "ГОСТ 34028-2016 Арматура класса А500С",
+      "status": "ok",
+      "confidence": 1.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "4",
+        "snippet": "Арматура класса А500С, А240 по ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "№ 10332",
+          "doc_date": "29.07.2025",
+          "volume": "68,912 т",
+          "manufacturer": "Акционерное общество \"ПромСорт-Урал\"",
+          "issuer": "ПромСорт-Урал",
+          "file_ref": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+          "file_doc_id": "DOC-57C259DF4F8F",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+            "doc_id": "DOC-57C259DF4F8F",
+            "page": "1",
+            "snippet": "Прокат арматурный свариваемый... A500C 68,912 т... ГОСТ 34028-2016"
+          }
+        },
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "8170",
+          "doc_date": "04.06.2025",
+          "volume": "needs_extraction",
+          "manufacturer": "АО \"ПромСорт-Урал\"",
+          "issuer": "АО \"ПромСорт-Урал\"",
+          "file_ref": "01_input/02_quality_docs/№1.2 Сертификат качества №8170 8А500.pdf",
+          "file_doc_id": "DOC-F9F722B9D9FE",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.2 Сертификат качества №8170 8А500.pdf",
+            "doc_id": "DOC-F9F722B9D9FE",
+            "page": "1",
+            "snippet": "ПРОКАТ АРМАТУРНЫЙ ДЛЯ ЖЕЛЕЗОБЕТОННЫХ КОНСТРУКЦИЙ МОТОК 8 А500С ГОСТ 34028-2016"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "armat_A240",
+      "material_name": "Арматура A240",
+      "material_norm_name": "ГОСТ 34028-2016 Арматура класса А240",
+      "status": "ok",
+      "confidence": 1.0,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "3",
+        "snippet": "Арматура класса А500С, А240 по ГОСТ 34028-2016"
+      },
+      "docs": [
+        {
+          "doc_kind": "Сертификат качества",
+          "doc_number": "№ 8170",
+          "doc_date": "04.06.2025",
+          "volume": "31720 кг",
+          "manufacturer": "АО \"ПромСорт-Урал\"",
+          "issuer": "АО \"ПромСорт-Урал\"",
+          "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+          "file_doc_id": "DOC-B8B68980EA66",
+          "status": "ok",
+          "confidence": 1.0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+            "doc_id": "DOC-B8B68980EA66",
+            "page": "1",
+            "snippet": "Прокат арматурный для железобетонных конструкций Моток 6-А240 ГОСТ 34028-2016... вес 31720 кг"
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "electrodes_E50",
+      "material_name": "Электроды типа Э50",
+      "material_norm_name": "ГОСТ 9467-75 Электроды покрытые металлические для ручной дуговой сварки, тип Э50",
+      "status": "ok",
+      "confidence": 0.9,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "3",
+        "snippet": "Сварку ручную электродуговую производить согласно ГОСТ 5264-80 и ГОСТ14098-2014 электродами типа Э50 ГОСТ 9467-75"
+      },
+      "docs": [
+        {
+          "doc_kind": "не найдено",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "не найдено",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.7 Док о кач Проволока 144347.pdf",
+          "file_doc_id": "DOC-2BF5B48FD6F2",
+          "status": "blocked_missing_source",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.7 Док о кач Проволока 144347.pdf",
+            "doc_id": "DOC-2BF5B48FD6F2",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "primer_GF-021",
+      "material_name": "Грунтовка ГФ-021",
+      "material_norm_name": "ГОСТ 25129-2020 Грунтовка ГФ-021",
+      "status": "ok",
+      "confidence": 0.9,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "3",
+        "snippet": "Открытые участки металлических элементов грунтовать...грунт Г Ф-021 по ГОСТ 25129-2020..."
+      },
+      "docs": [
+        {
+          "doc_kind": "не найдено",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "не найдено",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf",
+          "file_doc_id": "DOC-A4DAFFCE79C8",
+          "status": "blocked_missing_source",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf",
+            "doc_id": "DOC-A4DAFFCE79C8",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    },
+    {
+      "material_id": "enamel_PF-115",
+      "material_name": "Эмаль ПФ-115",
+      "material_norm_name": "ГОСТ 6465-76 Эмаль ПФ-115",
+      "status": "ok",
+      "confidence": 0.9,
+      "source": {
+        "file": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+        "doc_id": "DOC-075A2834D9FC",
+        "page": "3",
+        "snippet": "Открытые участки металлических элементов покрыть эмалью...эмаль ПФ-115 по ГОСТ 6465-76"
+      },
+      "docs": [
+        {
+          "doc_kind": "не найдено",
+          "doc_number": "не найдено",
+          "doc_date": "не найдено",
+          "volume": "не найдено",
+          "manufacturer": "не найдено",
+          "issuer": "не найдено",
+          "file_ref": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+          "file_doc_id": "DOC-57C259DF4F8F",
+          "status": "blocked_missing_source",
+          "confidence": 0,
+          "source": {
+            "file": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+            "doc_id": "DOC-57C259DF4F8F",
+            "page": "1",
+            "snippet": ""
+          }
+        }
+      ]
+    }
+  ],
+  "agent_comments": [
+    {
+      "comment": "Проектная документация по визуальному анализу содержит технические решения для монолитных железобетонных конструкций, с применением бетона класса не ниже B25, арматуры классов A240, A500S по ГОСТ 34028-2016.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": ""
+      }
+    },
+    {
+      "comment": "В файлах №1.2 Сертификат качества №8170 8А500.pdf, №1.7 Док о кач Проволока 144347.pdf, №3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf отсутствует извлеченная информация по материалам из project_materials_json.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": ""
+      }
+    },
+    {
+      "comment": "Документы для материалов electricals, primers и enamels в проекте не обнаружены, выставлен статус blocked_missing_source.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": ""
+      }
+    },
+    {
+      "comment": "Документ №1.1 Сертификат качества №8170 6А240.pdf не содержит распознанного текста, данные не извлечены.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": "No text could be parsed from document"
+      }
+    },
+    {
+      "comment": "Документ №1.3 Сертификат качества №10332 10А500.pdf не содержит распознанного текста, данные не извлечены.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+        "doc_id": "DOC-57C259DF4F8F",
+        "page": "1",
+        "snippet": "No text could be parsed from document"
+      }
+    },
+    {
+      "comment": "Документы №3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf и №3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf сохранены с извлечёнными частичными данными.",
+      "source": {
+        "file": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+        "doc_id": "DOC-9E11A6E6213B",
+        "page": "2",
+        "snippet": "Извлечены данные о бетоне и объемах из текста"
+      }
+    },
+    {
+      "comment": "Документ №1.7 Док о кач Проволока 144347.pdf содержит только одностраничное качество проволоки, данные извлечены частично.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.7 Док о кач Проволока 144347.pdf",
+        "doc_id": "DOC-2BF5B48FD6F2",
+        "page": "1",
+        "snippet": "Документ о качестве проволоки с названием и назначением"
+      }
+    },
+    {
+      "comment": "Пост-валидация Process 2: remap file_ref=3, добавлено синтетических docs для покрытия файлов=0.",
+      "source": {
+        "file": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+        "doc_id": "DOC-B8B68980EA66",
+        "page": "1",
+        "snippet": ""
+      }
+    }
+  ],
+  "agent_file_coverage": [
+    {
+      "doc_id": "DOC-075A2834D9FC",
+      "file_ref": "01_input/01_project/10.4. 218-4-24-КЖ2.1.В_06.02.2025.pdf",
+      "pages_total": 19,
+      "pages_checked": "all",
+      "status": "ok",
+      "notes": "Полное покрытие по всем страницам проекта"
+    },
+    {
+      "doc_id": "DOC-B8B68980EA66",
+      "file_ref": "01_input/02_quality_docs/№1.1 Сертификат качества №8170 6А240.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Сертификат арматуры 6А240, ГОСТ 34028-2016"
+    },
+    {
+      "doc_id": "DOC-F9F722B9D9FE",
+      "file_ref": "01_input/02_quality_docs/№1.2 Сертификат качества №8170 8А500.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Сертификат качества 8А500, информация не извлечена по проекту"
+    },
+    {
+      "doc_id": "DOC-57C259DF4F8F",
+      "file_ref": "01_input/02_quality_docs/№1.3 Сертификат качества №10332 10А500.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Сертификат качества арматура 10А500, ГОСТ 34028-2016"
+    },
+    {
+      "doc_id": "DOC-2BF5B48FD6F2",
+      "file_ref": "01_input/02_quality_docs/№1.7 Док о кач Проволока 144347.pdf",
+      "pages_total": 1,
+      "pages_checked": "1",
+      "status": "ok",
+      "notes": "Документ качества проволоки, не обработан для проекта"
+    },
+    {
+      "doc_id": "DOC-9E11A6E6213B",
+      "file_ref": "01_input/02_quality_docs/№3.1 Паспорт №17-016 от 17.01.2026 = 9м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Паспорт качества бетонной смеси B25, F200"
+    },
+    {
+      "doc_id": "DOC-A4DAFFCE79C8",
+      "file_ref": "01_input/02_quality_docs/№3.2 Паспорт №20-004 от 20.01.2026 =12м3.pdf",
+      "pages_total": 2,
+      "pages_checked": "1-2",
+      "status": "ok",
+      "notes": "Паспорт качества бетонной смеси, информация не извлечена для проекта"
+    }
+  ]
+}
