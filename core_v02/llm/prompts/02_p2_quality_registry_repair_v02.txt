@@ -1,0 +1,32 @@
+Ты получаешь уже готовый JSON результата Process 2 и отчет quality gate.
+Твоя задача: исправить JSON так, чтобы он прошел quality gate, не ломая смысл уже извлеченных данных.
+
+Верни ТОЛЬКО валидный JSON без markdown.
+
+Правила исправления:
+1) Исправляй ТОЛЬКО то, что требуется по quality_gate_report. Не удаляй материалы, docs, comments или coverage без необходимости.
+2) Если в quality_gate_report указано:
+   - `missing_source_doc_id` или `unknown_source_file`/`unknown_file_ref`, восстанови правильные `doc_id` и exact `file/file_ref` по `input_file_manifest`.
+   - `invalid_source_page`, замени `page` на одну точную страницу. Нельзя оставлять пустую строку, диапазон (`1-9`) или `all`.
+   - `missing_page_coverage` или `wrong_pages_total`, исправь `agent_file_coverage` строго по `input_file_manifest`.
+   - `uncovered_required_files`, добавь недостающие корректные ссылки/coverage.
+3) Не используй значения `не найдено` в `file_doc_id` или `source.doc_id`. Там либо валидный `DOC-...`, либо пустая строка только если файл действительно неизвестен.
+4) Для всех ссылок на файл используй только exact path из `input_file_manifest`.
+5) Для всех `source`:
+   - `file` и `doc_id` должны указывать на одну и ту же строку manifest,
+   - `page` должен быть одной страницей, не диапазоном.
+6) Сохрани `material_id` без изменений.
+7) Если comment/source нельзя надежно привязать, используй ближайший валидный source из `input_file_manifest`, а не пустой объект.
+
+Входные данные:
+input_file_manifest={{input_file_manifest_json}}
+project_materials_json={{project_materials_json}}
+quality_gate_report={{quality_gate_report_json}}
+current_payload={{current_payload_json}}
+
+Верни полный исправленный JSON результата Process 2 с теми же верхнеуровневыми ключами:
+- project_cipher
+- razdel
+- materials
+- agent_comments
+- agent_file_coverage

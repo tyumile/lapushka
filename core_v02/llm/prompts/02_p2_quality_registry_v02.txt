@@ -88,8 +88,10 @@ File identity rules:
 - Use `input_file_manifest` as the only source of truth for file identity.
 - For every docs[] entry include `file_doc_id`.
 - For every `source` include `doc_id`.
+- Do not rely on file name alone: every file reference is valid only when `file_ref/source.file` and `file_doc_id/source.doc_id` match the same manifest row.
 - `source.file` and `file_ref` must match the exact path from input_file_manifest.
 - Prefer matching by `doc_id`; never invent or normalize file names.
+- For every `source.page`, return an exact page number from the source document.
 
 Page coverage rules:
 - Add top-level `agent_file_coverage`.

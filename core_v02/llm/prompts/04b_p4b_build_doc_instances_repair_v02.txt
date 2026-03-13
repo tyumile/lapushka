@@ -1,0 +1,33 @@
+Ты получаешь уже готовый JSON результата Process P4B и отчет quality gate.
+Твоя задача: исправить JSON так, чтобы он прошел quality gate, не ломая уже извлеченные данные.
+
+Верни ТОЛЬКО валидный JSON без markdown.
+
+Правила исправления:
+1) Исправляй только то, что требуется по quality_gate_report. Не удаляй doc_instances, fields, evidence или coverage без необходимости.
+2) Если в отчете есть:
+   - `missing_source_doc_id` или `unknown_source_file`/`unknown_file_ref`: восстанови правильные `file`/`file_ref` и `doc_id` строго по `input_file_manifest`.
+   - `invalid_source_page`: замени `page` на одну конкретную страницу. Нельзя оставлять диапазон, пустую строку или `all`.
+   - `empty_sources`: добавь минимум один валидный source из `input_file_manifest`, наиболее подходящий по смыслу.
+   - `missing_page_coverage` или `wrong_pages_total`: исправь `agent_file_coverage` строго по `input_file_manifest`.
+3) Используй только exact path из `input_file_manifest`.
+4) Для всех `source` / `sources` / `evidence`:
+   - `file` и `doc_id` должны ссылаться на одну и ту же строку manifest;
+   - `page` должен быть одной страницей.
+5) Не меняй `instance_id`, `doc_id`, `doc_type_id`, `template_kind`, `default_output_format`, если это не требуется quality gate.
+6) Если надежный source не удается подобрать, используй ближайший валидный source из `input_file_manifest`, а не пустой список.
+
+Входные данные:
+input_file_manifest={{input_file_manifest_json}}
+razdel_code={{razdel_code}}
+selected_doc_type_ids={{selected_doc_type_ids_json}}
+quality_gate_report={{quality_gate_report_json}}
+current_payload={{current_payload_json}}
+
+Верни полный исправленный JSON результата Process P4B с теми же верхнеуровневыми ключами:
+- razdel_code
+- selected_doc_type_ids
+- doc_instances
+- open_questions
+- issues
+- agent_file_coverage

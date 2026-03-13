@@ -1,5 +1,81 @@
 {% extends "base_v02.html" %}
 {% block title %}Документы качества{% endblock %}
+{% block page_shell_class %}quality-page-shell{% endblock %}
+{% block page_content_class %}quality-page-card{% endblock %}
+{% block extra_head %}
+<style>
+  .quality-page-shell {
+    width: calc(100vw - 24px);
+    max-width: none;
+  }
+
+  .quality-page-card {
+    overflow-x: auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .quality-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .quality-table th,
+  .quality-table td {
+    vertical-align: top;
+  }
+
+  .quality-table input[type="text"] {
+    min-width: 0;
+  }
+
+  .quality-table .col-material {
+    width: 30%;
+  }
+
+  .quality-table .col-doc-kind {
+    width: 22%;
+  }
+
+  .quality-table .col-doc-number {
+    width: 8%;
+  }
+
+  .quality-table .col-doc-date {
+    width: 8%;
+  }
+
+  .quality-table .col-manufacturer {
+    width: 10%;
+  }
+
+  .quality-table .col-issuer {
+    width: 10%;
+  }
+
+  .quality-table .col-volume {
+    width: 5%;
+  }
+
+  .quality-table .col-file {
+    width: 4%;
+  }
+
+  .quality-table .col-status {
+    width: 3%;
+  }
+
+  @media (max-width: 768px) {
+    .quality-page-shell {
+      width: 100%;
+    }
+
+    .quality-table {
+      min-width: 1120px;
+    }
+  }
+</style>
+{% endblock %}
 {% block content %}
 <h2>2. Документы качества</h2>
 <p><a href="/start/?project_id={{ project_id }}">Вернуться к шагу 1</a></p>
@@ -85,7 +161,18 @@
   <input type="hidden" name="action" value="save_quality_edits" />
   <p><strong>Общий комментарий для исправления агентом</strong></p>
   <textarea name="general_comment" rows="3" style="width:100%;" placeholder="Что нужно учесть при повторном запуске Process 2">{{ quality_general_comment }}</textarea>
-  <table>
+  <table class="quality-table">
+    <colgroup>
+      <col class="col-material" />
+      <col class="col-doc-kind" />
+      <col class="col-doc-number" />
+      <col class="col-doc-date" />
+      <col class="col-manufacturer" />
+      <col class="col-issuer" />
+      <col class="col-volume" />
+      <col class="col-file" />
+      <col class="col-status" />
+    </colgroup>
     <thead>
       <tr>
         <th>Материал</th><th>Вид документа</th><th>Номер</th><th>Дата</th>
@@ -94,7 +181,7 @@
     </thead>
     <tbody>
       {% for row in rows %}
-      <tr class="{% if row.status == 'blocked_missing_source' or row.status == 'needs_extraction' %}warn{% endif %}">
+      <tr class="{% if row.status == 'warn' %}warn{% endif %}">
         <td><input class="value-tooltip" type="text" name="material_name_{{ forloop.counter0 }}" value="{{ row.material_name }}" title="{{ row.material_name }}" /></td>
         <td><input class="value-tooltip" type="text" name="doc_kind_{{ forloop.counter0 }}" value="{{ row.doc_kind }}" title="{{ row.doc_kind }}" /></td>
         <td><input class="value-tooltip" type="text" name="doc_number_{{ forloop.counter0 }}" value="{{ row.doc_number }}" title="{{ row.doc_number }}" /></td>
@@ -103,8 +190,8 @@
         <td><input class="value-tooltip" type="text" name="issuer_{{ forloop.counter0 }}" value="{{ row.issuer }}" title="{{ row.issuer }}" /></td>
         <td><input class="value-tooltip" type="text" name="volume_{{ forloop.counter0 }}" value="{{ row.volume }}" title="{{ row.volume }}" /></td>
         <td>
-          {% if row.file_ref %}
-            <a href="{% url 'v02_input_file' project_id=project_id relative_path=row.file_ref %}" target="_blank" rel="noopener noreferrer">Документ</a>
+          {% if row.file.file_ref %}
+            <a href="{% url 'v02_input_file' project_id=project_id relative_path=row.file.file_ref %}" target="_blank" rel="noopener noreferrer">Документ</a>
           {% else %}
             —
           {% endif %}
@@ -119,12 +206,12 @@
 </form>
 <p id="status_quality_fix" class="muted">Статус кнопки "Исправить": {{ ui_status.save_quality_edits.message|default:"еще не использовалась" }}</p>
 
-<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Переход..." data-status-target="status_quality_next" data-running-text="Статус кнопки \"Далее\": выполняется...">
+<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Запускается..." data-status-target="status_quality_next" data-running-text="Статус запуска Process P4B: выполняется...">
   {% csrf_token %}
   <input type="hidden" name="action" value="next_to_doc_types" />
-  <button type="submit">Далее</button>
+  <button type="submit">Сформировать план документов (все типы)</button>
 </form>
-<p id="status_quality_next" class="muted">Статус кнопки "Далее": {{ ui_status.next_to_doc_types.message|default:"ожидание" }}</p>
+<p id="status_quality_next" class="muted">Статус запуска Process P4B: {{ ui_status.next_to_doc_types.message|default:"ожидание" }}</p>
 {% endif %}
 
 <script>
@@ -175,13 +262,13 @@
   };
 
   const bindValueTooltips = () => {
-    document.querySelectorAll("input.value-tooltip").forEach((input) => {
+    document.querySelectorAll(".value-tooltip").forEach((field) => {
       const syncTitle = () => {
-        input.title = input.value || "";
+        field.title = field.value || "";
       };
       syncTitle();
-      input.addEventListener("input", syncTitle);
-      input.addEventListener("change", syncTitle);
+      field.addEventListener("input", syncTitle);
+      field.addEventListener("change", syncTitle);
     });
   };
 

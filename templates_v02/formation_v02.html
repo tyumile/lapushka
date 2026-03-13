@@ -3,34 +3,169 @@
 {% block content %}
 <h2>4. Формирование документов</h2>
 
-<form method="post" id="editForm" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_save_doc_list_edits" data-running-text="Статус кнопки \"Исправить\": выполняется...">
-  {% csrf_token %}
-  <input type="hidden" name="action" value="save_doc_list_edits" />
-  <input type="hidden" name="rows_order" id="rows_order" />
-  <table id="docsTable">
-    <thead><tr><th></th><th>Doc ID</th><th>Номер</th><th>Название</th><th>Статус</th></tr></thead>
-    <tbody>
-      {% for row in rows %}
-      <tr draggable="true" data-idx="{{ forloop.counter0 }}">
-        <td>::</td>
-        <td>{{ row.doc_id }}</td>
-        <td><input type="text" name="doc_number_suggestion_{{ forloop.counter0 }}" value="{{ row.doc_number_suggestion }}" /></td>
-        <td><input type="text" name="doc_name_{{ forloop.counter0 }}" value="{{ row.doc_name }}" style="width: 420px;" /></td>
-        <td>{{ row.status }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <button type="submit">Исправить</button>
-</form>
+<div class="btn-row">
+  <form method="post" data-disable-on-submit="true" data-busy-text="Сохраняется..." data-status-target="status_save_doc_list_edits" data-running-text="Статус кнопки \"Исправить\": выполняется..." id="formationSaveForm">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="save_doc_list_edits" />
+    <input type="hidden" name="rows_order" id="rows_order" />
+    <button type="submit">Исправить</button>
+  </form>
+  <form method="post" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p5" data-running-text="Статус Process 5: выполняется...">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="run_p5" />
+    <button type="submit">Сформировать документы</button>
+  </form>
+</div>
 <p id="status_save_doc_list_edits" class="muted">Статус кнопки "Исправить": {{ ui_status.save_doc_list_edits.message|default:"еще не использовалась" }}</p>
-
-<form method="post" style="margin-top:10px;" data-disable-on-submit="true" data-busy-text="Выполняется..." data-status-target="status_run_p5" data-running-text="Статус Process 5: выполняется...">
-  {% csrf_token %}
-  <input type="hidden" name="action" value="run_p5" />
-  <button type="submit">Сформировать документы</button>
-</form>
 <p id="status_run_p5" class="muted">Статус Process 5: {{ ui_status.run_p5.message|default:"еще не запускался" }}</p>
+
+{% if instances %}
+<style>
+  .doc-card {
+    border: 1px solid #cfd8e3;
+    border-radius: 12px;
+    background: #f8fbff;
+    margin: 14px 0;
+    padding: 10px 14px;
+  }
+  .doc-card > summary {
+    cursor: pointer;
+    font-weight: 700;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .doc-card > summary::-webkit-details-marker {
+    display: none;
+  }
+  .doc-meta {
+    color: #667085;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .doc-fields {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: #fff;
+  }
+  .doc-fields th, .doc-fields td {
+    border: 1px solid #e4e7ec;
+    padding: 8px;
+    vertical-align: top;
+  }
+  .doc-fields th {
+    width: 320px;
+    background: #f8fafc;
+    text-align: left;
+    font-weight: 600;
+  }
+  .doc-fields input, .doc-fields textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .doc-fields textarea {
+    min-height: 120px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .inner-fields {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .inner-fields th, .inner-fields td {
+    border: 1px solid #e4e7ec;
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+  .inner-fields th {
+    background: #f8fafc;
+    font-weight: 600;
+  }
+  .field-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+</style>
+
+<div id="docBlocks">
+  {% for inst in instances %}
+  <details class="doc-card" data-idx="{{ inst.row_idx }}">
+    <summary>
+      <span>{{ inst.doc_number|default:"б/н" }} - {{ inst.doc_name|default:"(без названия)" }}</span>
+      <span class="doc-meta">{{ inst.overall_status }}</span>
+    </summary>
+    <table class="doc-fields">
+      <tbody>
+        <tr>
+          <th>Doc type</th>
+          <td>{{ inst.doc_type_id }}</td>
+        </tr>
+        <tr>
+          <th>Название документа</th>
+          <td><input form="formationSaveForm" type="text" name="doc_name_{{ inst.row_idx }}" value="{{ inst.doc_name }}" /></td>
+        </tr>
+        <tr>
+          <th>Номер документа</th>
+          <td><input form="formationSaveForm" type="text" name="doc_number_suggestion_{{ inst.row_idx }}" value="{{ inst.doc_number }}" /></td>
+        </tr>
+        <tr>
+          <th>Multiplier axis</th>
+          <td><input form="formationSaveForm" type="text" name="mult_axis_{{ inst.row_idx }}" value="{{ inst.multiplier.axis }}" /></td>
+        </tr>
+        <tr>
+          <th>Multiplier label</th>
+          <td><input form="formationSaveForm" type="text" name="mult_label_{{ inst.row_idx }}" value="{{ inst.multiplier.label }}" /></td>
+        </tr>
+        <tr>
+          <th>Work scope (JSON)</th>
+          <td><textarea form="formationSaveForm" name="work_scope_{{ inst.row_idx }}">{{ inst.work_scope_text }}</textarea></td>
+        </tr>
+        <tr>
+          <th>Поля документа</th>
+          <td>
+            {% if inst.fields_rows %}
+            <table class="inner-fields">
+              <thead>
+                <tr>
+                  <th>Поле</th>
+                  <th>Значение</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for f in inst.fields_rows %}
+                <tr>
+                  <td>{{ f.label }}</td>
+                  <td>
+                    {% if f.is_multiline %}
+                    <textarea class="field-value" form="formationSaveForm" name="field_value_{{ inst.row_idx }}_{{ forloop.counter0 }}">{{ f.value_text }}</textarea>
+                    {% else %}
+                    <input class="field-value" form="formationSaveForm" type="text" name="field_value_{{ inst.row_idx }}_{{ forloop.counter0 }}" value="{{ f.value_text }}" />
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <span class="muted">Поля не заполнены.</span>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>User note</th>
+          <td><textarea form="formationSaveForm" name="user_note_{{ inst.row_idx }}" rows="3">{{ inst.user_note }}</textarea></td>
+        </tr>
+      </tbody>
+    </table>
+  </details>
+  {% endfor %}
+</div>
+{% else %}
+<p>План пока не построен.</p>
+{% endif %}
+
 {% if p4_comments %}
 <h3>Комментарии агента Process 4 (из файлов)</h3>
 <ul>
@@ -72,26 +207,11 @@
 
 <script>
 (() => {
-  const table = document.getElementById("docsTable");
-  if (!table) return;
-  let dragEl = null;
-  table.querySelectorAll("tbody tr").forEach((row) => {
-    row.addEventListener("dragstart", () => { dragEl = row; });
-    row.addEventListener("dragover", (e) => e.preventDefault());
-    row.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (!dragEl || dragEl === row) return;
-      const tbody = table.querySelector("tbody");
-      const rows = Array.from(tbody.children);
-      if (rows.indexOf(dragEl) < rows.indexOf(row)) {
-        tbody.insertBefore(dragEl, row.nextSibling);
-      } else {
-        tbody.insertBefore(dragEl, row);
-      }
-    });
-  });
-  document.getElementById("editForm").addEventListener("submit", () => {
-    const order = Array.from(table.querySelectorAll("tbody tr")).map((r) => r.dataset.idx).join(",");
+  const blocks = document.getElementById("docBlocks");
+  const form = document.getElementById("formationSaveForm");
+  if (!blocks || !form) return;
+  form.addEventListener("submit", () => {
+    const order = Array.from(blocks.querySelectorAll(".doc-card")).map((r) => r.dataset.idx).join(",");
     document.getElementById("rows_order").value = order;
   });
 })();

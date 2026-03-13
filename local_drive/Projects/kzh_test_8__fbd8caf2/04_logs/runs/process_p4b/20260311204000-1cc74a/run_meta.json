@@ -1,7 +1,0 @@
-{
-  "process": "process_p4b",
-  "model": "gpt-4.1-mini",
-  "success": true,
-  "mock_mode": false,
-  "excluded": []
-}

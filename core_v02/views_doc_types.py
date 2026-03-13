@@ -14,6 +14,9 @@ def _as_dict(payload) -> dict:
 
 
 def doc_types_view(request, project_id: str):
+    if request.method == "GET":
+        return redirect("v02_formation", project_id=project_id)
+
     quality_final = _as_dict(read_processing(project_id, "p2_quality_registry_final.json", {}))
     p4_v1 = _as_dict(read_processing(project_id, "p4b_doc_instances_v1.json", read_processing(project_id, "p4_doc_list_v1.json", {})))
     razdel_code = ((quality_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
@@ -60,16 +63,5 @@ def doc_types_view(request, project_id: str):
                 return redirect("v02_formation", project_id=project_id)
             return redirect("v02_formation", project_id=project_id)
 
-    set_project_step(project_id, 3)
-    return render(
-        request,
-        "doc_types_v02.html",
-        {
-            **common_context(project_id),
-            "quality_final": quality_final,
-            "p4_comments": p4_v1.get("agent_comments") or [],
-            "razdel_code": razdel_code,
-            "doc_types": get_doc_types(razdel_code),
-            "files_map": list_uploaded_files(project_id),
-        },
-    )
+    set_project_step(project_id, 4)
+    return redirect("v02_formation", project_id=project_id)

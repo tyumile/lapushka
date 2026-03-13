@@ -199,6 +199,70 @@ class ResponsesClientV02:
                 time.sleep(pause)
         raise ValueError(f"Model returned invalid JSON after retries: {last_raw[:2000]}")
 
+    def call_json_text(
+        self,
+        *,
+        instructions: str,
+        user_text: str,
+        model: str,
+        timeout_s: int = 120,
+    ) -> tuple[dict, str]:
+        pauses = _retry_pauses_from_env("OPENAI_CALL_RETRY_PAUSES", "1,2,4,8,16,24")
+        last_raw = ""
+        for i, pause in enumerate(pauses, start=1):
+            try:
+                raw = self._request_text(
+                    instructions=instructions,
+                    user_text=user_text if i == 1 else (user_text + "\n\nReturn valid JSON only."),
+                    model=model,
+                    timeout_s=timeout_s,
+                )
+            except (APIConnectionError, APIStatusError, RateLimitError) as e:
+                last_raw = str(e)
+                if i < len(pauses):
+                    if callable(self._on_retry):
+                        try:
+                            self._on_retry(
+                                {
+                                    "kind": "call",
+                                    "attempt": i,
+                                    "next_pause_s": pause,
+                                    "error": str(e)[:300],
+                                    "model": model,
+                                }
+                            )
+                        except Exception:
+                            pass
+                    time.sleep(pause)
+                    continue
+                raise
+            except Exception as e:
+                last_raw = str(e)
+                if _is_connection_like_error(e) and i < len(pauses):
+                    if callable(self._on_retry):
+                        try:
+                            self._on_retry(
+                                {
+                                    "kind": "call",
+                                    "attempt": i,
+                                    "next_pause_s": pause,
+                                    "error": str(e)[:300],
+                                    "model": model,
+                                }
+                            )
+                        except Exception:
+                            pass
+                    time.sleep(pause)
+                    continue
+                raise
+            last_raw = raw
+            parsed = _parse_json_or_none(raw)
+            if parsed is not None:
+                return parsed, raw
+            if i < len(pauses):
+                time.sleep(pause)
+        raise ValueError(f"Model returned invalid JSON after retries: {last_raw[:2000]}")
+
     def _request_with_files(
         self,
         *,
@@ -214,5 +278,20 @@ class ResponsesClientV02:
             model=model,
             instructions=instructions,
             input=[{"role": "user", "content": content}],
+        )
+        return _extract_output_text(response)
+
+    def _request_text(
+        self,
+        *,
+        instructions: str,
+        user_text: str,
+        model: str,
+        timeout_s: int,
+    ) -> str:
+        response = self._client(timeout_s=timeout_s).responses.create(
+            model=model,
+            instructions=instructions,
+            input=[{"role": "user", "content": [{"type": "input_text", "text": user_text}]}],
         )
         return _extract_output_text(response)

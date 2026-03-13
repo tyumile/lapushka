@@ -362,6 +362,8 @@ input_file_manifest={{input_file_manifest_json}}
 For every `source` / `sources[]` / `evidence[]` / `presence_evidence[]` / `multiplier_evidence.sources[]`:
 - use exact `file` from input_file_manifest
 - include `doc_id` from input_file_manifest
+- each reference is valid only when `file` and `doc_id` point to the same manifest row
+- `page` must be an exact page number from that file
 - do not invent, rename, shorten, transliterate, or normalize file names
 
 Add top-level `agent_file_coverage`:

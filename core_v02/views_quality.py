@@ -4,10 +4,12 @@ from pathlib import Path
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+from .services.dictionary_service import get_doc_types
 from .services.edit_logs import append_quality_edit_log, quality_row_key
 from .services.io_utils import read_processing
 from .services.process_p2_feedback_rule_miner import run_process_p2_feedback_rule_miner
 from .services.process_p2_quality_registry import run_process_p2
+from .services.process_p4b_build_doc_plan import run_process_p4b_build_doc_plan
 from .services.project_storage import (
     list_uploaded_files,
     load_project_meta,
@@ -31,27 +33,69 @@ def _from_ui_value(value: str) -> str:
     return "needs_extraction" if (value or "").strip().lower() == UI_NOT_FOUND else value
 
 
+def _doc_quality_score(doc: dict) -> tuple[int, int, int]:
+    status = str(doc.get("status", ""))
+    file_ref = 1 if doc.get("file_ref") else 0
+    extracted = 0
+    for key in ("doc_kind", "doc_number", "doc_date", "manufacturer", "issuer", "volume"):
+        value = str(doc.get(key, "") or "").strip()
+        if value and value != "needs_extraction" and value != "не найдено":
+            extracted += 1
+    status_rank = 2 if status == "ok" else 1 if status == "needs_extraction" else 0
+    return (status_rank, file_ref, extracted)
+
+
+def _select_primary_doc(docs: list[dict]) -> tuple[int, dict]:
+    if not docs:
+        return -1, {}
+    best_idx = 0
+    best_doc = docs[0]
+    best_score = _doc_quality_score(best_doc)
+    for idx, doc in enumerate(docs[1:], start=1):
+        score = _doc_quality_score(doc)
+        if score > best_score:
+            best_idx = idx
+            best_doc = doc
+            best_score = score
+    return best_idx, best_doc
+
+
+def _primary_doc_value(doc: dict, key: str, default: str = "") -> str:
+    raw = doc.get(key, default)
+    if raw in (None, ""):
+        raw = default
+    return _to_ui_value(str(raw))
+
+
 def _flatten_quality_rows(payload: dict) -> list[dict]:
     rows: list[dict] = []
     for material in payload.get("materials") or []:
         m_norm = material.get("material_norm_name") or ""
-        for doc in material.get("docs") or []:
-            rows.append(
-                {
-                    "material_id": material.get("material_id"),
-                    "material_name": material.get("material_name"),
-                    "material_norm_name": m_norm,
-                    "doc_kind": _to_ui_value(doc.get("doc_kind", "")),
-                    "doc_number": _to_ui_value(doc.get("doc_number", "б/н")),
-                    "doc_date": _to_ui_value(doc.get("doc_date", "б/д")),
-                    "volume": _to_ui_value(doc.get("volume", "needs_extraction")),
-                    "manufacturer": _to_ui_value(doc.get("manufacturer", "")),
-                    "issuer": _to_ui_value(doc.get("issuer", "")),
-                    "file_ref": doc.get("file_ref", ""),
-                    "status": doc.get("status", "ok"),
-                    "status_display": _to_ui_value(doc.get("status", "ok")),
-                }
-            )
+        docs = material.get("docs") or []
+        primary_doc_index, primary_doc = _select_primary_doc(docs)
+        doc_statuses = [str(doc.get("status", "ok")) for doc in docs] or ["ok"]
+        rows.append(
+            {
+                "material_id": material.get("material_id"),
+                "material_name": material.get("material_name"),
+                "material_norm_name": m_norm,
+                "primary_doc_index": primary_doc_index,
+                "doc_kind": _primary_doc_value(primary_doc, "doc_kind", ""),
+                "doc_number": _primary_doc_value(primary_doc, "doc_number", "б/н"),
+                "doc_date": _primary_doc_value(primary_doc, "doc_date", "б/д"),
+                "volume": _primary_doc_value(primary_doc, "volume", "needs_extraction"),
+                "manufacturer": _primary_doc_value(primary_doc, "manufacturer", ""),
+                "issuer": _primary_doc_value(primary_doc, "issuer", ""),
+                "file": {
+                    "file_ref": primary_doc.get("file_ref", "")
+                    if str(primary_doc.get("status", "") or "").strip() not in {"blocked_missing_source", "needs_disambiguation"}
+                    else "",
+                    "label": primary_doc.get("doc_kind") or "Документ",
+                },
+                "status": "warn" if any(x in {"blocked_missing_source", "needs_extraction"} for x in doc_statuses) else "ok",
+                "status_display": _to_ui_value(str(primary_doc.get("status", "ok") or "ok")),
+            }
+        )
     return rows
 
 
@@ -217,18 +261,17 @@ def quality_view(request, project_id: str):
             _save_general_comment(project_id, general_comment)
             # Rebuild payload with edited values.
             final = dict(before)
-            pointer = 0
-            for material in final.get("materials") or []:
-                for doc in material.get("docs") or []:
-                    row = edited_rows[pointer]
-                    pointer += 1
-                    material["material_name"] = row.get("material_name", material.get("material_name"))
-                    for key in ("doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
-                        doc[key] = row.get(key, doc.get(key))
+            for material, row in zip(final.get("materials") or [], edited_rows):
+                docs = material.get("docs") or []
+                material["material_name"] = row.get("material_name", material.get("material_name"))
+                primary_doc_index = row.get("primary_doc_index", -1)
+                if not isinstance(primary_doc_index, int) or not (0 <= primary_doc_index < len(docs)):
+                    continue
+                primary_doc = docs[primary_doc_index]
+                for key in ("doc_kind", "doc_number", "doc_date", "volume", "manufacturer", "issuer"):
+                    primary_doc[key] = _from_ui_value(row.get(key, primary_doc.get(key, "")))
             save_processing_json(project_id, "p2_quality_registry_final.json", final)
             rules = _build_rules_from_edits(edits)
-            if general_comment:
-                rules.append(f"- Общий комментарий пользователя по исправлению реестра: {general_comment}")
             feedback_rules = _append_feedback_rules(project_id, rules)
             agent_rules: list[str] = []
             try:
@@ -239,7 +282,7 @@ def quality_view(request, project_id: str):
                     edits=edits,
                     quality_registry_before=before,
                     quality_registry_after=final,
-                    general_comment=general_comment,
+                    general_comment="",
                     existing_user_rules=feedback_rules,
                     existing_agent_rules=_load_agent_feedback_rules(project_id),
                 )
@@ -290,9 +333,34 @@ def quality_view(request, project_id: str):
             return redirect("v02_quality", project_id=project_id)
 
         if action == "next_to_doc_types":
-            set_action_status(project_id, "next_to_doc_types", "success", "Переход к шагу 3 выполнен.")
-            set_project_step(project_id, 3)
-            return redirect("v02_doc_types", project_id=project_id)
+            p2_final = read_processing(project_id, "p2_quality_registry_final.json", {})
+            razdel_code = ((p2_final.get("razdel") or {}).get("razdel_code") or "KJ").strip() or "KJ"
+            selected_doc_type_ids = [d.get("doc_type_id") for d in get_doc_types(razdel_code) if d.get("doc_type_id")]
+            if not selected_doc_type_ids:
+                set_action_status(project_id, "next_to_doc_types", "error", "Не найдены типы документов для автоматического запуска Process P4B.")
+                set_action_status(project_id, "run_p4b", "error", "Для раздела не найдено типов документов.")
+                messages.error(request, "Для раздела не найдено типов документов.")
+                return redirect("v02_quality", project_id=project_id)
+            set_action_status(project_id, "next_to_doc_types", "running", "Запускаем Process P4B со всеми типами документов...")
+            set_action_status(project_id, "run_p4b", "running", "Process P4B запущен...")
+            try:
+                _, payload, excluded = run_process_p4b_build_doc_plan(project_id, razdel_code, selected_doc_type_ids)
+                rows_count = len(payload.get("doc_instances") or [])
+                status_msg = f"Process P4B завершён. Инстансов: {rows_count}."
+                if excluded:
+                    for x in excluded:
+                        messages.warning(request, f"Исключён: {x['path']}. Причина: {x['reason'][:150]}...")
+                    status_msg += f" Исключено файлов: {len(excluded)}."
+                set_action_status(project_id, "run_p4b", "success", status_msg)
+                set_action_status(project_id, "next_to_doc_types", "success", "Process P4B выполнен, открыт план документов.")
+                set_project_step(project_id, 4)
+                messages.success(request, f"Сформирован план документов: {rows_count}")
+                return redirect("v02_formation", project_id=project_id)
+            except Exception as exc:
+                set_action_status(project_id, "run_p4b", "error", f"Process P4B завершился ошибкой: {exc}")
+                set_action_status(project_id, "next_to_doc_types", "error", f"Автозапуск Process P4B завершился ошибкой: {exc}")
+                messages.error(request, f"Process P4B ошибка: {exc}")
+                return redirect("v02_quality", project_id=project_id)
 
     p2_v1 = read_processing(project_id, "p2_quality_registry_v1.json", {})
     p2_final = read_processing(project_id, "p2_quality_registry_final.json", p2_v1)

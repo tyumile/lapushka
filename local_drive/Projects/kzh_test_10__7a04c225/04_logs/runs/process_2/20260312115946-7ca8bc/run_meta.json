@@ -1,9 +1,0 @@
-{
-  "process": "process_2",
-  "run_id": "20260312115946-7ca8bc",
-  "model": "gpt-4.1-mini",
-  "model_primary": "gpt-4.1-mini",
-  "model_fallback": "",
-  "started_at": "2026-03-12T12:01:09.657057",
-  "success": true
-}

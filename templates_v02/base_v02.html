@@ -274,9 +274,10 @@
       }
     }
   </style>
+  {% block extra_head %}{% endblock %}
   </head>
 <body>
-  <div class="page-shell">
+  <div class="page-shell {% block page_shell_class %}{% endblock %}">
     <header class="hero card">
       <div class="hero-title">
         <p class="hero-subtitle">Лапушка Профи</p>
@@ -290,8 +291,7 @@
       <div class="steps">
         <a class="step {% if meta.step == 1 %}active{% endif %}" href="{% url 'v02_start' %}?project_id={{ project_id }}">1. Начало</a>
         <a class="step {% if meta.step == 2 %}active{% endif %}" href="{% url 'v02_quality' project_id=project_id %}">2. Документы качества</a>
-        <a class="step {% if meta.step == 3 %}active{% endif %}" href="{% url 'v02_doc_types' project_id=project_id %}">3. Выбрать тип документов</a>
-        <a class="step {% if meta.step == 4 %}active{% endif %}" href="{% url 'v02_formation' project_id=project_id %}">4. Формирование документов</a>
+        <a class="step {% if meta.step == 4 %}active{% endif %}" href="{% url 'v02_formation' project_id=project_id %}">3. Формирование документов</a>
       </div>
       {% endif %}
     </header>
@@ -304,7 +304,7 @@
     </div>
     {% endif %}
 
-    <main class="page-content-card card">
+    <main class="page-content-card card {% block page_content_class %}{% endblock %}">
       {% block content %}{% endblock %}
     </main>
   </div>
@@ -333,4 +333,3 @@
   </script>
 </body>
 </html>
-

@@ -104,6 +104,21 @@ def match_manifest_row(file_ref: str, doc_id: str, indexes: dict) -> dict | None
     return None
 
 
+def match_manifest_row_strict(file_ref: str, doc_id: str, indexes: dict) -> dict | None:
+    file_value = norm_ref(file_ref)
+    doc_value = (doc_id or "").strip()
+    if doc_value:
+        row = (indexes.get("by_doc_id") or {}).get(doc_value)
+        if not row:
+            return None
+        if file_value and norm_ref(row.get("path", "")) != file_value:
+            return None
+        return row
+    if file_value:
+        return (indexes.get("by_path") or {}).get(file_value)
+    return None
+
+
 def parse_pages_checked(value, pages_total: int) -> set[int]:
     if value is None or value == "":
         return set()

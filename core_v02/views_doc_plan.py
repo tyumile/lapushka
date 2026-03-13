@@ -318,12 +318,101 @@ def _parse_json_or_keep(value: str, fallback):
         return fallback
 
 
+def _infer_value_kind(value) -> str:
+    if isinstance(value, bool):
+        return "bool"
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return "number"
+    if isinstance(value, (dict, list)):
+        return "json"
+    return "string"
+
+
+def _coerce_field_value(value: str, kind: str, fallback):
+    text = (value or "").strip()
+    if kind == "json":
+        return _parse_json_or_keep(text, fallback)
+    if kind == "number":
+        if not text:
+            return fallback
+        try:
+            return int(text) if text.isdigit() else float(text)
+        except ValueError:
+            return fallback
+    if kind == "bool":
+        if text.lower() in {"true", "1", "yes", "да"}:
+            return True
+        if text.lower() in {"false", "0", "no", "нет"}:
+            return False
+        return fallback
+    return value if value is not None else ""
+
+
 def _value_to_text(value) -> str:
     if value is None:
         return ""
     if isinstance(value, str):
         return value
     return json.dumps(value, ensure_ascii=False)
+
+
+def _field_label(path: str) -> str:
+    return (
+        path.replace("common.", "")
+        .replace("template_specific.data.", "")
+        .replace("template_specific.", "")
+        .replace(".", " / ")
+    )
+
+
+def _collect_editable_field_rows(node, prefix: str = "") -> list[dict]:
+    rows: list[dict] = []
+    if isinstance(node, dict):
+        if "value" in node and set(node.keys()) & {"status", "confidence", "sources"}:
+            value = node.get("value")
+            rows.append(
+                {
+                    "path": prefix,
+                    "label": _field_label(prefix),
+                    "value_text": _value_to_text(value),
+                    "value_kind": _infer_value_kind(value),
+                    "is_multiline": isinstance(value, (dict, list)) or len(_value_to_text(value)) > 120,
+                }
+            )
+            return rows
+        for key, value in node.items():
+            child_prefix = f"{prefix}.{key}" if prefix else key
+            rows.extend(_collect_editable_field_rows(value, child_prefix))
+        return rows
+    rows.append(
+        {
+            "path": prefix,
+            "label": _field_label(prefix),
+            "value_text": _value_to_text(node),
+            "value_kind": _infer_value_kind(node),
+            "is_multiline": isinstance(node, (dict, list)) or len(_value_to_text(node)) > 120,
+        }
+    )
+    return rows
+
+
+def _set_nested_field_value(target: dict, path: str, value) -> None:
+    parts = [part for part in (path or "").split(".") if part]
+    if not parts:
+        return
+    current = target
+    for key in parts[:-1]:
+        child = current.get(key)
+        if not isinstance(child, dict):
+            child = {}
+            current[key] = child
+        current = child
+    last = parts[-1]
+    leaf = current.get(last)
+    if isinstance(leaf, dict) and "value" in leaf:
+        leaf["value"] = value
+    else:
+        current[last] = value
 
 
 def _fields_filled_score(payload: dict) -> int:
@@ -429,6 +518,18 @@ def save_doc_plan_view(request, project_id: str):
         inst["multiplier"] = mult
         inst["work_scope"] = _parse_json_or_keep(request.POST.get(f"work_scope_{i}", ""), inst.get("work_scope") or [])
         inst["fields"] = _parse_json_or_keep(request.POST.get(f"fields_{i}", ""), inst.get("fields") or {})
+        field_rows = _collect_editable_field_rows(inst.get("fields") or {})
+        for field_idx, field_row in enumerate(field_rows):
+            posted_value = request.POST.get(f"field_value_{i}_{field_idx}")
+            if posted_value is None:
+                continue
+            current_fields = inst.get("fields") if isinstance(inst.get("fields"), dict) else {}
+            _set_nested_field_value(
+                current_fields,
+                field_row.get("path", ""),
+                _coerce_field_value(posted_value, field_row.get("value_kind", "string"), _parse_json_or_keep(field_row.get("value_text", ""), None)),
+            )
+            inst["fields"] = current_fields
         note = request.POST.get(f"user_note_{i}", "").strip()
         if note:
             inst["user_note"] = note
@@ -504,49 +605,9 @@ def doc_plan_view(request, project_id: str):
         inst["row_idx"] = idx
         inst["work_scope_text"] = json.dumps(inst.get("work_scope") or [], ensure_ascii=False, indent=2)
         inst["fields_text"] = json.dumps(inst.get("fields") or {}, ensure_ascii=False, indent=2)
-        fields_rows = []
         fields_obj = inst.get("fields") if isinstance(inst.get("fields"), dict) else {}
         fields_obj = _filter_fields_for_doc(inst, fields_obj)
-        for field_name, field_payload in fields_obj.items():
-            if isinstance(field_payload, dict):
-                sources = field_payload.get("sources")
-                if not isinstance(sources, list):
-                    source_single = field_payload.get("source")
-                    sources = [source_single] if isinstance(source_single, dict) else []
-                source_text = "; ".join(
-                    f"{(s.get('file') or '').strip()}:{s.get('page')}" if isinstance(s, dict) else str(s)
-                    for s in sources
-                )
-                fields_rows.append(
-                    {
-                        "name": field_name,
-                        "value": _value_to_text(field_payload.get("value")),
-                        "status": field_payload.get("status", ""),
-                        "confidence": field_payload.get("confidence", ""),
-                        "sources": source_text,
-                    }
-                )
-            else:
-                fields_rows.append(
-                    {
-                        "name": field_name,
-                        "value": _value_to_text(field_payload),
-                        "status": "",
-                        "confidence": "",
-                        "sources": "",
-                    }
-                )
-        inst["fields_rows"] = fields_rows
-    doc_type_groups = []
-    groups_map = {}
-    for inst in instances:
-        doc_type_id = (inst.get("doc_type_id") or "").strip() or "unknown"
-        group = groups_map.get(doc_type_id)
-        if group is None:
-            group = {"doc_type_id": doc_type_id, "instances": []}
-            groups_map[doc_type_id] = group
-            doc_type_groups.append(group)
-        group["instances"].append(inst)
+        inst["fields_rows"] = _collect_editable_field_rows(fields_obj)
     set_project_step(project_id, 4)
     return render(
         request,
@@ -555,11 +616,9 @@ def doc_plan_view(request, project_id: str):
             **common_context(project_id),
             "plan": final,
             "instances": instances,
-            "doc_type_groups": doc_type_groups,
             "open_questions": final.get("open_questions") or [],
             "issues": final.get("issues") or [],
             "excluded_files": excluded_data.get("excluded") or [],
             "p4_general_comment": _load_p4_general_comment(project_id),
         },
     )
-

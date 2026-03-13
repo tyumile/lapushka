@@ -15,11 +15,14 @@ from .llm_runtime import (
     TABLE_CONTEXT_PROMPT_NOTE,
     prepare_context_file_for_upload,
     resolve_openai_model,
+    run_llm_json_text_process,
 )
 from .quality_gate import run_quality_gate
 from .project_storage import persist_run_artifact, persist_run_json, project_root, save_processing_json
+from .ui_status import set_action_status
 
 EXCLUDED_REL = "01_input/099_excluded"
+P4B_GATE_REPAIR_ATTEMPTS = 3
 
 
 def _move_to_excluded(root: Path, path: Path, reason: str) -> Path:
@@ -158,6 +161,42 @@ def _normalize_doc_instance(inst: dict, idx: int) -> dict:
     return out
 
 
+def _flatten_razdel_instances(out: dict) -> None:
+    if not isinstance(out.get("razdels"), list):
+        return
+    top_doc_instances = out.get("doc_instances")
+    if isinstance(top_doc_instances, list) and top_doc_instances:
+        return
+
+    flat_instances: list[dict] = []
+    flat_open_questions: list[str] = list(out.get("open_questions") or [])
+    flat_issues: list[str] = list(out.get("issues") or [])
+
+    for razdel in out.get("razdels") or []:
+        if not isinstance(razdel, dict):
+            continue
+        for inst in razdel.get("doc_instances") or []:
+            if isinstance(inst, dict):
+                flat_instances.append(inst)
+        for item in razdel.get("open_questions") or []:
+            if isinstance(item, str) and item.strip() and item not in flat_open_questions:
+                flat_open_questions.append(item)
+        for item in razdel.get("issues") or []:
+            if isinstance(item, str) and item.strip() and item not in flat_issues:
+                flat_issues.append(item)
+
+    for item in out.get("global_open_questions") or []:
+        if isinstance(item, str) and item.strip() and item not in flat_open_questions:
+            flat_open_questions.append(item)
+    for item in out.get("global_issues") or []:
+        if isinstance(item, str) and item.strip() and item not in flat_issues:
+            flat_issues.append(item)
+
+    out["doc_instances"] = flat_instances
+    out["open_questions"] = flat_open_questions
+    out["issues"] = flat_issues
+
+
 def _default_coverage_from_manifest(manifest: dict) -> list[dict]:
     rows = manifest.get("files") or []
     out: list[dict] = []
@@ -186,10 +225,186 @@ def _normalize_payload(payload: dict, razdel_code: str, selected_doc_type_ids: l
     out.setdefault("open_questions", [])
     out.setdefault("issues", [])
     out.setdefault("agent_file_coverage", [])
+    _flatten_razdel_instances(out)
     if not isinstance(out["doc_instances"], list):
         out["doc_instances"] = []
     out["doc_instances"] = [_normalize_doc_instance(inst, i) for i, inst in enumerate(out["doc_instances"])]
     return out
+
+
+def _normalize_page_value(value, pages_total: int) -> str:
+    if isinstance(value, int):
+        page = value if value > 0 else 1
+        return str(min(max(page, 1), max(1, pages_total)))
+    text = str(value or "").strip()
+    if text.isdigit():
+        page = int(text)
+        return str(min(max(page, 1), max(1, pages_total)))
+    if "-" in text:
+        left = text.split("-", 1)[0].strip()
+        if left.isdigit():
+            page = int(left)
+            return str(min(max(page, 1), max(1, pages_total)))
+    return "1"
+
+
+def _fallback_source_from_manifest(manifest: dict) -> dict:
+    for row in manifest.get("files") or []:
+        if not isinstance(row, dict):
+            continue
+        path = (row.get("path") or "").strip()
+        if path:
+            return {
+                "file": path,
+                "doc_id": (row.get("doc_id") or "").strip(),
+                "page": "1",
+                "snippet": "",
+            }
+    return {"file": "", "doc_id": "", "page": "1", "snippet": ""}
+
+
+def _match_manifest_row_loose(file_ref: str, doc_id: str, indexes: dict) -> dict | None:
+    row = match_manifest_row(file_ref, doc_id, indexes)
+    if row:
+        return row
+    file_value = str(file_ref or "").strip().replace("\\", "/")
+    if not file_value:
+        return None
+    by_path = indexes.get("by_path") or {}
+    file_name = Path(file_value).name.lower()
+    suffix_matches = [r for path, r in by_path.items() if path.lower().endswith(file_name)]
+    if len(suffix_matches) == 1:
+        return suffix_matches[0]
+    trimmed = file_value
+    if trimmed.startswith("01_input/"):
+        trimmed = trimmed[len("01_input/") :]
+        row = by_path.get(trimmed)
+        if row:
+            return row
+    return None
+
+
+def _normalize_source_entry(source: dict, indexes: dict, fallback_source: dict) -> dict:
+    item = dict(source) if isinstance(source, dict) else {}
+    row = _match_manifest_row_loose(item.get("file", ""), item.get("doc_id", ""), indexes)
+    if not row:
+        if fallback_source.get("file"):
+            return dict(fallback_source)
+        return {"file": "", "doc_id": "", "page": "1", "snippet": item.get("snippet", "")}
+    return {
+        "file": row.get("path", ""),
+        "doc_id": row.get("doc_id", ""),
+        "page": _normalize_page_value(item.get("page"), int(row.get("pages_total") or 1)),
+        "snippet": item.get("snippet", "") if item.get("snippet") is not None else "",
+    }
+
+
+def _normalize_nested_sources(payload, indexes: dict, fallback_source: dict):
+    if isinstance(payload, dict):
+        if isinstance(payload.get("source"), dict):
+            payload["source"] = _normalize_source_entry(payload.get("source"), indexes, fallback_source)
+        if "sources" in payload:
+            sources = payload.get("sources")
+            if isinstance(sources, list):
+                normalized_sources = [
+                    _normalize_source_entry(src, indexes, fallback_source)
+                    for src in sources
+                    if isinstance(src, dict)
+                ]
+                payload["sources"] = normalized_sources or ([dict(fallback_source)] if not _status_allows_missing_like(payload) and fallback_source.get("file") else [])
+        for evidence_key in ("evidence", "presence_evidence"):
+            entries = payload.get(evidence_key)
+            if isinstance(entries, list):
+                normalized_entries = []
+                for entry in entries:
+                    if not isinstance(entry, dict):
+                        continue
+                    normalized_entries.append(_normalize_source_entry(entry, indexes, fallback_source))
+                payload[evidence_key] = normalized_entries
+        for value in payload.values():
+            _normalize_nested_sources(value, indexes, fallback_source)
+    elif isinstance(payload, list):
+        for item in payload:
+            _normalize_nested_sources(item, indexes, fallback_source)
+    return payload
+
+
+def _status_allows_missing_like(obj: dict) -> bool:
+    status = str((obj or {}).get("status") or (obj or {}).get("overall_status") or "").strip().lower()
+    return status in {"needs_extraction", "needs_disambiguation", "blocked_missing_source"}
+
+
+def _sanitize_p4b_payload(payload: dict, manifest: dict) -> dict:
+    out = dict(payload) if isinstance(payload, dict) else {}
+    indexes = build_manifest_indexes(manifest)
+    fallback_source = _fallback_source_from_manifest(manifest)
+    _normalize_nested_sources(out, indexes, fallback_source)
+    for inst in out.get("doc_instances") or []:
+        if not isinstance(inst, dict):
+            continue
+        multiplier_evidence = inst.get("multiplier_evidence")
+        if isinstance(multiplier_evidence, dict):
+            sources = multiplier_evidence.get("sources")
+            if isinstance(sources, list) and not sources and not _status_allows_missing_like(multiplier_evidence) and fallback_source.get("file"):
+                multiplier_evidence["sources"] = [dict(fallback_source)]
+    return out
+
+
+def _trim_gate_report_for_prompt(report: dict) -> dict:
+    return {
+        "summary": report.get("summary", ""),
+        "totals": report.get("totals", {}),
+        "uncovered_required_files": list(report.get("uncovered_required_files") or [])[:50],
+        "page_coverage_errors": list(report.get("page_coverage_errors") or [])[:50],
+        "traceability_errors": list(report.get("traceability_errors") or [])[:50],
+    }
+
+
+def _repair_payload_after_gate_failure(
+    *,
+    project_id: str,
+    payload: dict,
+    gate_report: dict,
+    manifest: dict,
+    razdel_code: str,
+    selected_doc_type_ids: list[str],
+    attempt_no: int,
+) -> tuple[str, dict]:
+    repair_prompt_vars = {
+        "input_file_manifest_json": manifest,
+        "razdel_code": razdel_code,
+        "selected_doc_type_ids_json": selected_doc_type_ids,
+        "quality_gate_report_json": _trim_gate_report_for_prompt(gate_report),
+        "current_payload_json": payload,
+    }
+    append_event(
+        project_id,
+        {
+            "process": "process_p4b",
+            "stage": "quality_gate_repair_attempt",
+            "attempt": attempt_no,
+            "reason": gate_report.get("summary", ""),
+        },
+    )
+    set_action_status(
+        project_id,
+        "run_p4b",
+        "running",
+        f"Process P4B: идет автоперепроверка {attempt_no}/{P4B_GATE_REPAIR_ATTEMPTS}. "
+        f"Исправляем замечания quality gate: {gate_report.get('summary', '')}",
+    )
+    repair_run_id, repaired_raw = run_llm_json_text_process(
+        project_id=project_id,
+        process_name="process_p4b_repair",
+        prompt_name="04b_p4b_build_doc_instances_repair_v02",
+        prompt_vars=repair_prompt_vars,
+        output_filename="p4b_doc_instances_repaired.json",
+        mock_payload=payload,
+    )
+    persist_run_json(project_id, "process_p4b_repair", repair_run_id, "repair_request.json", repair_prompt_vars)
+    repaired_payload = _normalize_payload(repaired_raw, razdel_code, selected_doc_type_ids)
+    repaired_payload = _sanitize_p4b_payload(repaired_payload, manifest)
+    return repair_run_id, repaired_payload
 
 
 def _mock_payload(razdel_code: str, selected_doc_type_ids: list[str]) -> dict:
@@ -275,6 +490,7 @@ def run_process_p4b_build_doc_plan(
         if settings.MOCK_MODE:
             payload = _mock_payload(razdel_code, selected_doc_type_ids)
             payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
+            payload = _sanitize_p4b_payload(payload, input_file_manifest)
             payload["agent_file_coverage"] = _default_coverage_from_manifest(input_file_manifest)
             manifest, gate_report = run_quality_gate(
                 process_name="process_p4b",
@@ -426,10 +642,14 @@ def run_process_p4b_build_doc_plan(
         else:
             raise
     payload = _normalize_payload(payload, razdel_code, selected_doc_type_ids)
+    payload = _sanitize_p4b_payload(payload, input_file_manifest)
     if not isinstance(payload.get("doc_instances"), list):
         raise ValueError("p4b invalid payload: doc_instances missing")
 
     excluded_refs = [str(x.get("path") or "").strip() for x in excluded if isinstance(x, dict)]
+    persist_run_json(project_id, "process_p4b", run_id, "uploaded_files.json", upload_map)
+    persist_run_artifact(project_id, "process_p4b", run_id, "raw_response.txt", raw)
+    persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
     manifest, gate_report = run_quality_gate(
         process_name="process_p4b",
         root=root,
@@ -440,15 +660,70 @@ def run_process_p4b_build_doc_plan(
     )
     persist_run_json(project_id, "process_p4b", run_id, "input_manifest.json", manifest)
     persist_run_json(project_id, "process_p4b", run_id, "quality_gate_report.json", gate_report)
+    for attempt_no in range(1, P4B_GATE_REPAIR_ATTEMPTS + 1):
+        if gate_report.get("pass"):
+            break
+        repair_run_id, repaired_payload = _repair_payload_after_gate_failure(
+            project_id=project_id,
+            payload=payload,
+            gate_report=gate_report,
+            manifest=manifest,
+            razdel_code=razdel_code,
+            selected_doc_type_ids=selected_doc_type_ids,
+            attempt_no=attempt_no,
+        )
+        run_id = repair_run_id
+        payload = repaired_payload
+        persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
+        manifest, gate_report = run_quality_gate(
+            process_name="process_p4b",
+            root=root,
+            payload=payload,
+            input_files=input_files,
+            excluded_refs=excluded_refs,
+            required_files=input_files,
+        )
+        persist_run_json(project_id, "process_p4b", run_id, "input_manifest.json", manifest)
+        persist_run_json(project_id, "process_p4b", run_id, "quality_gate_report.json", gate_report)
+        if gate_report.get("pass"):
+            append_event(
+                project_id,
+                {
+                    "process": "process_p4b",
+                    "stage": "quality_gate_repair_success",
+                    "run_id": run_id,
+                    "attempt": attempt_no,
+                },
+            )
+            set_action_status(
+                project_id,
+                "run_p4b",
+                "running",
+                f"Process P4B: автоперепроверка {attempt_no}/{P4B_GATE_REPAIR_ATTEMPTS} успешно исправила замечания. Завершаем сохранение результата...",
+            )
+            break
     if not gate_report.get("pass"):
+        set_action_status(
+            project_id,
+            "run_p4b",
+            "error",
+            f"Process P4B завершился ошибкой после {P4B_GATE_REPAIR_ATTEMPTS} попыток автоперепроверки: {gate_report.get('summary', 'unknown reason')}",
+        )
+        append_event(
+            project_id,
+            {
+                "process": "process_p4b",
+                "stage": "quality_gate_failed",
+                "run_id": run_id,
+                "reason": gate_report.get("summary", ""),
+                "repair_attempts": P4B_GATE_REPAIR_ATTEMPTS,
+            },
+        )
         raise ValueError(f"Process P4B quality gate failed: {gate_report.get('summary', 'unknown reason')}")
 
     save_processing_json(project_id, "p4_doc_types_selection.json", {"selected_doc_type_ids": selected_doc_type_ids})
     save_processing_json(project_id, "p4b_doc_instances_v1.json", payload)
     save_processing_json(project_id, "p4b_doc_instances_final.json", payload)
-    persist_run_json(project_id, "process_p4b", run_id, "uploaded_files.json", upload_map)
-    persist_run_artifact(project_id, "process_p4b", run_id, "raw_response.txt", raw)
-    persist_run_json(project_id, "process_p4b", run_id, "p4b_doc_instances_v1.json", payload)
     persist_run_json(
         project_id,
         "process_p4b",

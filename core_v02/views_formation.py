@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from django.contrib import messages
@@ -9,6 +10,14 @@ from .services.process_p5_fill_plan import run_process_p5
 from .services.project_storage import save_processing_json, set_project_step
 from .services.rule_miner import save_learning_diff
 from .services.ui_status import set_action_status
+from .views_doc_plan import (
+    _coerce_field_value,
+    _collect_editable_field_rows,
+    _filter_fields_for_doc,
+    _normalize_doc_instance,
+    _parse_json_or_keep,
+    _set_nested_field_value,
+)
 from .views_utils import common_context, resolve_files_for_process
 
 
@@ -46,7 +55,7 @@ def formation_view(request, project_id: str):
             idx_order = [int(x) for x in order.split(",") if x.strip().isdigit()]
             edited = []
             for old_idx in idx_order if idx_order else range(len(original)):
-                row = original[old_idx]
+                row = _normalize_doc_instance(original[old_idx], old_idx)
                 item = dict(row)
                 item["doc_name"] = request.POST.get(f"doc_name_{old_idx}", row.get("doc_name", ""))
                 number = request.POST.get(
@@ -55,6 +64,24 @@ def formation_view(request, project_id: str):
                 )
                 item["doc_number"] = number
                 item["doc_number_suggestion"] = number
+                mult = item.get("multiplier") if isinstance(item.get("multiplier"), dict) else {}
+                mult["axis"] = request.POST.get(f"mult_axis_{old_idx}", mult.get("axis", ""))
+                mult["label"] = request.POST.get(f"mult_label_{old_idx}", mult.get("label", ""))
+                item["multiplier"] = mult
+                item["work_scope"] = _parse_json_or_keep(request.POST.get(f"work_scope_{old_idx}", ""), item.get("work_scope") or [])
+                fields_obj = item.get("fields") if isinstance(item.get("fields"), dict) else {}
+                field_rows = _collect_editable_field_rows(_filter_fields_for_doc(item, fields_obj))
+                for field_idx, field_row in enumerate(field_rows):
+                    posted_value = request.POST.get(f"field_value_{old_idx}_{field_idx}")
+                    if posted_value is None:
+                        continue
+                    _set_nested_field_value(
+                        fields_obj,
+                        field_row.get("path", ""),
+                        _coerce_field_value(posted_value, field_row.get("value_kind", "string"), field_row.get("value_text", "")),
+                    )
+                item["fields"] = fields_obj
+                item["user_note"] = request.POST.get(f"user_note_{old_idx}", item.get("user_note", ""))
                 edited.append(item)
             if isinstance(p4_final.get("doc_instances"), list):
                 p4_final["doc_instances"] = edited
@@ -100,6 +127,14 @@ def formation_view(request, project_id: str):
     fill_plan = _as_dict(read_processing(project_id, "p5_fill_plan.json", {}))
     outputs = fill_plan.get("outputs") or []
     set_project_step(project_id, 4)
+    instances = [_normalize_doc_instance(inst, i) for i, inst in enumerate(p4_final.get("doc_instances") or [])]
+    for idx, inst in enumerate(instances):
+        inst["row_idx"] = idx
+        inst["work_scope_text"] = json.dumps(inst.get("work_scope") or [], ensure_ascii=False, indent=2)
+        fields_obj = inst.get("fields") if isinstance(inst.get("fields"), dict) else {}
+        fields_obj = _filter_fields_for_doc(inst, fields_obj)
+        inst["fields_rows"] = _collect_editable_field_rows(fields_obj)
+
     return render(
         request,
         "formation_v02.html",
@@ -108,6 +143,7 @@ def formation_view(request, project_id: str):
             "p4_final": p4_final,
             "p4_comments": p4_v1.get("agent_comments") or [],
             "rows": _docs_rows(p4_final),
+            "instances": instances,
             "outputs": outputs,
             "p5_comments": fill_plan.get("agent_comments") or [],
         },

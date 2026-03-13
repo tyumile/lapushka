@@ -394,3 +394,108 @@ def run_llm_json_process(
     )
     append_event(project_id, {"process": process_name, "stage": "finish", "run_id": run_id, "status": "success"})
     return run_id, response_json
+
+
+def run_llm_json_text_process(
+    *,
+    project_id: str,
+    process_name: str,
+    prompt_name: str,
+    prompt_vars: dict,
+    output_filename: str,
+    mock_payload: dict,
+) -> tuple[str, dict]:
+    run_id = datetime.utcnow().strftime("%Y%m%d%H%M%S") + "-" + secrets.token_hex(3)
+    model = resolve_openai_model()
+    fallback_model = resolve_openai_fallback_model()
+    append_event(project_id, {"process": process_name, "stage": "start", "run_id": run_id})
+
+    if settings.MOCK_MODE:
+        persist_run_json(project_id, process_name, run_id, output_filename, mock_payload)
+        persist_run_json(
+            project_id,
+            process_name,
+            run_id,
+            "run_meta.json",
+            {
+                "process": process_name,
+                "run_id": run_id,
+                "model": model,
+                "mock_mode": True,
+                "started_at": datetime.utcnow().isoformat(),
+                "success": True,
+            },
+        )
+        persist_run_artifact(project_id, process_name, run_id, "raw_response.txt", json.dumps(mock_payload, ensure_ascii=False))
+        persist_run_json(project_id, process_name, run_id, "uploaded_files.json", {"files": [], "mode": "text_only"})
+        append_event(project_id, {"process": process_name, "stage": "finish", "run_id": run_id, "status": "success", "mock": True})
+        return run_id, mock_payload
+
+    def _on_retry(event: dict) -> None:
+        append_event(
+            project_id,
+            {
+                "process": process_name,
+                "stage": "retry_call",
+                "run_id": run_id,
+                "attempt": int(event.get("attempt") or 0),
+                "next_pause_s": int(event.get("next_pause_s") or 0),
+                "error": str(event.get("error") or "")[:300],
+                "model": event.get("model") or "",
+            },
+        )
+
+    client = ResponsesClientV02(on_retry=_on_retry)
+    system_prompt = load_prompt("01_system_v02")
+    user_prompt = load_prompt(prompt_name, prompt_vars)
+    used_model = model
+    try:
+        response_json, raw_text = client.call_json_text(
+            instructions=system_prompt,
+            user_text=user_prompt,
+            model=model,
+            timeout_s=180,
+        )
+    except Exception as e:
+        can_fallback = bool(fallback_model) and fallback_model != model and _should_retry_with_fallback(e)
+        if not can_fallback:
+            raise
+        used_model = fallback_model
+        append_event(
+            project_id,
+            {
+                "process": process_name,
+                "stage": "retry_with_fallback_model",
+                "run_id": run_id,
+                "from_model": model,
+                "to_model": fallback_model,
+                "reason": str(e)[:300],
+            },
+        )
+        response_json, raw_text = client.call_json_text(
+            instructions=system_prompt,
+            user_text=user_prompt,
+            model=fallback_model,
+            timeout_s=180,
+        )
+    persist_run_json(project_id, process_name, run_id, "uploaded_files.json", {"files": [], "mode": "text_only"})
+    persist_run_artifact(project_id, process_name, run_id, "raw_response.txt", raw_text)
+    persist_run_json(project_id, process_name, run_id, output_filename, response_json)
+    persist_run_json(
+        project_id,
+        process_name,
+        run_id,
+        "run_meta.json",
+        {
+            "process": process_name,
+            "run_id": run_id,
+            "model": used_model,
+            "model_primary": model,
+            "model_fallback": fallback_model or "",
+            "started_at": datetime.utcnow().isoformat(),
+            "success": True,
+            "mode": "text_only",
+        },
+    )
+    append_event(project_id, {"process": process_name, "stage": "finish", "run_id": run_id, "status": "success"})
+    return run_id, response_json

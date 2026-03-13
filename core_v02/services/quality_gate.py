@@ -1,7 +1,14 @@
 from typing import Any
 from pathlib import Path
 
-from .input_manifest import build_input_manifest, build_manifest_indexes, match_manifest_row, norm_ref, parse_pages_checked
+from .input_manifest import (
+    build_input_manifest,
+    build_manifest_indexes,
+    match_manifest_row,
+    match_manifest_row_strict,
+    norm_ref,
+    parse_pages_checked,
+)
 
 MISSING_ALLOWED_STATUSES = {"needs_extraction", "needs_disambiguation", "blocked_missing_source"}
 
@@ -12,8 +19,22 @@ def _status_allows_missing(obj: dict) -> bool:
 
 
 def _match_path(file_ref: str, doc_id: str, indexes: dict) -> str:
-    row = match_manifest_row(file_ref, doc_id, indexes)
+    row = match_manifest_row_strict(file_ref, doc_id, indexes)
     return (row or {}).get("path", "")
+
+
+def _page_is_valid(value: Any, pages_total: int) -> bool:
+    if value is None or value == "":
+        return False
+    if isinstance(value, int):
+        return 0 <= value < pages_total or 1 <= value <= pages_total
+    if isinstance(value, str):
+        text = value.strip()
+        if not text or not text.isdigit():
+            return False
+        page_no = int(text)
+        return 0 <= page_no < pages_total or 1 <= page_no <= pages_total
+    return False
 
 
 def _collect_payload_refs(payload: Any, out: list[dict] | None = None) -> list[dict]:
@@ -80,12 +101,17 @@ def _collect_traceability_errors(
         out = []
     if isinstance(payload, dict):
         allows_missing = _status_allows_missing(payload)
+        is_coverage_entry = path.startswith("$.agent_file_coverage[")
         if "file_ref" in payload:
             file_ref = payload.get("file_ref")
             file_doc_id = payload.get("file_doc_id") if isinstance(payload.get("file_doc_id"), str) else ""
+            if is_coverage_entry and not file_doc_id and isinstance(payload.get("doc_id"), str):
+                file_doc_id = payload.get("doc_id") or ""
             if isinstance(file_ref, str):
                 if not file_ref.strip() and not file_doc_id and not allows_missing:
                     out.append({"path": f"{path}.file_ref", "issue": "missing_file_ref"})
+                elif (file_ref.strip() or file_doc_id) and not file_doc_id and not allows_missing and not is_coverage_entry:
+                    out.append({"path": f"{path}.file_doc_id", "issue": "missing_file_doc_id", "value": file_ref})
                 elif (file_ref.strip() or file_doc_id) and not _match_path(file_ref, file_doc_id, indexes):
                     out.append({"path": f"{path}.file_ref", "issue": "unknown_file_ref", "value": file_ref, "doc_id": file_doc_id})
             elif not allows_missing:
@@ -97,8 +123,21 @@ def _collect_traceability_errors(
                 doc_id = (src.get("doc_id") or "").strip() if isinstance(src.get("doc_id"), str) else ""
                 if not f and not doc_id and not allows_missing:
                     out.append({"path": f"{path}.source.file", "issue": "missing_source_file"})
+                elif (f or doc_id) and not doc_id and not allows_missing:
+                    out.append({"path": f"{path}.source.doc_id", "issue": "missing_source_doc_id", "value": f})
                 elif enforce_membership and (f or doc_id) and not _match_path(f, doc_id, indexes):
                     out.append({"path": f"{path}.source.file", "issue": "unknown_source_file", "value": f, "doc_id": doc_id})
+                else:
+                    row = match_manifest_row_strict(f, doc_id, indexes)
+                    if row and not allows_missing and not _page_is_valid(src.get("page"), int(row.get("pages_total") or 1)):
+                        out.append(
+                            {
+                                "path": f"{path}.source.page",
+                                "issue": "invalid_source_page",
+                                "value": src.get("page"),
+                                "doc_id": doc_id,
+                            }
+                        )
             elif not allows_missing:
                 out.append({"path": f"{path}.source", "issue": "invalid_source_type"})
         if "sources" in payload:
@@ -114,10 +153,51 @@ def _collect_traceability_errors(
                     doc_id = (s.get("doc_id") or "").strip() if isinstance(s.get("doc_id"), str) else ""
                     if not f and not doc_id and not allows_missing:
                         out.append({"path": f"{path}.sources[{i}].file", "issue": "missing_source_file"})
+                    elif (f or doc_id) and not doc_id and not allows_missing:
+                        out.append({"path": f"{path}.sources[{i}].doc_id", "issue": "missing_source_doc_id", "value": f})
                     elif enforce_membership and (f or doc_id) and not _match_path(f, doc_id, indexes):
                         out.append({"path": f"{path}.sources[{i}].file", "issue": "unknown_source_file", "value": f, "doc_id": doc_id})
+                    else:
+                        row = match_manifest_row_strict(f, doc_id, indexes)
+                        if row and not allows_missing and not _page_is_valid(s.get("page"), int(row.get("pages_total") or 1)):
+                            out.append(
+                                {
+                                    "path": f"{path}.sources[{i}].page",
+                                    "issue": "invalid_source_page",
+                                    "value": s.get("page"),
+                                    "doc_id": doc_id,
+                                }
+                            )
             elif not allows_missing:
                 out.append({"path": f"{path}.sources", "issue": "invalid_sources_type"})
+        for evidence_key in ("evidence", "presence_evidence"):
+            entries = payload.get(evidence_key)
+            if isinstance(entries, list):
+                for i, entry in enumerate(entries):
+                    if not isinstance(entry, dict):
+                        out.append({"path": f"{path}.{evidence_key}[{i}]", "issue": "invalid_source_entry"})
+                        continue
+                    f = (entry.get("file") or "").strip() if isinstance(entry.get("file"), str) else ""
+                    doc_id = (entry.get("doc_id") or "").strip() if isinstance(entry.get("doc_id"), str) else ""
+                    if not f and not doc_id and not allows_missing:
+                        out.append({"path": f"{path}.{evidence_key}[{i}].file", "issue": "missing_source_file"})
+                        continue
+                    if (f or doc_id) and not doc_id and not allows_missing:
+                        out.append({"path": f"{path}.{evidence_key}[{i}].doc_id", "issue": "missing_source_doc_id", "value": f})
+                        continue
+                    row = match_manifest_row_strict(f, doc_id, indexes)
+                    if enforce_membership and (f or doc_id) and not row:
+                        out.append({"path": f"{path}.{evidence_key}[{i}].file", "issue": "unknown_source_file", "value": f, "doc_id": doc_id})
+                        continue
+                    if row and not allows_missing and not _page_is_valid(entry.get("page"), int(row.get("pages_total") or 1)):
+                        out.append(
+                            {
+                                "path": f"{path}.{evidence_key}[{i}].page",
+                                "issue": "invalid_source_page",
+                                "value": entry.get("page"),
+                                "doc_id": doc_id,
+                            }
+                        )
         for k, v in payload.items():
             _collect_traceability_errors(
                 v,
@@ -144,7 +224,10 @@ def _collect_page_coverage_errors(entries: list[dict], indexes: dict, required_r
     for idx, entry in enumerate(entries):
         file_ref = entry.get("file_ref") if isinstance(entry.get("file_ref"), str) else ""
         doc_id = entry.get("doc_id") if isinstance(entry.get("doc_id"), str) else ""
-        row = match_manifest_row(file_ref, doc_id, indexes)
+        if not doc_id:
+            errors.append({"path": f"$.agent_file_coverage[{idx}].doc_id", "issue": "missing_coverage_doc_id", "value": file_ref})
+            continue
+        row = match_manifest_row_strict(file_ref, doc_id, indexes)
         if not row:
             errors.append({"path": f"$.agent_file_coverage[{idx}]", "issue": "unknown_coverage_file", "value": file_ref, "doc_id": doc_id})
             continue

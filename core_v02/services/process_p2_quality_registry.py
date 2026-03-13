@@ -3,8 +3,8 @@ import os
 import re
 
 from .dictionary_service import get_razdel
-from .input_manifest import build_input_manifest, build_manifest_indexes, match_manifest_row
-from .llm_runtime import run_llm_json_process
+from .input_manifest import build_input_manifest, build_manifest_indexes, match_manifest_row, match_manifest_row_strict
+from .llm_runtime import run_llm_json_process, run_llm_json_text_process
 from .log_service import append_event
 from .quality_gate import run_quality_gate
 from .project_storage import (
@@ -14,6 +14,7 @@ from .project_storage import (
     project_root,
     save_processing_json,
 )
+from .ui_status import set_action_status
 
 
 ALLOWED_STATUS = {"ok", "needs_extraction", "needs_disambiguation", "blocked_missing_source"}
@@ -24,6 +25,7 @@ TOO_LARGE_HINTS = (
     "request too large",
     "error code: 429",
 )
+P2_GATE_REPAIR_ATTEMPTS = 3
 
 
 def _slug(value: str) -> str:
@@ -34,6 +36,248 @@ def _slug(value: str) -> str:
 
 def _default_source(file_ref: str = "", doc_id: str = "") -> dict:
     return {"file": file_ref, "doc_id": doc_id, "page": "", "snippet": ""}
+
+
+def _clean_doc_id(value: str) -> str:
+    text = (value or "").strip()
+    if not text:
+        return ""
+    if text.lower() in {"не найдено", "needs_extraction", "blocked_missing_source"}:
+        return ""
+    return text if text.startswith("DOC-") else ""
+
+
+def _normalize_page_value(value, pages_total: int) -> str:
+    pages_total = max(1, int(pages_total or 1))
+    if isinstance(value, int):
+        if 0 <= value < pages_total:
+            return str(value + 1)
+        if 1 <= value <= pages_total:
+            return str(value)
+        return "1"
+    text = str(value or "").strip()
+    if not text:
+        return "1"
+    if text.isdigit():
+        page_no = int(text)
+        if 0 <= page_no < pages_total:
+            return str(page_no + 1)
+        if 1 <= page_no <= pages_total:
+            return str(page_no)
+        return "1"
+    first = text.split(",", 1)[0].split("-", 1)[0].strip()
+    if first.isdigit():
+        page_no = int(first)
+        if 0 <= page_no < pages_total:
+            return str(page_no + 1)
+        if 1 <= page_no <= pages_total:
+            return str(page_no)
+    return "1"
+
+
+def _dedupe_agent_comments(comments: list[dict]) -> list[dict]:
+    out: list[dict] = []
+    seen: set[tuple[str, str, str, str]] = set()
+    for item in comments:
+        if not isinstance(item, dict):
+            continue
+        comment = (item.get("comment") or "").strip()
+        source = item.get("source") if isinstance(item.get("source"), dict) else {}
+        key = (
+            comment,
+            str(source.get("file") or "").strip(),
+            str(source.get("doc_id") or "").strip(),
+            str(source.get("page") or "").strip(),
+        )
+        if not comment or key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+    return out
+
+
+def _dedupe_agent_coverage(entries: list[dict]) -> list[dict]:
+    out: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    for item in entries:
+        if not isinstance(item, dict):
+            continue
+        key = (str(item.get("doc_id") or "").strip(), str(item.get("file_ref") or "").strip())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+    return out
+
+
+def _dedupe_docs_for_materials(materials: list[dict]) -> list[dict]:
+    out: list[dict] = []
+    for material in materials:
+        if not isinstance(material, dict):
+            continue
+        docs = material.get("docs") if isinstance(material.get("docs"), list) else []
+        deduped_docs: list[dict] = []
+        seen: set[tuple[str, str]] = set()
+        for doc in docs:
+            if not isinstance(doc, dict):
+                continue
+            key = (
+                str(doc.get("file_doc_id") or "").strip(),
+                str(doc.get("file_ref") or "").strip(),
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped_docs.append(doc)
+        material["docs"] = deduped_docs
+        out.append(material)
+    return out
+
+
+def _sanitize_docs_with_quality_manifest(materials: list[dict], quality_indexes: dict) -> list[dict]:
+    out: list[dict] = []
+    for material in materials:
+        if not isinstance(material, dict):
+            continue
+        docs = material.get("docs") if isinstance(material.get("docs"), list) else []
+        fixed_docs: list[dict] = []
+        for doc in docs:
+            if not isinstance(doc, dict):
+                continue
+            file_ref = str(doc.get("file_ref") or "").strip()
+            file_doc_id = _clean_doc_id(str(doc.get("file_doc_id") or "").strip())
+            row = None
+            if file_ref:
+                row = match_manifest_row_strict(file_ref, "", quality_indexes)
+            if not row and file_doc_id:
+                row = match_manifest_row_strict("", file_doc_id, quality_indexes)
+            fixed = dict(doc)
+            if row:
+                fixed["file_ref"] = row.get("path", file_ref)
+                fixed["file_doc_id"] = row.get("doc_id", file_doc_id)
+                fixed["source"] = _normalize_source_with_manifest(
+                    fixed.get("source"),
+                    quality_indexes,
+                    row.get("path", file_ref),
+                    row.get("doc_id", file_doc_id),
+                )
+            fixed_docs.append(fixed)
+        material["docs"] = fixed_docs
+        out.append(material)
+    return out
+
+
+def _material_merge_key(material: dict) -> str:
+    if not isinstance(material, dict):
+        return ""
+    norm_name = (material.get("material_norm_name") or "").strip()
+    name = (material.get("material_name") or material.get("name") or "").strip()
+    return _slug(norm_name or name)
+
+
+def _material_tokens(material: dict) -> set[str]:
+    if not isinstance(material, dict):
+        return set()
+    raw = " ".join(
+        [
+            str(material.get("material_name") or ""),
+            str(material.get("material_norm_name") or ""),
+            str(material.get("name") or ""),
+        ]
+    ).lower()
+    return {x for x in re.split(r"[^a-zA-Z0-9а-яА-Я]+", raw) if len(x) >= 2}
+
+
+def _is_strong_token(token: str) -> bool:
+    text = (token or "").strip().lower()
+    return len(text) >= 3 and any(ch.isdigit() for ch in text)
+
+
+def _doc_tokens(doc: dict) -> set[str]:
+    if not isinstance(doc, dict):
+        return set()
+    source = doc.get("source") if isinstance(doc.get("source"), dict) else {}
+    raw = " ".join(
+        [
+            str(doc.get("doc_kind") or ""),
+            str(doc.get("doc_number") or ""),
+            str(doc.get("doc_date") or ""),
+            str(doc.get("manufacturer") or ""),
+            str(doc.get("issuer") or ""),
+            str(doc.get("volume") or ""),
+            str(doc.get("file_ref") or ""),
+            str(source.get("snippet") or ""),
+            str(source.get("file") or ""),
+        ]
+    ).lower()
+    return {x for x in re.split(r"[^a-zA-Z0-9а-яА-Я]+", raw) if len(x) >= 2}
+
+
+def _doc_matches_material(doc: dict, material: dict) -> bool:
+    material_tokens = _material_tokens(material)
+    doc_tokens = _doc_tokens(doc)
+    if not material_tokens or not doc_tokens:
+        return False
+    overlap = material_tokens & doc_tokens
+    if len(overlap) >= 2:
+        return True
+    if any(_is_strong_token(token) for token in overlap):
+        return True
+    strong_material_tokens = [token for token in material_tokens if _is_strong_token(token)]
+    strong_doc_tokens = [token for token in doc_tokens if _is_strong_token(token)]
+    for m_token in strong_material_tokens:
+        for d_token in strong_doc_tokens:
+            if m_token in d_token or d_token in m_token:
+                return True
+    return False
+
+
+def _match_material_to_project(candidate: dict, project_materials: list[dict]) -> dict | None:
+    candidate_id = (candidate.get("material_id") or "").strip()
+    candidate_key = _material_merge_key(candidate)
+    candidate_tokens = _material_tokens(candidate)
+    best: tuple[int, dict] | None = None
+    for material in project_materials:
+        if not isinstance(material, dict):
+            continue
+        if candidate_id and candidate_id == (material.get("material_id") or "").strip():
+            return material
+        if candidate_key and candidate_key == _material_merge_key(material):
+            return material
+        score = len(candidate_tokens & _material_tokens(material))
+        if score < 2:
+            continue
+        if best is None or score > best[0]:
+            best = (score, material)
+    return best[1] if best else None
+
+
+def _merge_duplicate_materials(materials: list[dict]) -> list[dict]:
+    merged: dict[str, dict] = {}
+    order: list[str] = []
+    for idx, material in enumerate(materials, start=1):
+        if not isinstance(material, dict):
+            continue
+        key = _material_merge_key(material) or f"mat-{idx:03d}"
+        target = merged.get(key)
+        if not target:
+            target = dict(material)
+            target["docs"] = list(material.get("docs") or []) if isinstance(material.get("docs"), list) else []
+            merged[key] = target
+            order.append(key)
+            continue
+        if not target.get("material_id") and material.get("material_id"):
+            target["material_id"] = material.get("material_id")
+        if not target.get("material_name") and material.get("material_name"):
+            target["material_name"] = material.get("material_name")
+        if not target.get("material_norm_name") and material.get("material_norm_name"):
+            target["material_norm_name"] = material.get("material_norm_name")
+        if (target.get("status") or "").strip() in {"", "needs_extraction"} and (material.get("status") or "").strip():
+            target["status"] = material.get("status")
+        docs = target.get("docs") if isinstance(target.get("docs"), list) else []
+        docs.extend([d for d in (material.get("docs") or []) if isinstance(d, dict)])
+        target["docs"] = docs
+    return [merged[key] for key in order]
 
 
 def _quality_ref(path: Path) -> str:
@@ -175,7 +419,6 @@ def _default_coverage_from_manifest(manifest: dict) -> list[dict]:
 def _normalize_agent_file_coverage(raw_entries, manifest: dict) -> list[dict]:
     rows = manifest.get("files") or []
     indexes = build_manifest_indexes(manifest)
-    by_path = {row.get("path", ""): row for row in rows if isinstance(row, dict)}
     normalized: list[dict] = []
     seen: set[str] = set()
     if isinstance(raw_entries, list):
@@ -205,35 +448,30 @@ def _normalize_agent_file_coverage(raw_entries, manifest: dict) -> list[dict]:
                 }
             )
             seen.add(path)
-    for path, row in by_path.items():
-        if path in seen:
-            continue
-        pages_total = int(row.get("pages_total") or 1)
-        normalized.append(
-            {
-                "doc_id": row.get("doc_id", ""),
-                "file_ref": path,
-                "pages_total": pages_total,
-                "pages_checked": f"1-{pages_total}" if pages_total > 1 else "1",
-                "status": "ok",
-                "notes": "auto",
-            }
-        )
     return normalized
 
 
 def _normalize_source_with_manifest(source: dict | None, indexes: dict, fallback_path: str = "", fallback_doc_id: str = "") -> dict:
     src = source if isinstance(source, dict) else {}
     candidate_file = (src.get("file") or fallback_path or "").strip() if isinstance(src.get("file"), str) or fallback_path else ""
-    candidate_doc_id = (src.get("doc_id") or fallback_doc_id or "").strip() if isinstance(src.get("doc_id"), str) or fallback_doc_id else ""
-    row = match_manifest_row(candidate_file, candidate_doc_id, indexes)
+    candidate_doc_id = _clean_doc_id((src.get("doc_id") or fallback_doc_id or "").strip() if isinstance(src.get("doc_id"), str) or fallback_doc_id else "")
+    row = match_manifest_row_strict(candidate_file, candidate_doc_id, indexes)
+    if not row and candidate_file:
+        row = match_manifest_row_strict(candidate_file, "", indexes)
+    if not row and candidate_doc_id:
+        row = match_manifest_row_strict("", candidate_doc_id, indexes)
     if row:
         candidate_file = row.get("path", "")
         candidate_doc_id = row.get("doc_id", "")
+    page = src.get("page") if src.get("page") is not None else ""
+    if row:
+        page = _normalize_page_value(page, int(row.get("pages_total") or 1))
+    elif candidate_file:
+        page = _normalize_page_value(page, 1)
     return {
         "file": candidate_file,
         "doc_id": candidate_doc_id,
-        "page": src.get("page") if src.get("page") is not None else "",
+        "page": page,
         "snippet": src.get("snippet") if src.get("snippet") is not None else "",
     }
 
@@ -262,7 +500,9 @@ def _fallback_source_from_quality_files(quality_manifest: dict) -> dict:
         path = (row.get("path") or "").strip()
         doc_id = (row.get("doc_id") or "").strip()
         if path:
-            return _default_source(path, doc_id)
+            src = _default_source(path, doc_id)
+            src["page"] = "1"
+            return src
     return _default_source()
 
 
@@ -400,14 +640,18 @@ def _normalize_doc(doc: dict, quality_indexes: dict, file_ref_fallback: str = ""
     if status not in ALLOWED_STATUS:
         status = "needs_extraction"
     file_ref = (item.get("file_ref") or file_ref_fallback or "").strip()
-    file_doc_id = (item.get("file_doc_id") or file_doc_id_fallback or "").strip()
+    file_doc_id = _clean_doc_id((item.get("file_doc_id") or file_doc_id_fallback or "").strip())
     if not file_ref and isinstance(item.get("source"), dict):
         file_ref = (item["source"].get("file") or "").strip()
     if not file_doc_id and isinstance(item.get("source"), dict):
-        file_doc_id = (item["source"].get("doc_id") or "").strip()
+        file_doc_id = _clean_doc_id((item["source"].get("doc_id") or "").strip())
     if file_ref and "/" not in file_ref and "\\" not in file_ref:
         file_ref = f"01_input/02_quality_docs/{file_ref}"
-    row = match_manifest_row(file_ref, file_doc_id, quality_indexes)
+    row = match_manifest_row_strict(file_ref, file_doc_id, quality_indexes)
+    if not row and file_ref:
+        row = match_manifest_row_strict(file_ref, "", quality_indexes)
+    if not row and file_doc_id:
+        row = match_manifest_row_strict("", file_doc_id, quality_indexes)
     if row:
         file_ref = row.get("path", "")
         file_doc_id = row.get("doc_id", "")
@@ -512,29 +756,52 @@ def _normalize_project_materials_payload(payload: dict, project_files: list[Path
 
 
 def _ensure_project_materials(out: dict, project_materials: list[dict]) -> None:
-    by_id = {}
-    for material in out.get("materials") or []:
-        if isinstance(material, dict):
-            by_id[(material.get("material_id") or "").strip()] = material
+    existing_materials = _merge_duplicate_materials(list(out.get("materials") or []))
+    result: list[dict] = []
+    targets_by_id: dict[str, dict] = {}
     for idx, material in enumerate(project_materials, start=1):
         if not isinstance(material, dict):
             continue
         material_id = (material.get("material_id") or f"mat-{idx:03d}").strip()
-        target = by_id.get(material_id)
+        target = {
+            "material_id": material_id,
+            "material_name": (material.get("material_name") or f"Материал {idx}").strip(),
+            "material_norm_name": (material.get("material_norm_name") or _slug(material.get("material_name") or "")).strip() or _slug(material.get("material_name") or ""),
+            "status": (material.get("status") or "needs_extraction").strip() or "needs_extraction",
+            "confidence": float(material.get("confidence") or 0),
+            "source": material.get("source") if isinstance(material.get("source"), dict) else _default_source(),
+            "docs": [],
+        }
+        result.append(target)
+        targets_by_id[material_id] = target
+
+    for material in existing_materials:
+        if not isinstance(material, dict):
+            continue
+        matched_project = _match_material_to_project(material, project_materials)
+        if not matched_project:
+            continue
+        target = targets_by_id.get((matched_project.get("material_id") or "").strip())
         if not target:
-            target = {
-                "material_id": material_id,
-                "material_name": (material.get("material_name") or f"РњР°С‚РµСЂРёР°Р» {idx}").strip(),
-                "material_norm_name": (material.get("material_norm_name") or _slug(material.get("material_name") or "")).strip() or _slug(material.get("material_name") or ""),
-                "status": (material.get("status") or "needs_extraction").strip() or "needs_extraction",
-                "confidence": float(material.get("confidence") or 0),
-                "source": material.get("source") if isinstance(material.get("source"), dict) else _default_source(),
-                "docs": [],
-            }
-            by_id[material_id] = target
+            continue
+        docs = target.get("docs") if isinstance(target.get("docs"), list) else []
+        docs.extend(
+            [
+                d
+                for d in (material.get("docs") or [])
+                if isinstance(d, dict) and _doc_matches_material(d, matched_project)
+            ]
+        )
+        target["docs"] = docs
+        if (target.get("status") or "").strip() in {"", "needs_extraction"} and (material.get("status") or "").strip():
+            target["status"] = material.get("status")
+        if not (target.get("source") or {}).get("file") and isinstance(material.get("source"), dict):
+            target["source"] = material.get("source")
+
+    for target in result:
         if not (target.get("docs") or []):
             target["docs"] = [_build_missing_doc()]
-    out["materials"] = list(by_id.values())
+    out["materials"] = _dedupe_docs_for_materials(result)
 
 
 def _normalize_payload(payload: dict, quality_files: list[Path], project_id: str, *, project_materials: list[dict] | None = None, root: Path | None = None) -> dict:
@@ -704,6 +971,104 @@ def _normalize_payload(payload: dict, quality_files: list[Path], project_id: str
     out["agent_comments"] = _sanitize_agent_comments_sources(out.get("agent_comments") or [], quality_indexes, fallback_comment_source)
     _enforce_quality_file_coverage(out, quality_refs)
     return out
+
+
+def _prepare_final_payload(
+    *,
+    base_payload: dict,
+    project_materials_payload: dict,
+    quality_files: list[Path],
+    project_id: str,
+    root: Path,
+    include_project_context: bool,
+) -> tuple[dict, dict]:
+    quality_manifest = _build_prompt_manifest(root, quality_files)
+    payload = _normalize_payload(
+        base_payload,
+        quality_files,
+        project_id,
+        project_materials=project_materials_payload.get("project_materials") or [],
+        root=root,
+    )
+    if include_project_context:
+        payload["agent_comments"] = list(project_materials_payload.get("agent_comments") or []) + list(payload.get("agent_comments") or [])
+        payload["agent_file_coverage"] = list(project_materials_payload.get("agent_file_coverage") or []) + list(payload.get("agent_file_coverage") or [])
+    quality_indexes = build_manifest_indexes(quality_manifest)
+    payload["materials"] = _dedupe_docs_for_materials(
+        _sanitize_docs_with_quality_manifest(list(payload.get("materials") or []), quality_indexes)
+    )
+    payload["agent_comments"] = _dedupe_agent_comments(
+        _sanitize_agent_comments_sources(
+            payload.get("agent_comments") or [],
+            quality_indexes,
+            _fallback_source_from_quality_files(quality_manifest),
+        )
+    )
+    payload["agent_file_coverage"] = _dedupe_agent_coverage(list(payload.get("agent_file_coverage") or []))
+    return payload, quality_manifest
+
+
+def _trim_gate_report_for_prompt(report: dict) -> dict:
+    return {
+        "summary": report.get("summary", ""),
+        "totals": report.get("totals", {}),
+        "uncovered_required_files": list(report.get("uncovered_required_files") or [])[:50],
+        "page_coverage_errors": list(report.get("page_coverage_errors") or [])[:50],
+        "traceability_errors": list(report.get("traceability_errors") or [])[:50],
+    }
+
+
+def _repair_payload_after_gate_failure(
+    *,
+    project_id: str,
+    payload: dict,
+    gate_report: dict,
+    manifest: dict,
+    project_materials_payload: dict,
+    quality_files: list[Path],
+    root: Path,
+    attempt_no: int,
+) -> tuple[str, dict]:
+    repair_prompt_vars = {
+        "input_file_manifest_json": manifest,
+        "project_materials_json": project_materials_payload.get("project_materials") or [],
+        "quality_gate_report_json": _trim_gate_report_for_prompt(gate_report),
+        "current_payload_json": payload,
+    }
+    append_event(
+        project_id,
+        {
+            "process": "process_2",
+            "stage": "quality_gate_repair_attempt",
+            "attempt": attempt_no,
+            "reason": gate_report.get("summary", ""),
+        },
+    )
+    set_action_status(
+        project_id,
+        "run_p2",
+        "running",
+        f"Process 2: идет автоперепроверка {attempt_no}/{P2_GATE_REPAIR_ATTEMPTS}. "
+        f"Исправляем замечания quality gate: {gate_report.get('summary', '')}",
+    )
+    repair_run_id, repaired_raw = run_llm_json_text_process(
+        project_id=project_id,
+        process_name="process_2_repair",
+        prompt_name="02_p2_quality_registry_repair_v02",
+        prompt_vars=repair_prompt_vars,
+        output_filename="p2_quality_registry_repaired.json",
+        mock_payload=payload,
+    )
+    persist_run_json(project_id, "process_2_repair", repair_run_id, "repair_request.json", repair_prompt_vars)
+    repaired_payload, _ = _prepare_final_payload(
+        base_payload=repaired_raw,
+        project_materials_payload=project_materials_payload,
+        quality_files=quality_files,
+        project_id=project_id,
+        root=root,
+        include_project_context=True,
+    )
+    return repair_run_id, repaired_payload
 
 
 def _mock_payload(project_id: str, comment: str, quality_files: list[Path], project_materials: list[dict], root: Path) -> dict:
@@ -1112,19 +1477,13 @@ def run_process_p2(
         raise ValueError("Process 2: no batch runs were produced.")
     run_id = all_runs[-1][0]
     merged_payload = _merge_partial_payloads([x[1] for x in all_runs], project_id)
-    payload = _normalize_payload(
-        merged_payload,
-        files_quality,
-        project_id,
-        project_materials=project_materials_payload.get("project_materials") or [],
+    payload, quality_manifest = _prepare_final_payload(
+        base_payload=merged_payload,
+        project_materials_payload=project_materials_payload,
+        quality_files=files_quality,
+        project_id=project_id,
         root=root,
-    )
-    payload["agent_comments"] = list(project_materials_payload.get("agent_comments") or []) + list(payload.get("agent_comments") or [])
-    payload["agent_file_coverage"] = list(project_materials_payload.get("agent_file_coverage") or []) + list(payload.get("agent_file_coverage") or [])
-    payload["agent_comments"] = _sanitize_agent_comments_sources(
-        payload.get("agent_comments") or [],
-        build_manifest_indexes(quality_manifest),
-        _fallback_source_from_quality_files(quality_manifest),
+        include_project_context=True,
     )
     all_input_files = list(files_project) + list(files_quality) + list(files_ojr)
     manifest, gate_report = run_quality_gate(
@@ -1135,12 +1494,64 @@ def run_process_p2(
         excluded_refs=[],
         required_files=all_input_files,
     )
+    for attempt_no in range(1, P2_GATE_REPAIR_ATTEMPTS + 1):
+        if gate_report.get("pass"):
+            break
+        repair_run_id, repaired_payload = _repair_payload_after_gate_failure(
+            project_id=project_id,
+            payload=payload,
+            gate_report=gate_report,
+            manifest=manifest,
+            project_materials_payload=project_materials_payload,
+            quality_files=files_quality,
+            root=root,
+            attempt_no=attempt_no,
+        )
+        run_id = repair_run_id
+        payload = repaired_payload
+        manifest, gate_report = run_quality_gate(
+            process_name="process_2",
+            root=root,
+            payload=payload,
+            input_files=all_input_files,
+            excluded_refs=[],
+            required_files=all_input_files,
+        )
+        if gate_report.get("pass"):
+            append_event(
+                project_id,
+                {
+                    "process": "process_2",
+                    "stage": "quality_gate_repair_success",
+                    "run_id": run_id,
+                    "attempt": attempt_no,
+                },
+            )
+            set_action_status(
+                project_id,
+                "run_p2",
+                "running",
+                f"Process 2: автоперепроверка {attempt_no}/{P2_GATE_REPAIR_ATTEMPTS} успешно исправила замечания. Завершаем сохранение результата...",
+            )
+            break
     persist_run_json(project_id, "process_2", run_id, "input_manifest.json", manifest)
     persist_run_json(project_id, "process_2", run_id, "quality_gate_report.json", gate_report)
     if not gate_report.get("pass"):
+        set_action_status(
+            project_id,
+            "run_p2",
+            "error",
+            f"Process 2 завершился ошибкой после {P2_GATE_REPAIR_ATTEMPTS} попыток автоперепроверки: {gate_report.get('summary', 'unknown reason')}",
+        )
         append_event(
             project_id,
-            {"process": "process_2", "stage": "quality_gate_failed", "run_id": run_id, "reason": gate_report.get("summary", "")},
+            {
+                "process": "process_2",
+                "stage": "quality_gate_failed",
+                "run_id": run_id,
+                "reason": gate_report.get("summary", ""),
+                "repair_attempts": P2_GATE_REPAIR_ATTEMPTS,
+            },
         )
         raise ValueError(f"Process 2 quality gate failed: {gate_report.get('summary', 'unknown reason')}")
     save_processing_json(project_id, "p2_quality_registry_v1.json", payload)
